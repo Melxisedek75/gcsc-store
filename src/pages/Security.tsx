@@ -1,10 +1,679 @@
-export default function Security() {
+import { useState, useRef, useEffect } from 'react'
+import { Link } from 'react-router'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Shield,
+  Lock,
+  Database,
+  ChevronDown,
+  FileSignature,
+  Eye,
+  Timer,
+  ShieldCheck,
+  FileText,
+  CreditCard,
+  Scale,
+  Globe,
+  FileSearch,
+  Wallet,
+  ScrollText,
+  Server,
+} from 'lucide-react'
+
+/* ─── animation helpers ─── */
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+}
+
+const staggerChild = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1, y: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+  },
+}
+
+/* ─── Scroll-reveal wrapper ─── */
+function ScrollReveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
+      { threshold: 0.15 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center bg-void">
-      <div className="text-center">
-        <h1 className="font-outfit font-bold text-h1 text-white mb-4">Security</h1>
-        <p className="font-inter text-body-lg text-silver">Coming soon</p>
-      </div>
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 40 }}
+      animate={visible ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+/* ─── Stat counter with intersection observer ─── */
+function StatCounter({ value, suffix = '', label }: { value: string; suffix?: string; label: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect() } },
+      { threshold: 0.3 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} className="text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={visible ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+      >
+        <span className="font-outfit font-bold text-stat text-electric">{value}{suffix}</span>
+      </motion.div>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={visible ? { opacity: 1 } : {}}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="font-inter text-body text-silver mt-1"
+      >
+        {label}
+      </motion.p>
+    </div>
+  )
+}
+
+/* ─── data: security layers ─── */
+const securityLayers = [
+  {
+    num: '01',
+    title: 'Application Security',
+    description: 'Our web and mobile applications are built with security-first development practices. All code undergoes mandatory security review, automated vulnerability scanning (SAST/DAST), and penetration testing before deployment.',
+    spec: 'OWASP Top 10 compliant · Daily dependency scanning · WAF protection · Rate limiting · Input sanitization',
+  },
+  {
+    num: '02',
+    title: 'Smart Contract Security',
+    description: 'Every smart contract is written in strict accordance with blockchain security best practices. Contracts undergo multiple independent audits and are deployed with upgrade-resistant patterns to prevent tampering.',
+    spec: 'eosio.cdt framework · Multi-sig deployment · Immutable logic · Open-source verification · Reentrancy guards',
+  },
+  {
+    num: '03',
+    title: 'Encryption & Data Protection',
+    description: 'All sensitive data is encrypted at rest using AES-256 and in transit using TLS 1.3. Private keys are stored in hardware security modules (HSMs) with zero-knowledge architecture.',
+    spec: 'AES-256-GCM · TLS 1.3 · HSM key storage · Zero-knowledge proofs · End-to-end encrypted messaging',
+  },
+  {
+    num: '04',
+    title: 'Identity & Access Management',
+    description: 'Multi-factor authentication (MFA) is required for all accounts. Role-based access control (RBAC) ensures users can only access data relevant to their projects. Biometric auth supported on mobile.',
+    spec: 'MFA (TOTP + SMS) · RBAC · Biometric (Face/Touch ID) · Session timeout · Login anomaly detection',
+  },
+  {
+    num: '05',
+    title: 'Blockchain Consensus',
+    description: "XPR Network's delegated proof-of-stake (DPoS) consensus ensures transactions are validated by 21 elected block producers. This provides enterprise-grade security with instant finality and no risk of double-spending.",
+    spec: 'DPoS consensus · 21 block producers · 0.5s block time · Instant finality · Byzantine fault tolerance',
+  },
+  {
+    num: '06',
+    title: 'Disaster Recovery',
+    description: 'All critical data is replicated across multiple geographic regions with point-in-time recovery capability. Our RTO (Recovery Time Objective) is under 1 hour, and RPO (Recovery Point Objective) is under 5 minutes.',
+    spec: 'Multi-region replication · Daily encrypted backups · RTO < 1hr · RPO < 5min · Annual DR testing',
+  },
+]
+
+/* ─── data: certifications ─── */
+const certifications = [
+  {
+    icon: ShieldCheck,
+    title: 'SOC 2 Type II',
+    description: 'Independent audit of our security controls, availability, and confidentiality measures. Conducted annually by a Big Four firm.',
+    status: 'Certified',
+    statusColor: 'success' as const,
+  },
+  {
+    icon: Lock,
+    title: 'ISO 27001',
+    description: 'International standard for information security management systems (ISMS). Our ISMS covers all aspects of data handling and protection.',
+    status: 'Certified',
+    statusColor: 'success' as const,
+  },
+  {
+    icon: FileText,
+    title: 'GDPR Compliant',
+    description: 'Full compliance with EU General Data Protection Regulation. Users have complete control over their personal data with right-to-deletion supported.',
+    status: 'Certified',
+    statusColor: 'success' as const,
+  },
+  {
+    icon: CreditCard,
+    title: 'PCI DSS Level 1',
+    description: 'Payment Card Industry Data Security Standard compliance for handling card data. All card processing is tokenized — we never store raw card numbers.',
+    status: 'Certified',
+    statusColor: 'success' as const,
+  },
+  {
+    icon: Scale,
+    title: 'SEC Regulation',
+    description: 'Structured to meet emerging SEC guidance on digital asset custody and consumer protection in blockchain-based financial services.',
+    status: 'In Progress',
+    statusColor: 'warning' as const,
+  },
+  {
+    icon: Globe,
+    title: 'State Money Transmitter',
+    description: 'Licensed money transmitter in all required U.S. states. We work with banking partners to ensure full regulatory compliance across jurisdictions.',
+    status: 'In Progress',
+    statusColor: 'warning' as const,
+  },
+]
+
+/* ─── blockchain diagram nodes ─── */
+const diagramNodes = [
+  {
+    icon: Wallet,
+    title: 'Homeowner Wallet',
+    detail: 'XPR Deposit',
+  },
+  {
+    icon: ScrollText,
+    title: 'GCSC Smart Contract',
+    detail: 'Escrow Lock & Encrypt',
+  },
+  {
+    icon: Server,
+    title: 'XPR Blockchain',
+    detail: 'Immutable Record',
+  },
+  {
+    icon: Wallet,
+    title: 'Contractor Wallet',
+    detail: 'Auto Release',
+  },
+]
+
+/* ─── detail cards below diagram ─── */
+const detailCards = [
+  {
+    icon: FileSignature,
+    title: 'Smart Contract Deployment',
+    description: 'Every project creates a unique smart contract on the XPR Network. This contract contains the payment terms, milestone schedule, and release conditions. Once deployed, it cannot be altered by any party — including GCSC.',
+  },
+  {
+    icon: Eye,
+    title: 'Transparent Ledger',
+    description: 'Every deposit, milestone approval, and payment release is recorded on the public XPR blockchain. Both homeowner and contractor can verify transaction status in real-time through any block explorer.',
+  },
+  {
+    icon: Timer,
+    title: 'Instant Finality',
+    description: 'XPR Network provides sub-second transaction finality with zero gas fees for end users. This means escrow operations happen instantly — no waiting hours for blockchain confirmations.',
+  },
+]
+
+/* ═══════════════════════════════════════════ */
+/* ═══ MAIN SECURITY PAGE ════════════════════ */
+/* ═══════════════════════════════════════════ */
+export default function Security() {
+  const [openLayer, setOpenLayer] = useState<number | null>(null)
+
+  return (
+    <div className="w-full">
+      {/* ═══════ SECTION 1: HERO ═══════ */}
+      <section
+        className="relative w-full flex items-center justify-center overflow-hidden"
+        style={{
+          minHeight: '65vh',
+          background: `
+            radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123, 47, 247, 0.45) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59, 107, 247, 0.4) 0%, transparent 55%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0, 212, 255, 0.35) 0%, transparent 50%),
+            #0B0E17
+          `,
+        }}
+      >
+        {/* Scan-line overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none z-[1]"
+          style={{
+            background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,212,255,0.015) 2px, rgba(0,212,255,0.015) 4px)',
+            opacity: 0.4,
+          }}
+        />
+
+        <div className="relative z-10 mx-auto max-w-container container-padding text-center py-36">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
+            {/* Eyebrow */}
+            <motion.div variants={staggerChild} className="flex items-center justify-center gap-2 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-electric" />
+              <span className="font-outfit font-semibold text-label text-electric uppercase tracking-[0.12em]">
+                Security Architecture
+              </span>
+            </motion.div>
+
+            {/* Heading */}
+            <motion.h1 variants={staggerChild} className="font-outfit font-bold text-h1 text-white mb-4">
+              Fortress-Grade Protection
+            </motion.h1>
+
+            {/* Subheading */}
+            <motion.p variants={staggerChild} className="font-inter text-body-lg text-silver max-w-[640px] mx-auto">
+              Every payment protected by military-grade encryption, immutable blockchain records, and multi-layered smart contract security.
+            </motion.p>
+
+            {/* Security badges */}
+            <motion.div
+              variants={staggerChild}
+              className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-10"
+            >
+              {[
+                { icon: Shield, text: 'SOC 2 Type II' },
+                { icon: Lock, text: 'AES-256 Encryption' },
+                { icon: Database, text: 'On-Chain Immutable' },
+              ].map((badge, i) => (
+                <motion.div
+                  key={badge.text}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: 0.8 + i * 0.1,
+                    ease: [0.34, 1.56, 0.64, 1] as [number, number, number, number],
+                  }}
+                  className="flex items-center gap-2.5 px-5 py-3 rounded-2xl"
+                  style={{
+                    background: 'rgba(11, 14, 23, 0.55)',
+                    border: '1px solid rgba(123, 47, 247, 0.15)',
+                    backdropFilter: 'blur(12px) saturate(150%)',
+                  }}
+                >
+                  <badge.icon size={16} className="text-electric shrink-0" />
+                  <span className="font-inter font-medium text-body-sm text-white">{badge.text}</span>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════ SECTION 2: STATS BAR ═══════ */}
+      <section
+        className="w-full"
+        style={{
+          background: '#151928',
+          borderTop: '1px solid rgba(123,47,247,0.1)',
+          padding: '60px 0',
+        }}
+      >
+        <div className="mx-auto max-w-container container-padding">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
+            <StatCounter value="256-bit" label="AES Encryption" />
+            <StatCounter value="0" label="Successful Breaches" />
+            <StatCounter value="99.99" suffix="%" label="Uptime SLA" />
+            <StatCounter value="$50M+" label="Secured on Chain" />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ SECTION 3: BLOCKCHAIN ESCROW ═══════ */}
+      <section className="w-full bg-surface" style={{ padding: '120px 0' }}>
+        <div className="mx-auto max-w-container container-padding">
+          {/* Header */}
+          <ScrollReveal className="text-center mb-16">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-electric" />
+              <span className="font-outfit font-semibold text-label text-electric uppercase tracking-[0.12em]">
+                Blockchain Escrow
+              </span>
+            </div>
+            <h2 className="font-outfit font-bold text-h2 text-void mb-3">
+              How XPR Blockchain Secures Every Payment
+            </h2>
+            <p className="font-inter text-body-lg max-w-[720px] mx-auto" style={{ color: 'rgba(11,14,23,0.6)' }}>
+              GCSC leverages the XPR Network&apos;s high-performance blockchain to create smart contracts that are transparent, immutable, and automatic.
+            </p>
+          </ScrollReveal>
+
+          {/* Architecture Diagram */}
+          <ScrollReveal delay={0.1}>
+            <div className="max-w-[900px] mx-auto">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-2 relative">
+                {diagramNodes.map((node, i) => (
+                  <div key={node.title} className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
+                    {/* Node */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{
+                        duration: 0.8,
+                        delay: i * 0.15,
+                        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                      }}
+                      className="flex-1 md:flex-none bg-white rounded-2xl p-6 md:p-7 text-center"
+                      style={{
+                        boxShadow: '0 2px 16px rgba(11,14,23,0.06)',
+                        minWidth: '160px',
+                      }}
+                    >
+                      <div
+                        className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-3"
+                        style={{ background: 'rgba(123,47,247,0.08)' }}
+                      >
+                        <node.icon size={28} className="text-violet" />
+                      </div>
+                      <h4 className="font-outfit font-semibold text-h4" style={{ color: '#1a1a2e' }}>
+                        {node.title}
+                      </h4>
+                      <p className="font-inter text-body-sm mt-1" style={{ color: 'rgba(11,14,23,0.65)' }}>
+                        {node.detail}
+                      </p>
+                    </motion.div>
+
+                    {/* Arrow (hidden on last item and on mobile) */}
+                    {i < diagramNodes.length - 1 && (
+                      <div className="hidden md:flex flex-col items-center shrink-0 w-8 relative">
+                        <div className="w-full h-0.5 gradient-primary relative overflow-visible">
+                          {/* Animated traveling dot */}
+                          <div
+                            className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-electric"
+                            style={{
+                              animation: `travelArrow 2s linear infinite`,
+                              animationDelay: `${i * 0.5}s`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
+
+          {/* Detail Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-[900px] mx-auto mt-12">
+            {detailCards.map((card, i) => (
+              <ScrollReveal key={card.title} delay={0.1 + i * 0.1}>
+                <div
+                  className="bg-white rounded-xl p-7 h-full"
+                  style={{ boxShadow: '0 2px 16px rgba(11,14,23,0.05)' }}
+                >
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: 'rgba(123,47,247,0.08)' }}>
+                    <card.icon size={20} className="text-violet" />
+                  </div>
+                  <h4 className="font-outfit font-semibold text-h4 mb-2" style={{ color: '#1a1a2e' }}>
+                    {card.title}
+                  </h4>
+                  <p className="font-inter text-body-sm leading-body-sm" style={{ color: 'rgba(11,14,23,0.65)' }}>
+                    {card.description}
+                  </p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ SECTION 4: SECURITY LAYERS ═══════ */}
+      <section className="w-full bg-void" style={{ padding: '120px 0' }}>
+        <div className="mx-auto max-w-[900px] container-padding">
+          <ScrollReveal className="text-center mb-12">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-electric" />
+              <span className="font-outfit font-semibold text-label text-electric uppercase tracking-[0.12em]">
+                Defense in Depth
+              </span>
+            </div>
+            <h2 className="font-outfit font-bold text-h2 text-white">
+              Multi-Layered Security Architecture
+            </h2>
+          </ScrollReveal>
+
+          <div>
+            {securityLayers.map((layer, i) => (
+              <motion.div
+                key={layer.num}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{
+                  duration: 0.8,
+                  delay: i * 0.08,
+                  ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                }}
+              >
+                <button
+                  onClick={() => setOpenLayer(openLayer === i ? null : i)}
+                  className="w-full flex items-center justify-between py-6 px-4 md:px-8 text-left transition-colors duration-200"
+                  style={{
+                    borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    background: openLayer === i ? 'rgba(123,47,247,0.05)' : 'transparent',
+                  }}
+                >
+                  <div className="flex items-center gap-4 md:gap-6">
+                    <span className="font-outfit font-bold text-body-sm text-electric">{layer.num}</span>
+                    <span className="font-outfit font-semibold text-body text-white">{layer.title}</span>
+                  </div>
+                  <ChevronDown
+                    size={20}
+                    className="text-silver shrink-0 transition-transform duration-300"
+                    style={{
+                      transform: openLayer === i ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                  />
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {openLayer === i && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-4 md:px-8 pb-6 pt-2">
+                        <p className="font-inter text-body text-silver leading-body mb-4">
+                          {layer.description}
+                        </p>
+                        <div
+                          className="inline-block rounded-lg px-4 py-3 font-inter text-mono leading-mono"
+                          style={{
+                            background: 'rgba(123,47,247,0.08)',
+                            border: '1px solid rgba(123,47,247,0.15)',
+                            color: 'var(--electric)',
+                            fontSize: '0.8125rem',
+                          }}
+                        >
+                          {layer.spec}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ SECTION 5: COMPLIANCE & CERTIFICATIONS ═══════ */}
+      <section className="w-full bg-surface" style={{ padding: '120px 0' }}>
+        <div className="mx-auto max-w-[900px] container-padding">
+          <ScrollReveal className="text-center mb-12">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-electric" />
+              <span className="font-outfit font-semibold text-label text-electric uppercase tracking-[0.12em]">
+                Trusted & Certified
+              </span>
+            </div>
+            <h2 className="font-outfit font-bold text-h2 text-void mb-3">
+              Compliance & Certifications
+            </h2>
+            <p className="font-inter text-body max-w-[560px] mx-auto" style={{ color: 'rgba(11,14,23,0.6)' }}>
+              GCSC meets or exceeds the security standards required by regulated industries.
+            </p>
+          </ScrollReveal>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {certifications.map((cert, i) => (
+              <ScrollReveal key={cert.title} delay={i * 0.1}>
+                <motion.div
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                  className="bg-white rounded-2xl p-8 text-center h-full flex flex-col items-center"
+                  style={{ boxShadow: '0 2px 16px rgba(11,14,23,0.05)' }}
+                >
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center mb-4"
+                    style={{ background: 'rgba(123,47,247,0.08)' }}
+                  >
+                    <cert.icon size={28} className="text-violet" />
+                  </div>
+                  <h3 className="font-outfit font-semibold text-h3" style={{ color: '#1a1a2e' }}>
+                    {cert.title}
+                  </h3>
+                  <p className="font-inter text-body-sm mt-2 leading-body-sm" style={{ color: 'rgba(11,14,23,0.65)' }}>
+                    {cert.description}
+                  </p>
+                  <span
+                    className="mt-3 inline-block font-inter font-semibold text-[0.75rem] px-3 py-1 rounded-full"
+                    style={{
+                      background: cert.statusColor === 'success' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)',
+                      color: cert.statusColor === 'success' ? '#10B981' : '#F59E0B',
+                    }}
+                  >
+                    {cert.status}
+                  </span>
+                </motion.div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ SECTION 6: AUDIT REPORT CTA ═══════ */}
+      <section
+        className="w-full"
+        style={{ background: '#151928', padding: '80px 0' }}
+      >
+        <div className="mx-auto max-w-container container-padding text-center">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <motion.div
+              variants={staggerChild}
+              className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-6"
+              style={{
+                background: 'rgba(0,212,255,0.1)',
+                animation: 'glow-pulse 3s ease-in-out infinite',
+              }}
+            >
+              <FileSearch size={32} className="text-electric" />
+            </motion.div>
+            <motion.h2 variants={staggerChild} className="font-outfit font-bold text-h2 text-white mb-3">
+              Independent Security Audits
+            </motion.h2>
+            <motion.p variants={staggerChild} className="font-inter text-body-lg text-silver max-w-[600px] mx-auto mb-8">
+              Our smart contracts and infrastructure are audited quarterly by leading blockchain security firms. Download our latest audit reports.
+            </motion.p>
+            <motion.div variants={staggerChild} className="flex flex-wrap items-center justify-center gap-4">
+              <button
+                className="inline-flex items-center justify-center gradient-primary text-white font-inter font-semibold text-[0.9375rem] px-8 py-3.5 rounded-full hover:scale-[1.04] hover:shadow-glow transition-all duration-300"
+                style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+                onClick={() => alert('Audit report download coming soon!')}
+              >
+                Download Latest Audit
+              </button>
+              <button
+                className="inline-flex items-center justify-center font-inter font-semibold text-[0.9375rem] px-8 py-3.5 rounded-full hover:scale-[1.04] transition-all duration-300"
+                style={{
+                  border: '1px solid rgba(123,47,247,0.4)',
+                  color: '#fff',
+                  background: 'transparent',
+                  transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+                onClick={() => alert('Reports archive coming soon!')}
+              >
+                View All Reports
+              </button>
+            </motion.div>
+            <motion.p variants={staggerChild} className="font-inter text-body-sm text-silver mt-4">
+              Last audit: March 2026 by CertiK · Next audit: June 2026
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════ SECTION 7: FINAL CTA ═══════ */}
+      <section className="w-full gradient-primary" style={{ padding: '80px 0' }}>
+        <div className="mx-auto max-w-container container-padding text-center">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
+            <motion.h2 variants={staggerChild} className="font-outfit font-bold text-h2 text-white mb-3">
+              Ready to Build with Confidence?
+            </motion.h2>
+            <motion.p variants={staggerChild} className="font-inter text-body-lg mx-auto mb-8 max-w-[560px]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+              Join thousands of homeowners and contractors who trust GCSC&apos;s fortress-grade security for their construction payments.
+            </motion.p>
+            <motion.div variants={staggerChild}>
+              <Link
+                to="/pricing"
+                className="inline-flex items-center justify-center bg-white font-inter font-semibold text-[0.9375rem] px-8 py-3.5 rounded-full hover:scale-[1.04] transition-all duration-300"
+                style={{
+                  color: '#7B2FF7',
+                  transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+              >
+                Get Started for Free
+              </Link>
+            </motion.div>
+            <motion.p variants={staggerChild} className="font-inter text-body-sm mt-4" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              <span className="mr-1">&#10022;</span> No credit card required · Instant setup
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── traveling dot keyframe (injected via style tag) ─── */}
+      <style>{`
+        @keyframes travelArrow {
+          0% { left: 0; }
+          100% { left: 100%; }
+        }
+      `}</style>
     </div>
   )
 }
