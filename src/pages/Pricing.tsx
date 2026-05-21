@@ -4,14 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Check, X, ChevronDown } from 'lucide-react'
 
 /* ─── animation helpers ─── */
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
-  }),
-}
 
 const staggerContainer = {
   hidden: {},
