@@ -92,7 +92,7 @@ function StatCounter({ value, suffix = '', label }: { value: string; suffix?: st
         initial={{ opacity: 0 }}
         animate={visible ? { opacity: 1 } : {}}
         transition={{ duration: 0.6, delay: 0.3 }}
-        className="font-inter text-body text-silver mt-1"
+        className="font-inter text-body text-[#475569] mt-1"
       >
         {label}
       </motion.p>
@@ -243,11 +243,11 @@ export default function Security() {
         style={{
           minHeight: '65vh',
           background: `
-            radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123, 47, 247, 0.45) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59, 107, 247, 0.4) 0%, transparent 55%),
-            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0, 212, 255, 0.2) 0%, transparent 50%),
-            radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0, 212, 255, 0.35) 0%, transparent 50%),
-            #0B0E17
+            radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123, 47, 247, 0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59, 107, 247, 0.12) 0%, transparent 55%),
+            radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0, 212, 255, 0.06) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+            #F8FAFC
           `,
         }}
       >
@@ -255,7 +255,7 @@ export default function Security() {
         <div
           className="absolute inset-0 pointer-events-none z-[1]"
           style={{
-            background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,212,255,0.015) 2px, rgba(0,212,255,0.015) 4px)',
+            background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,212,255,0.008) 2px, rgba(0,212,255,0.008) 4px)',
             opacity: 0.4,
           }}
         />
@@ -275,12 +275,12 @@ export default function Security() {
             </motion.div>
 
             {/* Heading */}
-            <motion.h1 variants={staggerChild} className="font-outfit font-bold text-h1 text-white mb-4">
+            <motion.h1 variants={staggerChild} className="font-outfit font-bold text-h1 text-[#0F172A] mb-4">
               Fortress-Grade Protection
             </motion.h1>
 
             {/* Subheading */}
-            <motion.p variants={staggerChild} className="font-inter text-body-lg text-silver max-w-[640px] mx-auto">
+            <motion.p variants={staggerChild} className="font-inter text-body-lg text-[#475569] max-w-[640px] mx-auto">
               Every payment protected by military-grade encryption, immutable blockchain records, and multi-layered smart contract security.
             </motion.p>
 
@@ -305,13 +305,14 @@ export default function Security() {
                   }}
                   className="flex items-center gap-2.5 px-5 py-3 rounded-2xl"
                   style={{
-                    background: 'rgba(11, 14, 23, 0.55)',
-                    border: '1px solid rgba(123, 47, 247, 0.15)',
+                    background: 'rgba(255, 255, 255, 0.85)',
+                    border: '1px solid rgba(123, 47, 247, 0.2)',
                     backdropFilter: 'blur(12px) saturate(150%)',
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
                   }}
                 >
                   <badge.icon size={16} className="text-electric shrink-0" />
-                  <span className="font-inter font-medium text-body-sm text-white">{badge.text}</span>
+                  <span className="font-inter font-medium text-body-sm text-[#0F172A]">{badge.text}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -323,8 +324,9 @@ export default function Security() {
       <section
         className="w-full"
         style={{
-          background: '#151928',
+          background: '#FFFFFF',
           borderTop: '1px solid rgba(123,47,247,0.1)',
+          borderBottom: '1px solid rgba(123,47,247,0.1)',
           padding: '60px 0',
         }}
       >
@@ -349,10 +351,10 @@ export default function Security() {
                 Blockchain Escrow
               </span>
             </div>
-            <h2 className="font-outfit font-bold text-h2 text-void mb-3">
+            <h2 className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">
               How XPR Blockchain Secures Every Payment
             </h2>
-            <p className="font-inter text-body-lg max-w-[720px] mx-auto" style={{ color: 'rgba(11,14,23,0.6)' }}>
+            <p className="font-inter text-body-lg max-w-[720px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
               GCSC leverages the XPR Network&apos;s high-performance blockchain to create smart contracts that are transparent, immutable, and automatic.
             </p>
           </ScrollReveal>
@@ -375,7 +377,7 @@ export default function Security() {
                       }}
                       className="flex-1 md:flex-none bg-white rounded-2xl p-6 md:p-7 text-center"
                       style={{
-                        boxShadow: '0 2px 16px rgba(11,14,23,0.06)',
+                        boxShadow: '0 2px 16px rgba(0,0,0,0.06)',
                         minWidth: '160px',
                       }}
                     >
@@ -385,10 +387,10 @@ export default function Security() {
                       >
                         <node.icon size={28} className="text-violet" />
                       </div>
-                      <h4 className="font-outfit font-semibold text-h4" style={{ color: '#1a1a2e' }}>
+                      <h4 className="font-outfit font-semibold text-h4" style={{ color: '#0F172A' }}>
                         {node.title}
                       </h4>
-                      <p className="font-inter text-body-sm mt-1" style={{ color: 'rgba(11,14,23,0.65)' }}>
+                      <p className="font-inter text-body-sm mt-1" style={{ color: 'rgba(15,23,42,0.65)' }}>
                         {node.detail}
                       </p>
                     </motion.div>
@@ -420,15 +422,15 @@ export default function Security() {
               <ScrollReveal key={card.title} delay={0.1 + i * 0.1}>
                 <div
                   className="bg-white rounded-xl p-7 h-full"
-                  style={{ boxShadow: '0 2px 16px rgba(11,14,23,0.05)' }}
+                  style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}
                 >
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: 'rgba(123,47,247,0.08)' }}>
                     <card.icon size={20} className="text-violet" />
                   </div>
-                  <h4 className="font-outfit font-semibold text-h4 mb-2" style={{ color: '#1a1a2e' }}>
+                  <h4 className="font-outfit font-semibold text-h4 mb-2" style={{ color: '#0F172A' }}>
                     {card.title}
                   </h4>
-                  <p className="font-inter text-body-sm leading-body-sm" style={{ color: 'rgba(11,14,23,0.65)' }}>
+                  <p className="font-inter text-body-sm leading-body-sm" style={{ color: 'rgba(15,23,42,0.65)' }}>
                     {card.description}
                   </p>
                 </div>
@@ -439,7 +441,7 @@ export default function Security() {
       </section>
 
       {/* ═══════ SECTION 4: SECURITY LAYERS ═══════ */}
-      <section className="w-full bg-void" style={{ padding: '120px 0' }}>
+      <section className="w-full" style={{ background: '#F8FAFC', padding: '120px 0' }}>
         <div className="mx-auto max-w-[900px] container-padding">
           <ScrollReveal className="text-center mb-12">
             <div className="flex items-center justify-center gap-2 mb-4">
@@ -448,7 +450,7 @@ export default function Security() {
                 Defense in Depth
               </span>
             </div>
-            <h2 className="font-outfit font-bold text-h2 text-white">
+            <h2 className="font-outfit font-bold text-h2 text-[#0F172A]">
               Multi-Layered Security Architecture
             </h2>
           </ScrollReveal>
@@ -470,17 +472,17 @@ export default function Security() {
                   onClick={() => setOpenLayer(openLayer === i ? null : i)}
                   className="w-full flex items-center justify-between py-6 px-4 md:px-8 text-left transition-colors duration-200"
                   style={{
-                    borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    borderBottom: '1px solid rgba(15,23,42,0.08)',
                     background: openLayer === i ? 'rgba(123,47,247,0.05)' : 'transparent',
                   }}
                 >
                   <div className="flex items-center gap-4 md:gap-6">
                     <span className="font-outfit font-bold text-body-sm text-electric">{layer.num}</span>
-                    <span className="font-outfit font-semibold text-body text-white">{layer.title}</span>
+                    <span className="font-outfit font-semibold text-body text-[#0F172A]">{layer.title}</span>
                   </div>
                   <ChevronDown
                     size={20}
-                    className="text-silver shrink-0 transition-transform duration-300"
+                    className="text-[#94A3B8] shrink-0 transition-transform duration-300"
                     style={{
                       transform: openLayer === i ? 'rotate(180deg)' : 'rotate(0deg)',
                       transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -498,15 +500,15 @@ export default function Security() {
                       className="overflow-hidden"
                     >
                       <div className="px-4 md:px-8 pb-6 pt-2">
-                        <p className="font-inter text-body text-silver leading-body mb-4">
+                        <p className="font-inter text-body text-[#475569] leading-body mb-4">
                           {layer.description}
                         </p>
                         <div
                           className="inline-block rounded-lg px-4 py-3 font-inter text-mono leading-mono"
                           style={{
-                            background: 'rgba(123,47,247,0.08)',
+                            background: 'rgba(123,47,247,0.06)',
                             border: '1px solid rgba(123,47,247,0.15)',
-                            color: 'var(--electric)',
+                            color: '#0F172A',
                             fontSize: '0.8125rem',
                           }}
                         >
@@ -532,10 +534,10 @@ export default function Security() {
                 Trusted & Certified
               </span>
             </div>
-            <h2 className="font-outfit font-bold text-h2 text-void mb-3">
+            <h2 className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">
               Compliance & Certifications
             </h2>
-            <p className="font-inter text-body max-w-[560px] mx-auto" style={{ color: 'rgba(11,14,23,0.6)' }}>
+            <p className="font-inter text-body max-w-[560px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
               GCSC meets or exceeds the security standards required by regulated industries.
             </p>
           </ScrollReveal>
@@ -547,7 +549,7 @@ export default function Security() {
                   whileHover={{ y: -4 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                   className="bg-white rounded-2xl p-8 text-center h-full flex flex-col items-center"
-                  style={{ boxShadow: '0 2px 16px rgba(11,14,23,0.05)' }}
+                  style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}
                 >
                   <div
                     className="w-14 h-14 rounded-full flex items-center justify-center mb-4"
@@ -555,10 +557,10 @@ export default function Security() {
                   >
                     <cert.icon size={28} className="text-violet" />
                   </div>
-                  <h3 className="font-outfit font-semibold text-h3" style={{ color: '#1a1a2e' }}>
+                  <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>
                     {cert.title}
                   </h3>
-                  <p className="font-inter text-body-sm mt-2 leading-body-sm" style={{ color: 'rgba(11,14,23,0.65)' }}>
+                  <p className="font-inter text-body-sm mt-2 leading-body-sm" style={{ color: 'rgba(15,23,42,0.65)' }}>
                     {cert.description}
                   </p>
                   <span
@@ -580,7 +582,7 @@ export default function Security() {
       {/* ═══════ SECTION 6: AUDIT REPORT CTA ═══════ */}
       <section
         className="w-full"
-        style={{ background: '#151928', padding: '80px 0' }}
+        style={{ background: '#F1F5F9', padding: '80px 0' }}
       >
         <div className="mx-auto max-w-container container-padding text-center">
           <motion.div
@@ -599,10 +601,10 @@ export default function Security() {
             >
               <FileSearch size={32} className="text-electric" />
             </motion.div>
-            <motion.h2 variants={staggerChild} className="font-outfit font-bold text-h2 text-white mb-3">
+            <motion.h2 variants={staggerChild} className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">
               Independent Security Audits
             </motion.h2>
-            <motion.p variants={staggerChild} className="font-inter text-body-lg text-silver max-w-[600px] mx-auto mb-8">
+            <motion.p variants={staggerChild} className="font-inter text-body-lg text-[#475569] max-w-[600px] mx-auto mb-8">
               Our smart contracts and infrastructure are audited quarterly by leading blockchain security firms. Download our latest audit reports.
             </motion.p>
             <motion.div variants={staggerChild} className="flex flex-wrap items-center justify-center gap-4">
@@ -617,7 +619,7 @@ export default function Security() {
                 className="inline-flex items-center justify-center font-inter font-semibold text-[0.9375rem] px-8 py-3.5 rounded-full hover:scale-[1.04] transition-all duration-300"
                 style={{
                   border: '1px solid rgba(123,47,247,0.4)',
-                  color: '#fff',
+                  color: '#0F172A',
                   background: 'transparent',
                   transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
                 }}
@@ -626,7 +628,7 @@ export default function Security() {
                 View All Reports
               </button>
             </motion.div>
-            <motion.p variants={staggerChild} className="font-inter text-body-sm text-silver mt-4">
+            <motion.p variants={staggerChild} className="font-inter text-body-sm text-[#94A3B8] mt-4">
               Last audit: March 2026 by CertiK · Next audit: June 2026
             </motion.p>
           </motion.div>

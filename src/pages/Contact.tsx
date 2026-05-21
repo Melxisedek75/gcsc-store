@@ -57,9 +57,9 @@ function InfoCard({
         <Icon size={24} style={{ color: '#7B2FF7' }} />
       </div>
       <div>
-        <h4 className="font-outfit font-semibold text-body" style={{ color: '#0B0E17' }}>{title}</h4>
-        <p className="font-inter text-body-sm text-silver">{detail}</p>
-        {secondary && <p className="font-inter text-body-sm text-silver">{secondary}</p>}
+        <h4 className="font-outfit font-semibold text-body" style={{ color: '#0F172A' }}>{title}</h4>
+        <p className="font-inter text-body-sm text-[#475569]">{detail}</p>
+        {secondary && <p className="font-inter text-body-sm text-[#475569]">{secondary}</p>}
         {badge && (
           <div className="flex items-center gap-1.5 mt-1.5">
             <span className="w-2 h-2 rounded-full" style={{ background: badge.color }} />
@@ -84,13 +84,13 @@ function ChannelCard({
       transition={{ duration: 0.4, ease: easeSmooth }}
       className="bg-white rounded-2xl p-8 text-center flex flex-col items-center"
       style={{
-        boxShadow: '0 2px 16px rgba(11,14,23,0.05)',
+        boxShadow: '0 2px 16px rgba(0,0,0,0.05)',
       }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(11,14,23,0.1)'
+        (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.1)'
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 16px rgba(11,14,23,0.05)'
+        (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 16px rgba(0,0,0,0.05)'
       }}
     >
       <div
@@ -99,8 +99,8 @@ function ChannelCard({
       >
         <Icon size={28} style={{ color: iconColor }} />
       </div>
-      <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0B0E17' }}>{title}</h3>
-      <p className="font-inter text-body-sm mt-2" style={{ color: 'rgba(11,14,23,0.65)' }}>{description}</p>
+      <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{title}</h3>
+      <p className="font-inter text-body-sm mt-2" style={{ color: 'rgba(15,23,42,0.65)' }}>{description}</p>
       <span
         className="inline-flex items-center gap-1 font-inter font-semibold text-body-sm mt-4 cursor-pointer hover:underline"
         style={{ color: '#7B2FF7' }}
@@ -196,13 +196,13 @@ export default function Contact() {
   }
 
   const inputStyle = {
-    background: 'rgba(11,14,23,0.02)',
-    border: '1px solid rgba(11,14,23,0.1)',
+    background: '#FFFFFF',
+    border: '1px solid rgba(15,23,42,0.12)',
     borderRadius: '12px',
     padding: '14px 16px',
     fontFamily: "'Inter', system-ui, sans-serif",
     fontSize: '1rem',
-    color: '#0B0E17',
+    color: '#0F172A',
     outline: 'none',
     width: '100%',
     transition: 'border-color 0.2s, box-shadow 0.2s',
@@ -213,16 +213,16 @@ export default function Contact() {
       {/* ── Section 1: Page Hero ── */}
       <section
         className="relative flex items-center justify-center overflow-hidden"
-        style={{ height: '45vh', background: '#0B0E17' }}
+        style={{ height: '45vh', background: '#F8FAFC' }}
       >
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123,47,247,0.16) 0%, transparent 60%),' +
-              'radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59,107,247,0.13) 0%, transparent 55%),' +
-              'radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0,212,255,0.1) 0%, transparent 50%),' +
-              '#0B0E17',
+              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123,47,247,0.12) 0%, transparent 60%),' +
+              'radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59,107,247,0.08) 0%, transparent 55%),' +
+              'radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0,212,255,0.06) 0%, transparent 50%),' +
+              '#F8FAFC',
           }}
         />
         <motion.div
@@ -232,13 +232,13 @@ export default function Contact() {
           className="relative z-10 text-center max-w-[700px] mx-auto container-padding"
         >
           <SectionLabel text="GET IN TOUCH" />
-          <motion.h1 variants={fadeUpChild} className="font-outfit font-bold text-h1 text-white">
+          <motion.h1 variants={fadeUpChild} className="font-outfit font-bold text-h1 text-[#0F172A]">
             We're Here to Help
           </motion.h1>
           <motion.p
             variants={fadeUpChild}
-            className="font-inter text-body-lg text-silver mt-6 mx-auto"
-            style={{ maxWidth: '560px' }}
+            className="font-inter text-body-lg mt-6 mx-auto"
+            style={{ color: '#475569', maxWidth: '560px' }}
           >
             Whether you're a homeowner starting a project, a contractor joining our network, or an enterprise exploring a partnership — we'd love to hear from you.
           </motion.p>
@@ -262,24 +262,24 @@ export default function Contact() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, ease: easeSmooth }}
                   className="bg-white rounded-[20px] flex flex-col items-center justify-center text-center"
-                  style={{ boxShadow: '0 4px 32px rgba(11,14,23,0.08)', padding: '64px 48px', minHeight: '500px' }}
+                  style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.08)', padding: '64px 48px', minHeight: '500px' }}
                 >
                   <CheckCircle size={48} style={{ color: '#10B981' }} />
-                  <h3 className="font-outfit font-semibold text-h3 mt-6" style={{ color: '#0B0E17' }}>Message Sent!</h3>
-                  <p className="font-inter text-body text-silver mt-2">We'll get back to you within 24 hours.</p>
+                  <h3 className="font-outfit font-semibold text-h3 mt-6" style={{ color: '#0F172A' }}>Message Sent!</h3>
+                  <p className="font-inter text-body text-[#475569] mt-2">We'll get back to you within 24 hours.</p>
                 </motion.div>
               ) : (
                 <div
                   className="bg-white rounded-[20px]"
-                  style={{ boxShadow: '0 4px 32px rgba(11,14,23,0.08)', padding: '48px' }}
+                  style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.08)', padding: '48px' }}
                 >
-                  <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0B0E17' }}>Send Us a Message</h3>
-                  <p className="font-inter text-body-sm text-silver mt-1">Fill out the form below and our team will respond within 24 hours.</p>
+                  <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>Send Us a Message</h3>
+                  <p className="font-inter text-body-sm text-[#475569] mt-1">Fill out the form below and our team will respond within 24 hours.</p>
 
                   <form onSubmit={handleSubmit} className="flex flex-col gap-6 mt-8">
                     {/* Full Name */}
                     <div>
-                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0B0E17' }}>
+                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0F172A' }}>
                         Full Name <span style={{ color: '#EF4444' }}>*</span>
                       </label>
                       <input
@@ -295,7 +295,7 @@ export default function Contact() {
 
                     {/* Email */}
                     <div>
-                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0B0E17' }}>
+                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0F172A' }}>
                         Email Address <span style={{ color: '#EF4444' }}>*</span>
                       </label>
                       <input
@@ -311,7 +311,7 @@ export default function Contact() {
 
                     {/* Phone */}
                     <div>
-                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0B0E17' }}>
+                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0F172A' }}>
                         Phone Number
                       </label>
                       <input
@@ -326,7 +326,7 @@ export default function Contact() {
 
                     {/* Role */}
                     <div>
-                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0B0E17' }}>
+                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0F172A' }}>
                         I am a... <span style={{ color: '#EF4444' }}>*</span>
                       </label>
                       <select
@@ -344,7 +344,7 @@ export default function Contact() {
 
                     {/* Subject */}
                     <div>
-                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0B0E17' }}>
+                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0F172A' }}>
                         Subject <span style={{ color: '#EF4444' }}>*</span>
                       </label>
                       <input
@@ -360,7 +360,7 @@ export default function Contact() {
 
                     {/* Message */}
                     <div>
-                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0B0E17' }}>
+                      <label className="font-outfit font-medium text-body-sm block mb-1.5" style={{ color: '#0F172A' }}>
                         Message <span style={{ color: '#EF4444' }}>*</span>
                       </label>
                       <textarea
@@ -394,7 +394,7 @@ export default function Contact() {
                         'Send Message'
                       )}
                     </button>
-                    <p className="font-inter text-body-sm text-silver text-center flex items-center justify-center gap-1">
+                    <p className="font-inter text-body-sm text-[#94A3B8] text-center flex items-center justify-center gap-1">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                       Your information is encrypted and never shared.
                     </p>
@@ -439,24 +439,24 @@ export default function Contact() {
 
               {/* Social Links */}
               <motion.div variants={fadeUpChild} className="mt-2">
-                <h4 className="font-outfit font-semibold text-body mb-3" style={{ color: '#0B0E17' }}>Follow Us</h4>
+                <h4 className="font-outfit font-semibold text-body mb-3" style={{ color: '#0F172A' }}>Follow Us</h4>
                 <div className="flex items-center gap-3">
                   {socialIcons.map((social) => (
                     <a
                       key={social.label}
                       href="#"
                       aria-label={social.label}
-                      className="flex items-center justify-center rounded-full text-silver hover:text-violet transition-all duration-200 hover:scale-110"
+                      className="flex items-center justify-center rounded-full text-[#94A3B8] hover:text-violet transition-all duration-200 hover:scale-110"
                       style={{
                         width: '40px',
                         height: '40px',
-                        border: '1px solid rgba(11,14,23,0.1)',
+                        border: '1px solid rgba(15,23,42,0.1)',
                       }}
                       onMouseEnter={(e) => {
                         (e.currentTarget as HTMLElement).style.borderColor = '#7B2FF7'
                       }}
                       onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.borderColor = 'rgba(11,14,23,0.1)'
+                        (e.currentTarget as HTMLElement).style.borderColor = 'rgba(15,23,42,0.1)'
                       }}
                     >
                       <social.icon size={20} />
@@ -480,7 +480,7 @@ export default function Contact() {
             className="text-center mb-12"
           >
             <SectionLabel text="MULTIPLE WAYS TO REACH US" />
-            <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2" style={{ color: '#0B0E17' }}>
+            <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2" style={{ color: '#0F172A' }}>
               Choose Your Support Channel
             </motion.h2>
           </motion.div>
@@ -513,14 +513,14 @@ export default function Contact() {
             alt="Map showing GCSC headquarters location"
             className="w-full h-full object-cover"
           />
-          {/* Dark overlay for readability */}
-          <div className="absolute inset-0" style={{ background: 'rgba(11,14,23,0.3)' }} />
+          {/* Light overlay for readability */}
+          <div className="absolute inset-0" style={{ background: 'rgba(255,255,255,0.15)' }} />
           {/* Bottom fade into next section */}
           <div
             className="absolute bottom-0 left-0 right-0"
             style={{
               height: '120px',
-              background: 'linear-gradient(to bottom, transparent 0%, #0B0E17 100%)',
+              background: 'linear-gradient(to bottom, transparent 0%, #F8FAFC 100%)',
             }}
           />
         </motion.div>
@@ -557,9 +557,9 @@ export default function Contact() {
             className="glass-card mt-2"
             style={{ padding: '20px 24px', minWidth: '220px', textAlign: 'center' }}
           >
-            <h4 className="font-outfit font-semibold text-body text-white">GCSC Headquarters</h4>
-            <p className="font-inter text-body-sm text-silver mt-1">1200 Brickell Avenue, Suite 400</p>
-            <p className="font-inter text-body-sm text-silver">Miami, FL 33131</p>
+            <h4 className="font-outfit font-semibold text-body text-[#0F172A]">GCSC Headquarters</h4>
+            <p className="font-inter text-body-sm text-[#475569] mt-1">1200 Brickell Avenue, Suite 400</p>
+            <p className="font-inter text-body-sm text-[#475569]">Miami, FL 33131</p>
             <a
               href="https://maps.google.com/?q=1200+Brickell+Avenue+Miami+FL"
               target="_blank"
@@ -574,7 +574,7 @@ export default function Contact() {
       </section>
 
       {/* ── Section 5: Final CTA ── */}
-      <section style={{ background: '#0B0E17', padding: '100px 0' }}>
+      <section style={{ background: '#F8FAFC', padding: '100px 0' }}>
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -582,12 +582,12 @@ export default function Contact() {
           variants={fadeUpStagger}
           className="mx-auto max-w-[700px] container-padding text-center"
         >
-          <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2 text-white">
+          <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2 text-[#0F172A]">
             Prefer to Start Right Away?
           </motion.h2>
           <motion.p
             variants={fadeUpChild}
-            className="font-inter text-body-lg text-silver mt-4"
+            className="font-inter text-body-lg text-[#475569] mt-4"
           >
             Create your free GCSC account in under 2 minutes and start protecting your construction payments today.
           </motion.p>
@@ -608,7 +608,7 @@ export default function Contact() {
             </Link>
             <Link
               to="/security"
-              className="inline-flex items-center justify-center font-inter font-semibold text-[0.9375rem] text-white rounded-full hover:bg-[rgba(123,47,247,0.1)] transition-all duration-300"
+              className="inline-flex items-center justify-center font-inter font-semibold text-[0.9375rem] text-[#0F172A] rounded-full hover:bg-[rgba(123,47,247,0.08)] transition-all duration-300"
               style={{
                 border: '1px solid rgba(123,47,247,0.4)',
                 padding: '14px 32px',

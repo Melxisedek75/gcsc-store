@@ -46,7 +46,7 @@ function ParticleField() {
       size: Math.random() * 4 + 2,
       duration: Math.random() * 15 + 15,
       delay: Math.random() * 15,
-      opacity: Math.random() * 0.15 + 0.05,
+      opacity: Math.random() * 0.08 + 0.03,
     }))
   ).current
 
@@ -82,7 +82,7 @@ function ProgressRing({ progress, size = 60 }: { progress: number; size?: number
         cx={size / 2}
         cy={size / 2}
         r={radius}
-        stroke="rgba(255,255,255,0.1)"
+        stroke="rgba(15,23,42,0.1)"
         strokeWidth={3}
         fill="none"
       />
@@ -120,7 +120,7 @@ function HeroSection() {
       tl.fromTo(
         [orb1Ref.current, orb2Ref.current, orb3Ref.current],
         { opacity: 0 },
-        { opacity: 0.4, duration: 1.5 },
+        { opacity: 0.3, duration: 1.5 },
         0
       )
     }
@@ -151,26 +151,23 @@ function HeroSection() {
       className="relative w-full overflow-hidden"
       style={{
         minHeight: '100dvh',
-        backgroundImage: `url('/hero-banner-dark.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        background: '#F8FAFC',
       }}
     >
-      {/* Dark overlay for text readability */}
+      {/* Subtle light overlay for readability */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ backgroundColor: 'rgba(11, 14, 23, 0.55)' }}
+        style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' }}
       />
 
-      {/* Mesh gradient orbs */}
+      {/* Mesh gradient orbs - very subtle for light theme */}
       <div
         ref={orb1Ref}
         className="absolute w-[600px] h-[600px] rounded-full pointer-events-none opacity-0"
         style={{
           top: '-20%',
           left: '-10%',
-          background: 'radial-gradient(circle, rgba(123,47,247,0.5) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(123,47,247,0.12) 0%, transparent 70%)',
           filter: 'blur(120px)',
           animation: 'meshBreathe 15s ease-in-out infinite',
         }}
@@ -181,7 +178,7 @@ function HeroSection() {
         style={{
           top: '30%',
           right: '-15%',
-          background: 'radial-gradient(circle, rgba(59,107,247,0.5) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(59,107,247,0.1) 0%, transparent 70%)',
           filter: 'blur(120px)',
           animation: 'meshBreathe 18s ease-in-out infinite 3s',
         }}
@@ -192,7 +189,7 @@ function HeroSection() {
         style={{
           bottom: '-10%',
           left: '40%',
-          background: 'radial-gradient(circle, rgba(0,212,255,0.4) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%)',
           filter: 'blur(120px)',
           animation: 'meshBreathe 20s ease-in-out infinite 6s',
         }}
@@ -200,7 +197,7 @@ function HeroSection() {
 
       {/* Noise texture overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        className="absolute inset-0 pointer-events-none opacity-[0.02]"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         }}
@@ -217,14 +214,14 @@ function HeroSection() {
             <SectionLabel text="XPR BLOCKCHAIN POWERED" />
           </div>
           <h1 className="font-outfit font-bold text-hero leading-hero tracking-hero">
-            <span className="hero-h1-l1 block opacity-0" style={{ color: '#F8FAFF' }}>
+            <span className="hero-h1-l1 block opacity-0" style={{ color: '#0F172A' }}>
               Build with Trust.
             </span>
             <span className="hero-h1-l2 block opacity-0 gradient-text">
               Pay with Confidence.
             </span>
           </h1>
-          <p className="hero-sub opacity-0 font-inter text-body-lg leading-body-lg mt-6" style={{ color: '#A0AEC0' }}>
+          <p className="hero-sub opacity-0 font-inter text-body-lg leading-body-lg mt-6" style={{ color: '#475569' }}>
             The first construction marketplace powered by XPR blockchain escrow. Smart contracts protect every payment, every milestone, every project.
           </p>
           <div className="hero-cta opacity-0 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-8">
@@ -236,8 +233,8 @@ function HeroSection() {
               Get Started
             </Link>
             <button
-              className="inline-flex items-center justify-center bg-transparent text-white font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full border hover:bg-[rgba(123,47,247,0.1)] transition-all duration-300 cursor-pointer"
-              style={{ borderColor: 'rgba(123,47,247,0.4)' }}
+              className="inline-flex items-center justify-center bg-transparent font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full border hover:bg-[rgba(123,47,247,0.08)] transition-all duration-300 cursor-pointer"
+              style={{ borderColor: 'rgba(123,47,247,0.4)', color: '#0F172A' }}
               onClick={() => {
                 document.getElementById('escrow-section')?.scrollIntoView({ behavior: 'smooth' })
               }}
@@ -245,7 +242,7 @@ function HeroSection() {
               Watch How It Works
             </button>
           </div>
-          <p className="mt-5 font-inter text-body-sm" style={{ color: 'rgba(160,174,192,0.7)' }}>
+          <p className="mt-5 font-inter text-body-sm" style={{ color: 'rgba(71,85,105,0.7)' }}>
             <span style={{ color: '#00D4FF' }}>&#10022;</span> Free to join. No credit card required.
           </p>
         </div>
@@ -271,21 +268,21 @@ function HeroSection() {
             </div>
 
             <div className="text-center mb-6">
-              <h3 className="font-outfit font-semibold text-h3 text-white">GCSC Smart Contract</h3>
-              <p className="font-inter text-body-sm" style={{ color: '#A0AEC0' }}>Blockchain Escrow</p>
+              <h3 className="font-outfit font-semibold text-h3 text-[#0F172A]">GCSC Smart Contract</h3>
+              <p className="font-inter text-body-sm" style={{ color: '#475569' }}>Blockchain Escrow</p>
             </div>
 
             {/* Status pills */}
             <div className="flex justify-center gap-3 mb-6">
               <span
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-inter text-[0.75rem] font-medium"
-                style={{ backgroundColor: 'rgba(16,185,129,0.15)', color: '#10B981', border: '1px solid rgba(16,185,129,0.25)' }}
+                style={{ backgroundColor: 'rgba(16,185,129,0.12)', color: '#10B981', border: '1px solid rgba(16,185,129,0.25)' }}
               >
                 <Lock size={12} /> Protected
               </span>
               <span
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-inter text-[0.75rem] font-medium"
-                style={{ backgroundColor: 'rgba(245,158,11,0.15)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.25)' }}
+                style={{ backgroundColor: 'rgba(245,158,11,0.12)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.25)' }}
               >
                 <span className="text-[0.7rem]">&#9889;</span> Instant
               </span>
@@ -298,11 +295,11 @@ function HeroSection() {
             >
               <CheckCircle2 size={20} style={{ color: '#10B981', flexShrink: 0 }} className="mt-0.5" />
               <div>
-                <p className="font-inter text-[0.75rem] font-medium text-white leading-snug">
+                <p className="font-inter text-[0.75rem] font-medium text-[#0F172A] leading-snug">
                   Payment Released
                 </p>
-                <p className="font-inter text-[0.7rem] mt-1" style={{ color: '#A0AEC0' }}>
-                  Milestone 2 of 3 · $24,500 in Escrow
+                <p className="font-inter text-[0.7rem] mt-1" style={{ color: '#475569' }}>
+                  Milestone 2 of 3 &middot; $24,500 in Escrow
                 </p>
               </div>
             </div>
@@ -357,7 +354,7 @@ function StatBlock({ value, suffix, prefix, label }: { value: number; suffix?: s
       <div className="font-outfit font-bold text-stat tracking-stat" style={{ color: '#00D4FF' }}>
         {prefix}{count.toLocaleString()}{suffix}
       </div>
-      <p className="font-inter text-body mt-2" style={{ color: '#A0AEC0' }}>
+      <p className="font-inter text-body mt-2" style={{ color: '#475569' }}>
         {label}
       </p>
     </div>
@@ -388,7 +385,7 @@ function StatsSection() {
   }, { scope: sectionRef })
 
   return (
-    <section ref={sectionRef} className="relative w-full" style={{ backgroundColor: '#0B0E17' }}>
+    <section ref={sectionRef} className="relative w-full bg-white">
       {/* Top gradient line */}
       <div className="w-full h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(123,47,247,0.3), rgba(59,107,247,0.3), transparent)' }} />
 
@@ -397,15 +394,15 @@ function StatsSection() {
           <div className="stat-block flex-1 text-center relative">
             <StatBlock value={50} prefix="$" suffix="M+" label="Value Secured in Escrow" />
           </div>
-          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(160,174,192,0.15)' }} />
+          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(148,163,184,0.25)' }} />
           <div className="stat-block flex-1 text-center relative">
             <StatBlock value={1200} suffix="+" label="Projects Completed" />
           </div>
-          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(160,174,192,0.15)' }} />
+          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(148,163,184,0.25)' }} />
           <div className="stat-block flex-1 text-center relative">
             <StatBlock value={850} suffix="+" label="Verified Contractors" />
           </div>
-          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(160,174,192,0.15)' }} />
+          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(148,163,184,0.25)' }} />
           <div className="stat-block flex-1 text-center relative">
             <StatBlock value={99.7} suffix="%" label="Dispute Resolution Rate" />
           </div>
@@ -471,10 +468,10 @@ function HowItWorksSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <SectionLabel text="SIMPLE PROCESS" />
-          <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1" style={{ color: '#0B0E17' }}>
+          <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1" style={{ color: '#0F172A' }}>
             Three Steps to Secure Construction Payments
           </h2>
-          <p className="font-inter text-body-lg leading-body-lg mt-4 max-w-[640px] mx-auto" style={{ color: 'rgba(11,14,23,0.6)' }}>
+          <p className="font-inter text-body-lg leading-body-lg mt-4 max-w-[640px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
             From project posting to final payment release — every step protected by XPR blockchain smart contracts.
           </p>
         </div>
@@ -486,16 +483,16 @@ function HowItWorksSection() {
               key={step.number}
               className="step-card relative bg-white rounded-[20px] p-10 lg:p-12 transition-all duration-400"
               style={{
-                boxShadow: '0 4px 24px rgba(11,14,23,0.06)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
                 transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-6px)'
-                e.currentTarget.style.boxShadow = '0 12px 40px rgba(11,14,23,0.1)'
+                e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = '0 4px 24px rgba(11,14,23,0.06)'
+                e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.06)'
               }}
             >
               {/* Step number circle with gradient border */}
@@ -511,12 +508,12 @@ function HowItWorksSection() {
               </div>
 
               {/* Title */}
-              <h3 className="font-outfit font-semibold text-h3 leading-h3" style={{ color: '#0B0E17' }}>
+              <h3 className="font-outfit font-semibold text-h3 leading-h3" style={{ color: '#0F172A' }}>
                 {step.title}
               </h3>
 
               {/* Description */}
-              <p className="font-inter text-body leading-body mt-3" style={{ color: 'rgba(11,14,23,0.65)' }}>
+              <p className="font-inter text-body leading-body mt-3" style={{ color: 'rgba(15,23,42,0.65)' }}>
                 {step.description}
               </p>
 
@@ -585,22 +582,22 @@ function EscrowSimulation() {
   }, { scope: sectionRef })
 
   return (
-    <section id="escrow-section" ref={sectionRef} className="relative w-full" style={{ backgroundColor: '#0B0E17' }}>
+    <section id="escrow-section" ref={sectionRef} className="relative w-full" style={{ backgroundColor: '#F8FAFC' }}>
       <div ref={pinnedRef} className="min-h-[100dvh] flex flex-col">
         {/* Header */}
         <div className="mx-auto max-w-container container-padding pt-20 pb-10 text-center">
           <SectionLabel text="LIVE DEMO" />
-          <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1 text-white">
+          <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1" style={{ color: '#0F172A' }}>
             See How Escrow Works
           </h2>
-          <p className="font-inter text-body-lg leading-body-lg mt-4 max-w-[600px] mx-auto" style={{ color: '#A0AEC0' }}>
+          <p className="font-inter text-body-lg leading-body-lg mt-4 max-w-[600px] mx-auto" style={{ color: '#475569' }}>
             Watch how funds flow securely from homeowner to contractor through our blockchain escrow. Scroll to advance.
           </p>
         </div>
 
         {/* Progress bar */}
         <div className="mx-auto max-w-container container-padding w-full mb-12">
-          <div className="w-full h-[4px] rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}>
+          <div className="w-full h-[4px] rounded-full" style={{ backgroundColor: 'rgba(15,23,42,0.08)' }}>
             <div
               ref={progressRef}
               className="h-full rounded-full gradient-primary transition-none"
@@ -621,11 +618,11 @@ function EscrowSimulation() {
                 boxShadow: activePhase >= 0 ? '0 0 30px rgba(123,47,247,0.2)' : undefined,
               }}
             >
-              <div className="flex justify-center mb-3" style={{ color: activePhase >= 0 ? '#00D4FF' : '#A0AEC0' }}>
+              <div className="flex justify-center mb-3" style={{ color: activePhase >= 0 ? '#00D4FF' : '#94A3B8' }}>
                 <Home size={40} />
               </div>
-              <h4 className="font-outfit font-semibold text-h4 text-white">Homeowner</h4>
-              <p className="font-inter text-body-sm mt-1" style={{ color: '#A0AEC0' }}>$25,000</p>
+              <h4 className="font-outfit font-semibold text-h4 text-[#0F172A]">Homeowner</h4>
+              <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>$25,000</p>
             </div>
 
             {/* Arrow 1 */}
@@ -651,11 +648,11 @@ function EscrowSimulation() {
                 boxShadow: activePhase >= 1 ? '0 0 30px rgba(123,47,247,0.2)' : undefined,
               }}
             >
-              <div className="flex justify-center mb-3" style={{ color: activePhase >= 1 ? '#00D4FF' : '#A0AEC0' }}>
+              <div className="flex justify-center mb-3" style={{ color: activePhase >= 1 ? '#00D4FF' : '#94A3B8' }}>
                 <Lock size={40} />
               </div>
-              <h4 className="font-outfit font-semibold text-h4 text-white">XPR Escrow</h4>
-              <p className="font-inter text-body-sm mt-1" style={{ color: '#A0AEC0' }}>Funds Locked</p>
+              <h4 className="font-outfit font-semibold text-h4 text-[#0F172A]">XPR Escrow</h4>
+              <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>Funds Locked</p>
             </div>
 
             {/* Arrow 2 */}
@@ -675,11 +672,11 @@ function EscrowSimulation() {
                 boxShadow: activePhase >= 3 ? '0 0 30px rgba(16,185,129,0.2)' : undefined,
               }}
             >
-              <div className="flex justify-center mb-3" style={{ color: activePhase >= 3 ? '#10B981' : '#A0AEC0' }}>
+              <div className="flex justify-center mb-3" style={{ color: activePhase >= 3 ? '#10B981' : '#94A3B8' }}>
                 <HardHat size={40} />
               </div>
-              <h4 className="font-outfit font-semibold text-h4 text-white">Contractor</h4>
-              <p className="font-inter text-body-sm mt-1" style={{ color: '#A0AEC0' }}>Gets Paid</p>
+              <h4 className="font-outfit font-semibold text-h4 text-[#0F172A]">Contractor</h4>
+              <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>Gets Paid</p>
             </div>
           </div>
 
@@ -701,7 +698,7 @@ function EscrowSimulation() {
                   >
                     {phases[activePhase].number}
                   </div>
-                  <h3 className="font-outfit font-semibold text-h3 text-white">
+                  <h3 className="font-outfit font-semibold text-h3 text-[#0F172A]">
                     {phases[activePhase].title}
                   </h3>
                   {activePhase === 3 && (
@@ -714,7 +711,7 @@ function EscrowSimulation() {
                     </motion.div>
                   )}
                 </div>
-                <p className="font-inter text-body leading-body" style={{ color: '#A0AEC0' }}>
+                <p className="font-inter text-body leading-body" style={{ color: '#475569' }}>
                   {phases[activePhase].description}
                 </p>
               </motion.div>
@@ -827,9 +824,9 @@ function TestimonialsSection() {
     <section ref={sectionRef} className="relative w-full" style={{ backgroundColor: '#E2E8F0' }}>
       {/* Subtle dot pattern overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.05]"
+        className="absolute inset-0 pointer-events-none opacity-[0.04]"
         style={{
-          backgroundImage: `radial-gradient(circle, #0B0E17 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(circle, #0F172A 1px, transparent 1px)`,
           backgroundSize: '24px 24px',
         }}
       />
@@ -838,7 +835,7 @@ function TestimonialsSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <SectionLabel text="TRUSTED BY BUILDERS" />
-          <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2" style={{ color: '#0B0E17' }}>
+          <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2" style={{ color: '#0F172A' }}>
             What Our Users Say
           </h2>
         </div>
@@ -849,19 +846,19 @@ function TestimonialsSection() {
             <div
               key={t.name}
               className="testimonial-card bg-white rounded-[16px] p-8 transition-all duration-300"
-              style={{ boxShadow: '0 2px 16px rgba(11,14,23,0.05)' }}
+              style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}
             >
               <div className="mb-4">
                 <span className="font-outfit text-[2rem] leading-none" style={{ color: '#7B2FF7' }}>&ldquo;</span>
               </div>
-              <p className="font-inter text-body-lg leading-body-lg italic" style={{ color: '#0B0E17' }}>
+              <p className="font-inter text-body-lg leading-body-lg italic" style={{ color: '#0F172A' }}>
                 {t.quote}
               </p>
 
               {/* Author row */}
               <div
                 className="flex items-center gap-3 mt-6 pt-5"
-                style={{ borderTop: '1px solid rgba(11,14,23,0.06)' }}
+                style={{ borderTop: '1px solid rgba(15,23,42,0.06)' }}
               >
                 {/* Avatar */}
                 <div
@@ -871,10 +868,10 @@ function TestimonialsSection() {
                   {t.name.charAt(0)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-outfit font-semibold text-body" style={{ color: '#0B0E17' }}>
+                  <p className="font-outfit font-semibold text-body" style={{ color: '#0F172A' }}>
                     {t.name}
                   </p>
-                  <p className="font-inter text-body-sm" style={{ color: '#A0AEC0' }}>
+                  <p className="font-inter text-body-sm" style={{ color: '#475569' }}>
                     {t.role}
                   </p>
                 </div>
@@ -893,7 +890,7 @@ function TestimonialsSection() {
         <div className="text-center">
           <p
             className="font-inter text-body-sm uppercase mb-8"
-            style={{ color: '#A0AEC0', letterSpacing: '0.08em' }}
+            style={{ color: '#94A3B8', letterSpacing: '0.08em' }}
           >
             POWERED BY
           </p>
@@ -903,7 +900,7 @@ function TestimonialsSection() {
                 key={partner}
                 className="partner-logo font-outfit font-semibold text-[1.125rem] transition-all duration-300 cursor-default"
                 style={{
-                  color: '#0B0E17',
+                  color: '#0F172A',
                   opacity: 0.5,
                   filter: 'grayscale(1)',
                 }}
@@ -970,12 +967,12 @@ function FAQItem({
   onClick: () => void
 }) {
   return (
-    <div style={{ borderBottom: '1px solid rgba(11,14,23,0.08)' }}>
+    <div style={{ borderBottom: '1px solid rgba(15,23,42,0.08)' }}>
       <button
         className="w-full flex items-center justify-between py-6 text-left"
         onClick={onClick}
       >
-        <span className="font-outfit font-semibold text-body pr-8" style={{ color: '#0B0E17' }}>
+        <span className="font-outfit font-semibold text-body pr-8" style={{ color: '#0F172A' }}>
           {item.question}
         </span>
         <span
@@ -999,7 +996,7 @@ function FAQItem({
           >
             <p
               className="font-inter text-body leading-body pb-6"
-              style={{ color: 'rgba(11,14,23,0.7)' }}
+              style={{ color: 'rgba(15,23,42,0.7)' }}
             >
               {item.answer}
             </p>
@@ -1037,7 +1034,7 @@ function FAQSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <SectionLabel text="GOT QUESTIONS?" />
-          <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2" style={{ color: '#0B0E17' }}>
+          <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2" style={{ color: '#0F172A' }}>
             Frequently Asked Questions
           </h2>
         </div>

@@ -95,7 +95,7 @@ function StatCard({ number, label }: { number: string; label: string }) {
       >
         {number}
       </div>
-      <div className="font-inter text-body-sm text-silver mt-2">{label}</div>
+      <div className="font-inter text-body-sm mt-2" style={{ color: '#475569' }}>{label}</div>
     </motion.div>
   )
 }
@@ -105,8 +105,8 @@ function VisionItem({ icon: Icon, title, description }: { icon: typeof Globe; ti
   return (
     <motion.div variants={fadeUpChild} className="flex flex-col items-start">
       <Icon size={48} style={{ color: '#00D4FF' }} />
-      <h3 className="font-outfit font-semibold text-h3 text-white mt-4">{title}</h3>
-      <p className="font-inter text-body text-silver mt-2">{description}</p>
+      <h3 className="font-outfit font-semibold text-h3 text-[#0F172A] mt-4">{title}</h3>
+      <p className="font-inter text-body text-[#475569] mt-2">{description}</p>
     </motion.div>
   )
 }
@@ -124,16 +124,16 @@ function ValueCard({
       transition={{ duration: 0.4, ease: easeSmooth }}
       className="relative bg-white rounded-2xl p-10 overflow-hidden"
       style={{
-        boxShadow: '0 2px 16px rgba(11,14,23,0.05)',
+        boxShadow: '0 2px 16px rgba(0,0,0,0.05)',
         border: '1px solid transparent',
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLElement).style.borderColor = 'rgba(123,47,247,0.2)'
-        ;(e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(11,14,23,0.1)'
+        ;(e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.1)'
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLElement).style.borderColor = 'transparent'
-        ;(e.currentTarget as HTMLElement).style.boxShadow = '0 2px 16px rgba(11,14,23,0.05)'
+        ;(e.currentTarget as HTMLElement).style.boxShadow = '0 2px 16px rgba(0,0,0,0.05)'
       }}
     >
       <span
@@ -150,8 +150,8 @@ function ValueCard({
         {num}
       </span>
       <Icon size={40} style={{ color: '#7B2FF7', marginBottom: '20px' }} />
-      <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0B0E17' }}>{title}</h3>
-      <p className="font-inter text-body mt-3" style={{ color: 'rgba(11,14,23,0.7)' }}>{description}</p>
+      <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{title}</h3>
+      <p className="font-inter text-body mt-3" style={{ color: 'rgba(15,23,42,0.7)' }}>{description}</p>
     </motion.div>
   )
 }
@@ -169,11 +169,11 @@ function TeamCard({
       whileHover={{ y: -6 }}
       transition={{ duration: 0.4, ease: easeSmooth }}
       className="bg-white rounded-[20px] overflow-hidden"
-      style={{ boxShadow: '0 4px 24px rgba(11,14,23,0.06)' }}
+      style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
     >
       <div
         className="flex items-center justify-center relative"
-        style={{ height: '280px', background: '#0B0E17' }}
+        style={{ height: '280px', background: '#F8FAFC' }}
       >
         {image ? (
           <div
@@ -188,18 +188,18 @@ function TeamCard({
               src={image}
               alt={name}
               className="w-full h-full rounded-full object-cover"
-              style={{ background: '#0B0E17' }}
+              style={{ background: '#F8FAFC' }}
             />
           </div>
         ) : (
           <div
             className="w-[160px] h-[160px] rounded-full flex items-center justify-center font-outfit font-bold text-[3rem]"
             style={{
-              background: 'linear-gradient(135deg, #151928 0%, #0B0E17 100%)',
+              background: 'linear-gradient(135deg, #F1F5F9 0%, #FFFFFF 100%)',
               border: '3px solid transparent',
               backgroundClip: 'padding-box',
-              color: '#F8FAFF',
-              boxShadow: 'inset 0 0 40px rgba(123,47,247,0.15)',
+              color: '#0F172A',
+              boxShadow: 'inset 0 0 40px rgba(123,47,247,0.1)',
             }}
           >
             {initials}
@@ -207,14 +207,14 @@ function TeamCard({
         )}
       </div>
       <div className="p-6">
-        <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0B0E17' }}>{name}</h3>
+        <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{name}</h3>
         <p className="font-inter font-medium text-body-sm mt-1" style={{ color: '#7B2FF7' }}>{role}</p>
-        <p className="font-inter text-body-sm mt-2 line-clamp-2" style={{ color: 'rgba(11,14,23,0.65)' }}>{bio}</p>
+        <p className="font-inter text-body-sm mt-2 line-clamp-2" style={{ color: 'rgba(15,23,42,0.65)' }}>{bio}</p>
         <div className="flex items-center gap-3 mt-4">
-          <a href="#" className="text-silver hover:text-violet transition-colors duration-200">
+          <a href="#" className="text-[#94A3B8] hover:text-violet transition-colors duration-200">
             <Linkedin size={20} />
           </a>
-          <a href="#" className="text-silver hover:text-violet transition-colors duration-200">
+          <a href="#" className="text-[#94A3B8] hover:text-violet transition-colors duration-200">
             <Twitter size={20} />
           </a>
         </div>
@@ -251,8 +251,8 @@ function TimelineMilestone({
           <span className="font-outfit font-bold text-label" style={{ color: '#00D4FF', letterSpacing: '0.08em' }}>
             {date}
           </span>
-          <h3 className="font-outfit font-semibold text-h3 text-white mt-2">{title}</h3>
-          <p className="font-inter text-body text-silver mt-2">{description}</p>
+          <h3 className="font-outfit font-semibold text-h3 text-[#0F172A] mt-2">{title}</h3>
+          <p className="font-inter text-body text-[#475569] mt-2">{description}</p>
         </div>
       </div>
 
@@ -316,17 +316,17 @@ export default function About() {
       {/* ── Section 1: Page Hero ── */}
       <section
         className="relative flex items-center justify-center overflow-hidden"
-        style={{ height: '60vh', background: '#0B0E17' }}
+        style={{ height: '60vh', background: '#F8FAFC' }}
       >
         {/* Mesh gradient background */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123,47,247,0.18) 0%, transparent 60%),' +
-              'radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59,107,247,0.15) 0%, transparent 55%),' +
-              'radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0,212,255,0.12) 0%, transparent 50%),' +
-              '#0B0E17',
+              'radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123,47,247,0.12) 0%, transparent 60%),' +
+              'radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59,107,247,0.1) 0%, transparent 55%),' +
+              'radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0,212,255,0.06) 0%, transparent 50%),' +
+              '#F8FAFC',
           }}
         />
         <motion.div
@@ -338,14 +338,14 @@ export default function About() {
           <SectionLabel text="OUR STORY" />
           <motion.h1
             variants={fadeUpChild}
-            className="font-outfit font-bold text-h1 text-white"
+            className="font-outfit font-bold text-h1 text-[#0F172A]"
           >
             Building Trust, One Block at a Time
           </motion.h1>
           <motion.p
             variants={fadeUpChild}
-            className="font-inter text-body-lg text-silver mt-6 mx-auto"
-            style={{ maxWidth: '640px' }}
+            className="font-inter text-body-lg mt-6 mx-auto"
+            style={{ color: '#475569', maxWidth: '640px' }}
           >
             GCSC was born from a simple idea: construction payments should be as reliable as the buildings they create.
           </motion.p>
@@ -364,17 +364,17 @@ export default function About() {
               variants={slideRight}
             >
               <SectionLabel text="THE BEGINNING" />
-              <h2 className="font-outfit font-bold text-h2" style={{ color: '#0B0E17' }}>
+              <h2 className="font-outfit font-bold text-h2" style={{ color: '#0F172A' }}>
                 Why We Built GCSC
               </h2>
               <div className="flex flex-col gap-5 mt-8">
-                <p className="font-inter text-body" style={{ color: 'rgba(11,14,23,0.75)' }}>
+                <p className="font-inter text-body" style={{ color: 'rgba(15,23,42,0.75)' }}>
                   In 2023, our founder watched a close friend lose $40,000 to a contractor who vanished halfway through a home renovation. The contractor had been paid upfront. There was no escrow. No protection. Just gone.
                 </p>
-                <p className="font-inter text-body" style={{ color: 'rgba(11,14,23,0.75)' }}>
+                <p className="font-inter text-body" style={{ color: 'rgba(15,23,42,0.75)' }}>
                   That same week, we discovered the XPR Network — a blockchain with instant transactions, zero gas fees, and smart contract capabilities perfect for real-world use cases. The idea clicked immediately: what if every construction payment was protected by an unbreakable smart contract?
                 </p>
-                <p className="font-inter text-body" style={{ color: 'rgba(11,14,23,0.75)' }}>
+                <p className="font-inter text-body" style={{ color: 'rgba(15,23,42,0.75)' }}>
                   GCSC launched in 2024 as the world's first construction marketplace built entirely on blockchain escrow. Today, we protect millions in construction payments across thousands of projects, and we're just getting started.
                 </p>
               </div>
@@ -404,7 +404,7 @@ export default function About() {
       </section>
 
       {/* ── Section 3: Mission & Vision ── */}
-      <section style={{ background: '#0B0E17', padding: '120px 0' }}>
+      <section style={{ background: '#F8FAFC', padding: '120px 0' }}>
         <div className="mx-auto max-w-[900px] container-padding text-center">
           <motion.div
             initial="hidden"
@@ -415,7 +415,7 @@ export default function About() {
             <SectionLabel text="OUR MISSION" />
             <motion.h2
               variants={fadeUpChild}
-              className="font-outfit font-bold text-white mx-auto"
+              className="font-outfit font-bold text-[#0F172A] mx-auto"
               style={{
                 fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
                 lineHeight: 1.2,
@@ -468,7 +468,7 @@ export default function About() {
             <motion.h2
               variants={fadeUpChild}
               className="font-outfit font-bold text-h2"
-              style={{ color: '#0B0E17' }}
+              style={{ color: '#0F172A' }}
             >
               Our Core Values
             </motion.h2>
@@ -499,13 +499,13 @@ export default function About() {
             className="text-center mb-16"
           >
             <SectionLabel text="THE PEOPLE" />
-            <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2" style={{ color: '#0B0E17' }}>
+            <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2" style={{ color: '#0F172A' }}>
               Meet the Team
             </motion.h2>
             <motion.p
               variants={fadeUpChild}
               className="font-inter text-body-lg mt-3 mx-auto"
-              style={{ color: 'rgba(11,14,23,0.6)', maxWidth: '640px' }}
+              style={{ color: 'rgba(15,23,42,0.6)', maxWidth: '640px' }}
             >
               Builders, engineers, and dreamers united by a mission to transform construction payments.
             </motion.p>
@@ -526,7 +526,7 @@ export default function About() {
       </section>
 
       {/* ── Section 6: Company Timeline ── */}
-      <section style={{ background: '#0B0E17', padding: '120px 0' }}>
+      <section style={{ background: '#F8FAFC', padding: '120px 0' }}>
         <div className="mx-auto max-w-container container-padding">
           <motion.div
             initial="hidden"
@@ -536,7 +536,7 @@ export default function About() {
             className="text-center mb-16"
           >
             <SectionLabel text="OUR JOURNEY" />
-            <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2 text-white">
+            <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2 text-[#0F172A]">
               Key Milestones
             </motion.h2>
           </motion.div>
@@ -583,8 +583,8 @@ export default function About() {
                   />
                   <div className="glass-card" style={{ padding: '20px 24px' }}>
                     <span className="font-outfit font-bold text-label" style={{ color: '#00D4FF' }}>{m.date}</span>
-                    <h3 className="font-outfit font-semibold text-h3 text-white mt-1">{m.title}</h3>
-                    <p className="font-inter text-body-sm text-silver mt-1">{m.description}</p>
+                    <h3 className="font-outfit font-semibold text-h3 text-[#0F172A] mt-1">{m.title}</h3>
+                    <p className="font-inter text-body-sm text-[#475569] mt-1">{m.description}</p>
                   </div>
                 </motion.div>
               ))}

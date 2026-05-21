@@ -15,9 +15,9 @@ module.exports = {
         silver: '#A0AEC0',
         surface: '#F1F5F9',
         'surface-alt': '#E2E8F0',
-        glass: 'rgba(11, 14, 23, 0.55)',
-        'glass-border': 'rgba(123, 47, 247, 0.15)',
-        'glass-border-hover': 'rgba(123, 47, 247, 0.35)',
+        glass: 'rgba(255, 255, 255, 0.85)',
+        'glass-border': 'rgba(123, 47, 247, 0.25)',
+        'glass-border-hover': 'rgba(123, 47, 247, 0.45)',
         success: '#10B981',
         warning: '#F59E0B',
         danger: '#EF4444',
@@ -103,7 +103,7 @@ module.exports = {
       },
       boxShadow: {
         xs: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-        'glass': '0 20px 60px rgba(123, 47, 247, 0.1)',
+        'glass': '0 20px 60px rgba(123, 47, 247, 0.15)',
         'glow': '0 0 30px rgba(123, 47, 247, 0.4)',
       },
       keyframes: {

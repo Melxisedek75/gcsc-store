@@ -12,16 +12,7 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   useEffect(() => {
     setIsOpen(false)
@@ -40,12 +31,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      style={{
-        background: scrolled ? 'rgba(11, 14, 23, 0.9)' : 'rgba(11, 14, 23, 0.7)',
-        backdropFilter: 'blur(20px) saturate(180%)',
-        borderBottom: '1px solid rgba(123, 47, 247, 0.08)',
-      }}
+      className="sticky top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-xl border-b border-gray-200/50"
     >
       <div className="mx-auto max-w-container container-padding">
         <div className="flex items-center justify-between h-[72px]">
@@ -55,7 +41,7 @@ export default function Navbar() {
               src="/gcsc-logo-nav.png"
               alt="GCSC Smart Contract"
               className="h-[40px] w-auto object-contain"
-              style={{ filter: 'drop-shadow(0 0 8px rgba(123,47,247,0.3))' }}
+              style={{ filter: 'drop-shadow(0 0 8px rgba(123,47,247,0.15))' }}
             />
           </Link>
 
@@ -65,7 +51,7 @@ export default function Navbar() {
               <Link
                 key={link.path}
                 to={link.path}
-                className="relative font-inter font-medium text-nav text-silver hover:text-white transition-colors duration-200"
+                className="relative font-inter font-medium text-nav text-[#475569] hover:text-[#0F172A] transition-colors duration-200"
               >
                 {link.label}
               </Link>
@@ -85,7 +71,7 @@ export default function Navbar() {
 
           {/* Mobile Hamburger */}
           <button
-            className="lg:hidden relative z-50 w-10 h-10 flex items-center justify-center text-white"
+            className="lg:hidden relative z-50 w-10 h-10 flex items-center justify-center text-[#0F172A]"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -96,7 +82,7 @@ export default function Navbar() {
 
       {/* Mobile Overlay Menu */}
       <div
-        className="lg:hidden fixed inset-0 top-[72px] bg-void transition-all duration-500"
+        className="lg:hidden fixed inset-0 top-[72px] bg-white transition-all duration-500"
         style={{
           opacity: isOpen ? 1 : 0,
           pointerEvents: isOpen ? 'auto' : 'none',
@@ -108,7 +94,7 @@ export default function Navbar() {
             <Link
               key={link.path}
               to={link.path}
-              className="font-outfit font-semibold text-[1.75rem] text-white hover:text-electric transition-colors duration-200"
+              className="font-outfit font-semibold text-[1.75rem] text-[#0F172A] hover:text-violet transition-colors duration-200"
               style={{
                 opacity: isOpen ? 1 : 0,
                 transform: isOpen ? 'translateY(0)' : 'translateY(20px)',

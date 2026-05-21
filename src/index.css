@@ -14,39 +14,39 @@
     --silver: #A0AEC0;
     --surface: #F1F5F9;
     --surface-alt: #E2E8F0;
-    --glass: rgba(11, 14, 23, 0.55);
-    --glass-border: rgba(123, 47, 247, 0.15);
-    --glass-border-hover: rgba(123, 47, 247, 0.35);
+    --glass: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(123, 47, 247, 0.25);
+    --glass-border-hover: rgba(123, 47, 247, 0.45);
     --success: #10B981;
     --warning: #F59E0B;
     --danger: #EF4444;
 
     --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 262 92% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 262 92% 58%;
     --radius: 0.625rem;
   }
 
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    color: var(--white);
-    background-color: var(--void);
+    color: #0F172A;
+    background-color: #FFFFFF;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
@@ -68,10 +68,10 @@
 
   .gradient-mesh {
     background:
-      radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123, 47, 247, 0.5) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59, 107, 247, 0.45) 0%, transparent 55%),
-      radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0, 212, 255, 0.35) 0%, transparent 50%),
-      #0B0E17;
+      radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123, 47, 247, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59, 107, 247, 0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+      #F8FAFC;
   }
 
   .gradient-card {
@@ -79,7 +79,7 @@
   }
 
   .gradient-subtle {
-    background: linear-gradient(180deg, #0B0E17 0%, #151928 100%);
+    background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
   }
 
   .gradient-text {
@@ -95,15 +95,16 @@
   }
 
   .glass-card {
-    background: rgba(11, 14, 23, 0.55);
-    border: 1px solid rgba(123, 47, 247, 0.15);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(123, 47, 247, 0.25);
     border-radius: 16px;
     backdrop-filter: blur(12px) saturate(150%);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   }
 
   .glass-card-hover:hover {
-    border-color: rgba(123, 47, 247, 0.35);
+    border-color: rgba(123, 47, 247, 0.45);
     transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(123, 47, 247, 0.1);
+    box-shadow: 0 20px 60px rgba(123, 47, 247, 0.15);
   }
 }

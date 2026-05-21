@@ -212,15 +212,15 @@ const faqItems = [
 /* ─── FAQ Accordion Item ─── */
 function FaqItem({ question, answer, isOpen, onClick }: { question: string; answer: string; isOpen: boolean; onClick: () => void }) {
   return (
-    <div className="border-b" style={{ borderColor: 'rgba(11,14,23,0.08)' }}>
+    <div className="border-b" style={{ borderColor: 'rgba(15,23,42,0.08)' }}>
       <button
         onClick={onClick}
         className="w-full flex items-center justify-between py-5 text-left group"
       >
-        <span className="font-outfit font-semibold text-h4 text-void pr-4">{question}</span>
+        <span className="font-outfit font-semibold text-h4 text-[#0F172A] pr-4">{question}</span>
         <ChevronDown
           size={20}
-          className="shrink-0 text-void transition-transform duration-300"
+          className="shrink-0 text-[#475569] transition-transform duration-300"
           style={{
             transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
             transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -236,7 +236,7 @@ function FaqItem({ question, answer, isOpen, onClick }: { question: string; answ
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
             className="overflow-hidden"
           >
-            <p className="font-inter text-body text-silver pb-5 leading-body">{answer}</p>
+            <p className="font-inter text-body text-[#475569] pb-5 leading-body">{answer}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -290,10 +290,10 @@ export default function Pricing() {
         style={{
           minHeight: '50vh',
           background: `
-            radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123, 47, 247, 0.35) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59, 107, 247, 0.3) 0%, transparent 55%),
-            radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0, 212, 255, 0.25) 0%, transparent 50%),
-            #0B0E17
+            radial-gradient(ellipse 80% 60% at 20% 40%, rgba(123, 47, 247, 0.18) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 70% 60%, rgba(59, 107, 247, 0.12) 0%, transparent 55%),
+            radial-gradient(ellipse 50% 40% at 50% 90%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+            #F8FAFC
           `,
         }}
       >
@@ -314,7 +314,7 @@ export default function Pricing() {
             {/* Heading */}
             <motion.h1
               variants={staggerChild}
-              className="font-outfit font-bold text-h1 text-white mb-4"
+              className="font-outfit font-bold text-h1 text-[#0F172A] mb-4"
             >
               Simple, Fair Pricing
             </motion.h1>
@@ -322,7 +322,7 @@ export default function Pricing() {
             {/* Subheading */}
             <motion.p
               variants={staggerChild}
-              className="font-inter text-body-lg text-silver max-w-[640px] mx-auto"
+              className="font-inter text-body-lg text-[#475569] max-w-[640px] mx-auto"
             >
               No hidden fees. No monthly subscriptions. Pay only when you use GCSC to secure a construction project.
             </motion.p>
@@ -331,7 +331,7 @@ export default function Pricing() {
             <motion.div variants={staggerChild} className="mt-8 flex items-center justify-center">
               <div
                 className="relative inline-flex items-center rounded-full p-1"
-                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}
+                style={{ background: 'rgba(15,23,42,0.06)', border: '1px solid rgba(15,23,42,0.1)' }}
               >
                 <motion.div
                   className="absolute top-1 bottom-1 rounded-full bg-violet"
@@ -348,14 +348,14 @@ export default function Pricing() {
                 <button
                   onClick={() => setUserType('homeowner')}
                   className="relative z-10 px-6 py-2.5 font-inter font-medium text-[0.875rem] rounded-full transition-colors duration-200"
-                  style={{ color: userType === 'homeowner' ? '#fff' : 'var(--silver)' }}
+                  style={{ color: userType === 'homeowner' ? '#fff' : '#475569' }}
                 >
                   Homeowner
                 </button>
                 <button
                   onClick={() => setUserType('contractor')}
                   className="relative z-10 px-6 py-2.5 font-inter font-medium text-[0.875rem] rounded-full transition-colors duration-200"
-                  style={{ color: userType === 'contractor' ? '#fff' : 'var(--silver)' }}
+                  style={{ color: userType === 'contractor' ? '#fff' : '#475569' }}
                 >
                   Contractor
                 </button>
@@ -405,11 +405,11 @@ export default function Pricing() {
                     style={{
                       padding: '40px 32px',
                       boxShadow: tier.popular
-                        ? '0 4px 24px rgba(11,14,23,0.1)'
-                        : '0 4px 24px rgba(11,14,23,0.06)',
+                        ? '0 4px 24px rgba(0,0,0,0.1)'
+                        : '0 4px 24px rgba(0,0,0,0.06)',
                       border: tier.popular
                         ? '2px solid transparent'
-                        : '1px solid rgba(11,14,23,0.08)',
+                        : '1px solid rgba(15,23,42,0.08)',
                       transform: tier.popular ? 'scale(1.03)' : 'scale(1)',
                       backgroundOrigin: tier.popular ? 'border-box' : undefined,
                       transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -430,13 +430,13 @@ export default function Pricing() {
                     )}
 
                     {/* Plan name */}
-                    <h3 className="font-outfit font-bold text-h3" style={{ color: '#1a1a2e' }}>
+                    <h3 className="font-outfit font-bold text-h3" style={{ color: '#0F172A' }}>
                       {tier.name}
                     </h3>
 
                     {/* Price */}
                     <div className="mt-2 flex items-baseline gap-1">
-                      <span className="font-outfit font-bold" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', color: '#1a1a2e' }}>
+                      <span className="font-outfit font-bold" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', color: '#0F172A' }}>
                         {tier.price}
                       </span>
                       {tier.priceNote && (
@@ -445,10 +445,10 @@ export default function Pricing() {
                     </div>
 
                     {/* Subtitle */}
-                    <p className="font-inter text-body-sm text-silver mt-1">{tier.subtitle}</p>
+                    <p className="font-inter text-body-sm text-[#94A3B8] mt-1">{tier.subtitle}</p>
 
                     {/* Divider */}
-                    <div className="my-6 h-px" style={{ background: 'rgba(11,14,23,0.08)' }} />
+                    <div className="my-6 h-px" style={{ background: 'rgba(15,23,42,0.08)' }} />
 
                     {/* Features */}
                     <ul className="flex flex-col gap-3.5">
@@ -457,12 +457,12 @@ export default function Pricing() {
                           {f.included ? (
                             <Check size={16} className="mt-0.5 shrink-0 text-success" />
                           ) : (
-                            <X size={16} className="mt-0.5 shrink-0" style={{ color: 'rgba(11,14,23,0.15)' }} />
+                            <X size={16} className="mt-0.5 shrink-0" style={{ color: 'rgba(15,23,42,0.15)' }} />
                           )}
                           <span
                             className="font-inter text-body leading-body"
                             style={{
-                              color: f.included ? '#1a1a2e' : 'rgba(11,14,23,0.35)',
+                              color: f.included ? '#0F172A' : 'rgba(15,23,42,0.35)',
                               textDecoration: f.included ? 'none' : 'line-through',
                             }}
                           >
@@ -488,12 +488,12 @@ export default function Pricing() {
                           className="block w-full text-center font-inter font-semibold text-[0.9375rem] py-3.5 rounded-full transition-all duration-300 hover:scale-[1.04]"
                           style={{
                             border: '1px solid rgba(123,47,247,0.4)',
-                            color: '#1a1a2e',
+                            color: '#0F172A',
                             background: 'transparent',
                             transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = 'rgba(123,47,247,0.1)'
+                            e.currentTarget.style.background = 'rgba(123,47,247,0.08)'
                             e.currentTarget.style.borderColor = 'rgba(123,47,247,0.7)'
                           }}
                           onMouseLeave={(e) => {
@@ -517,26 +517,26 @@ export default function Pricing() {
       <section className="w-full bg-surface-alt" style={{ padding: '100px 0' }}>
         <div className="mx-auto max-w-[1000px] container-padding">
           <ScrollReveal className="text-center mb-12">
-            <h2 className="font-outfit font-bold text-h2 text-void mb-3">Compare All Features</h2>
-            <p className="font-inter text-body" style={{ color: 'rgba(11,14,23,0.6)' }}>
+            <h2 className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">Compare All Features</h2>
+            <p className="font-inter text-body" style={{ color: 'rgba(15,23,42,0.6)' }}>
               A detailed breakdown of what&apos;s included in each plan.
             </p>
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>
-            <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'rgba(11,14,23,0.06)' }}>
+            <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'rgba(15,23,42,0.06)' }}>
               {/* Table header */}
               <div
                 className="grid grid-cols-4 gap-4 px-6 py-4"
                 style={{
-                  background: '#0B0E17',
+                  background: '#F8FAFC',
                   gridTemplateColumns: '2fr 1fr 1fr 1fr',
                 }}
               >
-                <span className="font-outfit font-semibold text-[0.875rem] text-white uppercase tracking-[0.05em]">Feature</span>
-                <span className="font-outfit font-semibold text-[0.875rem] text-white uppercase tracking-[0.05em] text-center">Starter</span>
-                <span className="font-outfit font-semibold text-[0.875rem] text-white uppercase tracking-[0.05em] text-center">Pro</span>
-                <span className="font-outfit font-semibold text-[0.875rem] text-white uppercase tracking-[0.05em] text-center">Enterprise</span>
+                <span className="font-outfit font-semibold text-[0.875rem] text-[#0F172A] uppercase tracking-[0.05em]">Feature</span>
+                <span className="font-outfit font-semibold text-[0.875rem] text-[#0F172A] uppercase tracking-[0.05em] text-center">Starter</span>
+                <span className="font-outfit font-semibold text-[0.875rem] text-[#0F172A] uppercase tracking-[0.05em] text-center">Pro</span>
+                <span className="font-outfit font-semibold text-[0.875rem] text-[#0F172A] uppercase tracking-[0.05em] text-center">Enterprise</span>
               </div>
 
               {/* Table body */}
@@ -556,11 +556,11 @@ export default function Pricing() {
                       className="grid grid-cols-4 gap-4 px-6 py-3.5 transition-colors duration-200 hover:bg-[rgba(123,47,247,0.03)]"
                       style={{
                         gridTemplateColumns: '2fr 1fr 1fr 1fr',
-                        background: (catIdx + rowIdx) % 2 === 0 ? '#fff' : 'rgba(11,14,23,0.02)',
-                        borderBottom: '1px solid rgba(11,14,23,0.06)',
+                        background: (catIdx + rowIdx) % 2 === 0 ? '#fff' : 'rgba(15,23,42,0.02)',
+                        borderBottom: '1px solid rgba(15,23,42,0.06)',
                       }}
                     >
-                      <span className="font-inter text-body" style={{ color: '#1a1a2e' }}>{row.feature}</span>
+                      <span className="font-inter text-body" style={{ color: '#0F172A' }}>{row.feature}</span>
                       {(['starter', 'pro', 'enterprise'] as const).map((col) => {
                         const val = row[col]
                         return (
@@ -569,10 +569,10 @@ export default function Pricing() {
                               val ? (
                                 <Check size={16} className="text-success" />
                               ) : (
-                                <X size={16} style={{ color: 'rgba(11,14,23,0.15)' }} />
+                                <X size={16} style={{ color: 'rgba(15,23,42,0.15)' }} />
                               )
                             ) : (
-                              <span className="font-inter text-body-sm" style={{ color: '#1a1a2e' }}>{val}</span>
+                              <span className="font-inter text-body-sm" style={{ color: '#0F172A' }}>{val}</span>
                             )}
                           </span>
                         )
@@ -596,11 +596,11 @@ export default function Pricing() {
                 Pricing Questions
               </span>
             </div>
-            <h2 className="font-outfit font-bold text-h2 text-void">Common Pricing Questions</h2>
+            <h2 className="font-outfit font-bold text-h2 text-[#0F172A]">Common Pricing Questions</h2>
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>
-            <div className="bg-white rounded-2xl p-6 md:p-8" style={{ boxShadow: '0 2px 16px rgba(11,14,23,0.05)' }}>
+            <div className="bg-white rounded-2xl p-6 md:p-8" style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
               {faqItems.map((item, i) => (
                 <FaqItem
                   key={i}
