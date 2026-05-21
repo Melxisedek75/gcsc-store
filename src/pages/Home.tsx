@@ -257,14 +257,11 @@ function HeroSection() {
 
             {/* GCSC Logo Mark */}
             <div className="flex justify-center mb-4">
-              <div
-                className="w-20 h-20 flex items-center justify-center rounded-full animate-glow-pulse"
-                style={{
-                  background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 50%, #00D4FF 100%)',
-                }}
-              >
-                <span className="font-outfit font-bold text-2xl text-white">G</span>
-              </div>
+              <img
+                src="/gcsc-logo-round-80.png"
+                alt="GCSC Smart Contract"
+                className="w-20 h-20 rounded-full animate-glow-pulse object-cover"
+              />
             </div>
 
             <div className="text-center mb-6">

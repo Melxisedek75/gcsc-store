@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { Twitter, Linkedin, MessageCircle, Github } from 'lucide-react'
+import { X, Linkedin, MessageCircle, Github } from 'lucide-react'
 
 const productLinks = [
   { label: 'Features', path: '/#features' },
@@ -22,7 +22,7 @@ const legalLinks = [
 ]
 
 const socialLinks = [
-  { icon: Twitter, label: 'Twitter/X', href: '#' },
+  { icon: X, label: 'X (Twitter)', href: '#' },
   { icon: Linkedin, label: 'LinkedIn', href: '#' },
   { icon: MessageCircle, label: 'Discord', href: '#' },
   { icon: Github, label: 'GitHub', href: '#' },
@@ -37,9 +37,11 @@ export default function Footer() {
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
             <Link to="/" className="inline-flex items-center gap-2 mb-4">
-              <span className="font-outfit font-bold text-[1.5rem] leading-none tracking-tight gradient-text">
-                GCSC
-              </span>
+              <img
+                src="/gcsc-logo-round-64.png"
+                alt="GCSC Smart Contract"
+                className="w-12 h-12 rounded-full object-cover"
+              />
             </Link>
             <p className="font-inter text-body-sm text-[#475569] leading-body-sm mb-6 max-w-[260px]">
               Blockchain-powered construction escrow. Secure payments, verified contractors, immutable trust.
