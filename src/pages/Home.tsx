@@ -149,8 +149,20 @@ function HeroSection() {
     <section
       ref={sectionRef}
       className="relative w-full overflow-hidden"
-      style={{ minHeight: '100dvh', backgroundColor: '#0B0E17' }}
+      style={{
+        minHeight: '100dvh',
+        backgroundImage: `url('/hero-banner-dark.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
     >
+      {/* Dark overlay for text readability */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ backgroundColor: 'rgba(11, 14, 23, 0.55)' }}
+      />
+
       {/* Mesh gradient orbs */}
       <div
         ref={orb1Ref}
