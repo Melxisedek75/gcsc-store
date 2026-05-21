@@ -50,13 +50,13 @@ export default function Navbar() {
       <div className="mx-auto max-w-container container-padding">
         <div className="flex items-center justify-between h-[72px]">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            <span className="font-outfit font-bold text-[1.5rem] leading-none tracking-tight gradient-text">
-              GCSC
-            </span>
-            <span className="hidden sm:block font-inter font-medium text-[0.625rem] uppercase tracking-label text-silver">
-              Smart Contract
-            </span>
+          <Link to="/" className="flex items-center shrink-0">
+            <img
+              src="/gcsc-logo-nav.png"
+              alt="GCSC Smart Contract"
+              className="h-[40px] w-auto object-contain"
+              style={{ filter: 'drop-shadow(0 0 8px rgba(123,47,247,0.3))' }}
+            />
           </Link>
 
           {/* Desktop Nav Links */}
