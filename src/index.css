@@ -107,4 +107,40 @@
     transform: translateY(-4px);
     box-shadow: 0 20px 60px rgba(123, 47, 247, 0.15);
   }
+
+  /* ── Shimmer Text (slow wave) ── */
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      #7B2FF7 0%,
+      #3B6BF7 20%,
+      #00D4FF 40%,
+      #3B6BF7 60%,
+      #7B2FF7 80%,
+      #3B6BF7 100%
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer-wave 10s ease-in-out infinite;
+  }
+
+  @keyframes shimmer-wave {
+    0% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+    100% { background-position: 0% center; }
+  }
+
+  /* ── Partner Logo Hover ── */
+  .partner-logo-real {
+    opacity: 0.6;
+    filter: grayscale(1);
+    transition: all 0.4s ease;
+  }
+  .partner-logo-real:hover {
+    opacity: 1;
+    filter: grayscale(0);
+    transform: scale(1.05);
+  }
 }

@@ -14,6 +14,8 @@ import {
   CheckCircle2,
   Star,
   Plus,
+  Zap,
+  Globe,
 } from 'lucide-react'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -296,7 +298,7 @@ function HeroSection() {
                   Payment Released
                 </p>
                 <p className="font-inter text-[0.7rem] mt-1" style={{ color: '#475569' }}>
-                  Milestone 2 of 3 &middot; $24,500 in Escrow
+                  Milestone 2 of 3 &middot; Funds in Escrow
                 </p>
               </div>
             </div>
@@ -358,12 +360,67 @@ function StatBlock({ value, suffix, prefix, label }: { value: number; suffix?: s
   )
 }
 
+const features = [
+  {
+    icon: ShieldCheck,
+    title: 'Blockchain Escrow',
+    description: 'Smart contracts hold funds securely until milestones are completed and approved by both parties.',
+    color: '#7B2FF7',
+  },
+  {
+    icon: Zap,
+    title: 'Zero Gas Fees',
+    description: 'Powered by XPR Network with zero gas fees and 3-second transaction finality.',
+    color: '#3B6BF7',
+  },
+  {
+    icon: Lock,
+    title: 'AES-256 Encryption',
+    description: 'All escrow funds are encrypted with military-grade security protocols.',
+    color: '#00D4FF',
+  },
+  {
+    icon: Globe,
+    title: 'On-Chain Identity',
+    description: 'Verified decentralized identity ensures trust between homeowners and contractors.',
+    color: '#A855F7',
+  },
+]
+
+function FeatureBlock({ feature, index }: { feature: typeof features[0]; index: number }) {
+  return (
+    <motion.div
+      className="flex-1 text-center px-4 py-6 group cursor-default"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      whileHover={{ y: -6, scale: 1.02 }}
+    >
+      <motion.div
+        className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center"
+        style={{ backgroundColor: `${feature.color}15` }}
+        whileHover={{ rotate: 5, scale: 1.1 }}
+        transition={{ type: 'spring', stiffness: 300 }}
+      >
+        <feature.icon className="w-6 h-6" style={{ color: feature.color }} />
+      </motion.div>
+      <h3 className="font-outfit font-semibold text-body" style={{ color: '#0F172A' }}>
+        {feature.title}
+      </h3>
+      <p className="font-inter text-body-sm mt-2 max-w-[200px] mx-auto" style={{ color: '#475569' }}>
+        {feature.description}
+      </p>
+    </motion.div>
+  )
+}
+
 function StatsSection() {
   const sectionRef = useRef<HTMLElement>(null)
 
   useGSAP(() => {
     if (!sectionRef.current) return
-    const blocks = sectionRef.current.querySelectorAll('.stat-block')
+    const blocks = sectionRef.current.querySelectorAll('.feature-block')
     gsap.fromTo(
       blocks,
       { y: 40, opacity: 0 },
@@ -386,23 +443,16 @@ function StatsSection() {
       {/* Top gradient line */}
       <div className="w-full h-[1px]" style={{ background: 'linear-gradient(90deg, transparent, rgba(123,47,247,0.3), rgba(59,107,247,0.3), transparent)' }} />
 
-      <div className="mx-auto max-w-container container-padding py-20">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-4">
-          <div className="stat-block flex-1 text-center relative">
-            <StatBlock value={50} prefix="$" suffix="M+" label="Value Secured in Escrow" />
-          </div>
-          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(148,163,184,0.25)' }} />
-          <div className="stat-block flex-1 text-center relative">
-            <StatBlock value={1200} suffix="+" label="Projects Completed" />
-          </div>
-          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(148,163,184,0.25)' }} />
-          <div className="stat-block flex-1 text-center relative">
-            <StatBlock value={850} suffix="+" label="Verified Contractors" />
-          </div>
-          <div className="hidden md:block w-[1px] h-16" style={{ backgroundColor: 'rgba(148,163,184,0.25)' }} />
-          <div className="stat-block flex-1 text-center relative">
-            <StatBlock value={99.7} suffix="%" label="Dispute Resolution Rate" />
-          </div>
+      <div className="mx-auto max-w-container container-padding py-16">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-2">
+          {features.map((feature, i) => (
+            <div key={feature.title} className="feature-block flex-1 text-center relative">
+              <FeatureBlock feature={feature} index={i} />
+              {i < features.length - 1 && (
+                <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-16" style={{ backgroundColor: 'rgba(148,163,184,0.25)' }} />
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -533,7 +583,7 @@ const phases = [
   {
     number: 1,
     title: 'Deposit',
-    description: 'Homeowner deposits $25,000 into the XPR blockchain escrow. Funds are immediately locked and encrypted with AES-256.',
+    description: 'Homeowner deposits funds into the XPR blockchain escrow. Funds are immediately locked and encrypted with AES-256.',
   },
   {
     number: 2,
@@ -619,7 +669,7 @@ function EscrowSimulation() {
                 <Home size={40} />
               </div>
               <h4 className="font-outfit font-semibold text-h4 text-[#0F172A]">Homeowner</h4>
-              <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>$25,000</p>
+              <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>Deposits Funds</p>
             </div>
 
             {/* Arrow 1 */}
@@ -781,7 +831,10 @@ const testimonials = [
   },
 ]
 
-const partners = ['XPR Network', 'Proton', 'Metal Pay', 'FIO Protocol', 'EOSUSA']
+const partners = [
+  { name: 'XPR Network', logo: '/logos/xpr-network-logo.png', href: 'https://xprnetwork.org/' },
+  { name: 'Metal Pay', logo: '/logos/metalpay-logo.png', href: 'https://metalpay.com/' },
+]
 
 function TestimonialsSection() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -891,27 +944,22 @@ function TestimonialsSection() {
           >
             POWERED BY
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-12">
+          <div className="flex flex-wrap items-center justify-center gap-10 lg:gap-16">
             {partners.map((partner) => (
-              <div
-                key={partner}
-                className="partner-logo font-outfit font-semibold text-[1.125rem] transition-all duration-300 cursor-default"
-                style={{
-                  color: '#0F172A',
-                  opacity: 0.5,
-                  filter: 'grayscale(1)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '1'
-                  e.currentTarget.style.filter = 'grayscale(0)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '0.5'
-                  e.currentTarget.style.filter = 'grayscale(1)'
-                }}
+              <a
+                key={partner.name}
+                href={partner.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="partner-logo-real transition-all duration-300"
               >
-                {partner}
-              </div>
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="h-8 w-auto object-contain"
+                  title={partner.name}
+                />
+              </a>
             ))}
           </div>
         </div>

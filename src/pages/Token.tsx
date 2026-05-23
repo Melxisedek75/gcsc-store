@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { motion } from 'framer-motion'
-import { Lock, TrendingUp, Vote, ArrowRight, ChevronUp } from 'lucide-react'
+import { Lock, TrendingUp, Vote, ArrowRight, ExternalLink, Wallet, CheckCircle } from 'lucide-react'
 
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }
 const fadeUpChild = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } } }
@@ -18,27 +18,18 @@ function SectionLabel({ text }: { text: string }) {
    PAGE — TOKEN
    ════════════════════════════════════════════ */
 export default function Token() {
-  const [stakeAmount, setStakeAmount] = useState(1000)
-  const [stakeDuration, setStakeDuration] = useState(90)
-
-  const apyRates: Record<number, number> = { 30: 8, 90: 12, 180: 16, 365: 22 }
-  const apy = apyRates[stakeDuration] || 12
-  const monthlyReward = (stakeAmount * apy / 100) / 12
-  const totalAtMaturity = stakeAmount + (stakeAmount * apy / 100 * stakeDuration / 365)
-
-  const priceData = [
-    { month: 'Jan', price: 0.028 }, { month: 'Feb', price: 0.031 }, { month: 'Mar', price: 0.035 },
-    { month: 'Apr', price: 0.032 }, { month: 'May', price: 0.038 }, { month: 'Jun', price: 0.0423 },
-  ]
-  const maxPrice = Math.max(...priceData.map(d => d.price))
-
   return (
     <div>
       {/* HERO */}
       <section className="relative overflow-hidden" style={{ background: '#FFFFFF' }}>
         <div className="mx-auto max-w-container container-padding text-center" style={{ padding: '120px 0 80px' }}>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
-            <motion.div variants={fadeUpChild}><SectionLabel text="GCSC ECOSYSTEM" /></motion.div>
+            <motion.div variants={fadeUpChild}>
+              <div className="inline-flex items-center gap-2 mb-4">
+                <img src="/logos/xpr-network-logo.png" alt="XPR Network" className="w-5 h-5 object-contain" />
+                <SectionLabel text="GCSC ECOSYSTEM" />
+              </div>
+            </motion.div>
             <motion.h1 variants={fadeUpChild} className="font-outfit font-bold text-hero leading-hero tracking-hero break-words mt-4 gradient-text">
               GCSC Token
             </motion.h1>
@@ -47,32 +38,31 @@ export default function Token() {
             </motion.p>
           </motion.div>
 
-          {/* Price Display */}
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.3 }} className="mt-10 inline-flex items-center gap-6 glass-card px-8 py-5">
+          {/* Coming Soon Badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-10 inline-flex items-center gap-3 glass-card px-8 py-5"
+          >
+            <div className="w-3 h-3 rounded-full bg-amber-400 animate-pulse" />
             <div className="text-left">
-              <p className="font-inter text-body-sm" style={{ color: '#94A3B8' }}>Current Price</p>
-              <p className="font-outfit font-bold text-h2" style={{ color: '#0F172A' }}>$0.0423</p>
-            </div>
-            <div className="flex items-center gap-1 px-3 py-1 rounded-full" style={{ background: 'rgba(16,185,129,0.12)' }}>
-              <ChevronUp size={16} style={{ color: '#10B981' }} />
-              <span className="font-inter font-medium text-sm" style={{ color: '#10B981' }}>+5.23%</span>
+              <p className="font-inter text-body-sm" style={{ color: '#94A3B8' }}>Status</p>
+              <p className="font-outfit font-bold text-h3" style={{ color: '#0F172A' }}>Coming Soon</p>
             </div>
           </motion.div>
 
-          {/* Stats */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 max-w-[720px] mx-auto">
-            {[
-              { label: 'Market Cap', value: '$4.2M' },
-              { label: 'Total Supply', value: '100M' },
-              { label: 'Circulating', value: '45M' },
-              { label: 'Staked', value: '12M' },
-            ].map(stat => (
-              <motion.div key={stat.label} variants={fadeUpChild} className="glass-card p-4 text-center">
-                <p className="font-outfit font-bold text-h3" style={{ color: '#0F172A' }}>{stat.value}</p>
-                <p className="font-inter text-body-sm" style={{ color: '#475569' }}>{stat.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="mt-6 font-inter text-body-sm"
+            style={{ color: '#94A3B8' }}
+          >
+            Token launch date to be announced. Stay tuned for updates.
+          </motion.p>
         </div>
       </section>
 
@@ -102,115 +92,147 @@ export default function Token() {
         </div>
       </section>
 
-      {/* STAKING CALCULATOR */}
+      {/* METAL PAY — BUY TOKENS */}
       <section style={{ background: '#FFFFFF', padding: '80px 0' }}>
         <div className="mx-auto max-w-container container-padding">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="text-center mb-10">
-            <SectionLabel text="STAKING" />
-            <h2 className="font-outfit font-bold text-h2 break-words mt-3" style={{ color: '#0F172A' }}>Staking Calculator</h2>
-          </motion.div>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Info */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <SectionLabel text="GET GCSC TOKENS" />
+              <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1 mt-4" style={{ color: '#0F172A' }}>
+                Buy with <span className="gradient-text">Metal Pay</span>
+              </h2>
+              <p className="font-inter text-body-lg mt-4" style={{ color: '#475569' }}>
+                GCSC tokens will be available for purchase through Metal Pay — the compliant, 
+                secure payment platform from Metallicus. Metal Pay offers the lowest card fees 
+                in the industry with 24/7 live support and instant transfers on XPR Network.
+              </p>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-[600px] mx-auto glass-card p-8">
-            {/* Amount */}
-            <label className="block font-inter font-medium text-body mb-2" style={{ color: '#0F172A' }}>GCSC Amount</label>
-            <input
-              type="number"
-              value={stakeAmount}
-              onChange={e => setStakeAmount(Math.max(0, Number(e.target.value)))}
-              className="w-full px-4 py-3 rounded-xl border font-inter text-body focus:outline-none focus:ring-2"
-              style={{ borderColor: 'rgba(123,47,247,0.3)', color: '#0F172A' }}
-            />
-            <div className="flex gap-2 mt-2">
-              {[100, 1000, 10000].map(a => (
-                <button key={a} onClick={() => setStakeAmount(a)} className="px-3 py-1 rounded-full font-inter text-sm border hover:bg-[rgba(123,47,247,0.08)] transition-colors" style={{ borderColor: 'rgba(123,47,247,0.3)', color: '#7B2FF7' }}>
-                  +{a.toLocaleString()}
-                </button>
-              ))}
-            </div>
-
-            {/* Duration */}
-            <label className="block font-inter font-medium text-body mt-6 mb-2" style={{ color: '#0F172A' }}>Duration</label>
-            <div className="grid grid-cols-4 gap-2">
-              {[30, 90, 180, 365].map(d => (
-                <button
-                  key={d}
-                  onClick={() => setStakeDuration(d)}
-                  className="py-2 rounded-xl font-inter text-sm font-medium transition-all"
-                  style={{
-                    background: stakeDuration === d ? 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' : '#F1F5F9',
-                    color: stakeDuration === d ? '#FFFFFF' : '#475569',
-                  }}
-                >
-                  {d}d
-                </button>
-              ))}
-            </div>
-
-            {/* Results */}
-            <div className="mt-6 p-4 rounded-xl" style={{ background: '#F8FAFC' }}>
-              <div className="grid grid-cols-3 gap-4 text-center">
-                <div>
-                  <p className="font-inter text-sm" style={{ color: '#94A3B8' }}>APY</p>
-                  <p className="font-outfit font-bold text-h3" style={{ color: '#7B2FF7' }}>{apy}%</p>
-                </div>
-                <div>
-                  <p className="font-inter text-sm" style={{ color: '#94A3B8' }}>Monthly</p>
-                  <p className="font-outfit font-bold text-h3" style={{ color: '#0F172A' }}>${monthlyReward.toFixed(2)}</p>
-                </div>
-                <div>
-                  <p className="font-inter text-sm" style={{ color: '#94A3B8' }}>At Maturity</p>
-                  <p className="font-outfit font-bold text-h3" style={{ color: '#0F172A' }}>${totalAtMaturity.toFixed(2)}</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* PRICE CHART */}
-      <section style={{ background: '#F8FAFC', padding: '80px 0' }}>
-        <div className="mx-auto max-w-container container-padding">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="text-center mb-10">
-            <SectionLabel text="PERFORMANCE" />
-            <h2 className="font-outfit font-bold text-h2 break-words mt-3" style={{ color: '#0F172A' }}>Price History</h2>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="glass-card p-8 max-w-[720px] mx-auto">
-            <div className="flex items-end gap-4 h-[200px]">
-              {priceData.map((d, i) => (
-                <div key={d.month} className="flex-1 flex flex-col items-center group">
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity font-inter text-xs mb-1" style={{ color: '#475569' }}>${d.price.toFixed(4)}</div>
+              <div className="space-y-4 mt-8">
+                {[
+                  'Lowest card fees in the industry',
+                  'Instant transfers on XPR Network',
+                  '24/7 live human support',
+                  'Available in US, Australia & New Zealand',
+                  'FDIC-insured cash wallets',
+                ].map((item, i) => (
                   <motion.div
-                    initial={{ height: 0 }}
-                    whileInView={{ height: `${(d.price / maxPrice) * 160}px` }}
+                    key={item}
+                    className="flex items-center gap-3"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: i * 0.1 }}
-                    className="w-full rounded-t-lg"
-                    style={{ background: 'linear-gradient(to top, #7B2FF7, #00D4FF)', minWidth: '40px' }}
-                  />
-                  <p className="font-inter text-sm mt-2" style={{ color: '#475569' }}>{d.month}</p>
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#7B2FF7] to-[#3B6BF7] flex items-center justify-center flex-shrink-0">
+                      <CheckCircle size={12} className="text-white" />
+                    </div>
+                    <span className="font-inter text-body" style={{ color: '#475569' }}>{item}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.a
+                href="https://metalpay.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 mt-8 gradient-primary text-white font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full hover:scale-[1.04] hover:shadow-glow active:scale-[0.98] transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                Visit Metal Pay <ExternalLink size={16} />
+              </motion.a>
+            </motion.div>
+
+            {/* Right: Steps Card */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <div className="glass-card rounded-[24px] p-8 lg:p-10 relative overflow-hidden">
+                {/* Background glow */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-200/20 to-pink-200/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+
+                {/* Metal Pay Logo */}
+                <div className="relative mb-8">
+                  <img src="/logos/metalpay-logo.png" alt="Metal Pay" className="h-12 w-auto object-contain" />
                 </div>
-              ))}
-            </div>
-          </motion.div>
+
+                {/* Steps */}
+                <div className="space-y-6 relative">
+                  {[
+                    { step: '1', title: 'Download Metal Pay', desc: 'Get the app on iOS or Android and complete verification.' },
+                    { step: '2', title: 'Fund Your Wallet', desc: 'Add funds via debit card, credit card, or bank transfer.' },
+                    { step: '3', title: 'Purchase GCSC', desc: 'Buy GCSC tokens instantly with zero gas fees on XPR Network.' },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={item.step}
+                      className="flex items-start gap-4"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 + i * 0.1 }}
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#7B2FF7] to-[#EC4899] flex items-center justify-center flex-shrink-0 text-white font-bold text-sm">
+                        {item.step}
+                      </div>
+                      <div>
+                        <h4 className="font-outfit font-semibold text-body" style={{ color: '#0F172A' }}>{item.title}</h4>
+                        <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>{item.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <motion.a
+                  href="https://metalpay.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-8 flex items-center justify-center gap-2 w-full py-4 rounded-xl font-inter font-medium text-white transition-all"
+                  style={{
+                    background: 'linear-gradient(135deg, #7B2FF7 0%, #EC4899 50%, #F59E0B 100%)',
+                  }}
+                  whileHover={{ scale: 1.02, boxShadow: '0 10px 40px rgba(236, 72, 153, 0.3)' }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Get Metal Pay App <ArrowRight size={16} />
+                </motion.a>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section style={{ background: '#FFFFFF', padding: '80px 0' }}>
+      <section style={{ background: '#F8FAFC', padding: '80px 0' }}>
         <div className="mx-auto max-w-container container-padding text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="gradient-card p-12 rounded-[24px]">
-            <h2 className="font-outfit font-bold text-h2 text-white break-words">Ready to Invest in the Future?</h2>
-            <p className="font-inter text-body-lg mt-3" style={{ color: 'rgba(255,255,255,0.8)' }}>
-              Join the GCSC ecosystem and earn rewards while transforming construction payments.
+            <h2 className="font-outfit font-bold text-h2 text-[#0F172A] break-words">Ready to Join the Ecosystem?</h2>
+            <p className="font-inter text-body-lg mt-3" style={{ color: '#475569' }}>
+              Be among the first to access GCSC tokens and transform construction payments.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-              <Link to="/wallet" className="inline-flex items-center justify-center bg-white font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full hover:scale-105 transition-all" style={{ color: '#7B2FF7' }}>
-                Get GCSC Token <ArrowRight size={18} className="ml-2" />
+              <Link to="/wallet" className="inline-flex items-center justify-center gradient-primary text-white font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full hover:scale-[1.04] hover:shadow-glow active:scale-[0.98] transition-all duration-300">
+                Connect Wallet <ArrowRight size={18} className="ml-2" />
               </Link>
-              <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="inline-flex items-center justify-center bg-transparent text-white font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full border border-white/40 hover:bg-white/10 transition-all">
-                Try Calculator
-              </button>
+              <a
+                href="https://xprnetwork.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-transparent font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full border hover:bg-[rgba(123,47,247,0.08)] transition-all duration-300"
+                style={{ borderColor: 'rgba(123,47,247,0.4)', color: '#0F172A' }}
+              >
+                <img src="/logos/xpr-network-logo.png" alt="XPR" className="w-4 h-4 mr-2 object-contain" />
+                Learn About XPR
+              </a>
             </div>
           </motion.div>
         </div>
