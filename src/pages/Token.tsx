@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { Link } from 'react-router'
 import { motion } from 'framer-motion'
-import { Lock, TrendingUp, Vote, ArrowRight, ExternalLink, Wallet, CheckCircle } from 'lucide-react'
+import { Lock, TrendingUp, Vote, ArrowRight, ExternalLink, CheckCircle } from 'lucide-react'
 
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }
 const fadeUpChild = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } } }

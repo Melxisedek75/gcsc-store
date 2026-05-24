@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -312,54 +312,6 @@ function HeroSection() {
 /* ════════════════════════════════════════════
    SECTION 2 — STATS BAR
    ════════════════════════════════════════════ */
-function useCountUp(target: number, duration = 2000, start = 0) {
-  const [count, setCount] = useState(start)
-  const ref = useRef<HTMLDivElement>(null)
-  const hasAnimated = useRef(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !hasAnimated.current) {
-          hasAnimated.current = true
-          const startTime = Date.now()
-          const animate = () => {
-            const elapsed = Date.now() - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setCount(Math.floor(start + (target - start) * eased))
-            if (progress < 1) requestAnimationFrame(animate)
-          }
-          requestAnimationFrame(animate)
-        }
-      },
-      { threshold: 0.3 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [target, duration, start])
-
-  return { count, ref }
-}
-
-function StatBlock({ value, suffix, prefix, label }: { value: number; suffix?: string; prefix?: string; label: string }) {
-  const { count, ref } = useCountUp(value)
-
-  return (
-    <div ref={ref} className="text-center flex-1 px-4">
-      <div className="font-outfit font-bold text-stat tracking-stat" style={{ color: '#00D4FF' }}>
-        {prefix}{count.toLocaleString()}{suffix}
-      </div>
-      <p className="font-inter text-body mt-2" style={{ color: '#475569' }}>
-        {label}
-      </p>
-    </div>
-  )
-}
-
 const features = [
   {
     icon: ShieldCheck,
