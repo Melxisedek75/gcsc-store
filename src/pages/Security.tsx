@@ -111,7 +111,7 @@ const securityLayers = [
   {
     num: '02',
     title: 'Smart Contract Security',
-    description: 'Every smart contract is written in strict accordance with blockchain security best practices. Contracts undergo multiple independent audits and are deployed with upgrade-resistant patterns to prevent tampering.',
+    description: 'Smart contracts are designed around blockchain security best practices. Independent reviews are planned before real-money production launch.',
     spec: 'eosio.cdt framework · Multi-sig deployment · Immutable logic · Open-source verification · Reentrancy guards',
   },
   {
@@ -145,30 +145,30 @@ const certifications = [
   {
     icon: ShieldCheck,
     title: 'SOC 2 Type II',
-    description: 'Independent audit of our security controls, availability, and confidentiality measures. Conducted annually by a Big Four firm.',
-    status: 'Certified',
-    statusColor: 'success' as const,
+    description: 'Independent audit of security controls, availability, and confidentiality measures. This certification is planned for the production compliance roadmap.',
+    status: 'Planned',
+    statusColor: 'warning' as const,
   },
   {
     icon: Lock,
     title: 'ISO 27001',
-    description: 'International standard for information security management systems (ISMS). Our ISMS covers all aspects of data handling and protection.',
-    status: 'Certified',
-    statusColor: 'success' as const,
+    description: 'International standard for information security management systems. GCSC is preparing the controls and documentation required for future certification.',
+    status: 'Planned',
+    statusColor: 'warning' as const,
   },
   {
     icon: FileText,
     title: 'GDPR Compliant',
-    description: 'Full compliance with EU General Data Protection Regulation. Users have complete control over their personal data with right-to-deletion supported.',
-    status: 'Certified',
-    statusColor: 'success' as const,
+    description: 'Privacy controls are being designed around user data access, retention, and deletion workflows for applicable regulatory requirements.',
+    status: 'In Progress',
+    statusColor: 'warning' as const,
   },
   {
     icon: CreditCard,
     title: 'PCI DSS Level 1',
-    description: 'Payment Card Industry Data Security Standard compliance for handling card data. All card processing is tokenized — we never store raw card numbers.',
-    status: 'Certified',
-    statusColor: 'success' as const,
+    description: 'Payment card compliance is planned through tokenized payment providers so GCSC does not store raw card data.',
+    status: 'Planned',
+    statusColor: 'warning' as const,
   },
   {
     icon: Scale,
@@ -180,8 +180,8 @@ const certifications = [
   {
     icon: Globe,
     title: 'State Money Transmitter',
-    description: 'Licensed money transmitter in all required U.S. states. We work with banking partners to ensure full regulatory compliance across jurisdictions.',
-    status: 'In Progress',
+    description: 'Regulatory review is planned with banking and compliance partners before any money transmission activity is launched.',
+    status: 'Planned',
     statusColor: 'warning' as const,
   },
 ]
@@ -332,10 +332,10 @@ export default function Security() {
       >
         <div className="mx-auto max-w-container container-padding">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
-            <StatCounter value="256-bit" label="AES Encryption" />
-            <StatCounter value="0" label="Successful Breaches" />
-            <StatCounter value="99.99" suffix="%" label="Uptime SLA" />
-            <StatCounter value="$50M+" label="Secured on Chain" />
+            <StatCounter value="AES-256" label="Data Protection" />
+            <StatCounter value="Zero" label="XPR Gas Fees" />
+            <StatCounter value="DPoS" label="XPR Consensus" />
+            <StatCounter value="On-chain" label="Escrow Records" />
           </div>
         </div>
       </section>
@@ -531,14 +531,14 @@ export default function Security() {
             <div className="flex items-center justify-center gap-2 mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-electric" />
               <span className="font-outfit font-semibold text-label text-electric uppercase tracking-[0.12em]">
-                Trusted & Certified
+                Compliance Roadmap
               </span>
             </div>
             <h2 className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">
-              Compliance & Certifications
+              Compliance & Security Roadmap
             </h2>
             <p className="font-inter text-body max-w-[560px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
-              GCSC meets or exceeds the security standards required by regulated industries.
+              GCSC is preparing the controls, reviews, and documentation required for regulated production use.
             </p>
           </ScrollReveal>
 
@@ -566,8 +566,8 @@ export default function Security() {
                   <span
                     className="mt-3 inline-block font-inter font-semibold text-[0.75rem] px-3 py-1 rounded-full"
                     style={{
-                      background: cert.statusColor === 'success' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)',
-                      color: cert.statusColor === 'success' ? '#10B981' : '#F59E0B',
+                      background: 'rgba(245,158,11,0.1)',
+                      color: '#F59E0B',
                     }}
                   >
                     {cert.status}
@@ -605,7 +605,7 @@ export default function Security() {
               Independent Security Audits
             </motion.h2>
             <motion.p variants={staggerChild} className="font-inter text-body-lg text-[#475569] max-w-[600px] mx-auto mb-8">
-              Our smart contracts and infrastructure are audited quarterly by leading blockchain security firms. Download our latest audit reports.
+              Independent smart contract and infrastructure audits are planned before real-money production launch. Audit reports will be published when complete.
             </motion.p>
             <motion.div variants={staggerChild} className="flex flex-wrap items-center justify-center gap-4">
               <button
@@ -613,7 +613,7 @@ export default function Security() {
                 style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
                 onClick={() => alert('Audit report download coming soon!')}
               >
-                Download Latest Audit
+                Audit Reports Coming Soon
               </button>
               <button
                 className="inline-flex items-center justify-center font-inter font-semibold text-[0.9375rem] px-8 py-3.5 rounded-full hover:scale-[1.04] transition-all duration-300"
@@ -625,11 +625,11 @@ export default function Security() {
                 }}
                 onClick={() => alert('Reports archive coming soon!')}
               >
-                View All Reports
+                View Audit Roadmap
               </button>
             </motion.div>
             <motion.p variants={staggerChild} className="font-inter text-body-sm text-[#94A3B8] mt-4">
-              Last audit: March 2026 by CertiK · Next audit: June 2026
+              No completed third-party production audit has been published yet.
             </motion.p>
           </motion.div>
         </div>

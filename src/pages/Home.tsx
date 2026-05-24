@@ -12,7 +12,6 @@ import {
   Lock,
   HardHat,
   CheckCircle2,
-  Star,
   Plus,
   Zap,
   Globe,
@@ -328,7 +327,7 @@ const features = [
   {
     icon: Lock,
     title: 'AES-256 Encryption',
-    description: 'All escrow funds are encrypted with military-grade security protocols.',
+    description: 'Sensitive platform data is protected with AES-256 encryption controls where applicable.',
     color: '#00D4FF',
   },
   {
@@ -763,23 +762,23 @@ function ConfettiBurst() {
 }
 
 /* ════════════════════════════════════════════
-   SECTION 5 — TESTIMONIALS
-   ════════════════════════════════════════════ */
-const testimonials = [
+   SECTION 5 — PLATFORM FEATURES
+    ════════════════════════════════════════════ */
+const platformFeatures = [
   {
-    quote: 'GCSC eliminated the payment anxiety that used to keep me up at night. My contractor gets paid on time, and I know my money is safe until the work is done.',
-    name: 'Michael Torres',
-    role: 'Homeowner, Miami',
+    icon: Home,
+    title: 'For Homeowners',
+    description: 'Post a project, compare contractor bids, fund escrow, and release payments only after reviewed milestones are approved.',
   },
   {
-    quote: "As a contractor, GCSC has transformed how I work. Clients trust me more because they can see exactly where their money goes. I've won 40% more bids since joining.",
-    name: 'Sarah Chen',
-    role: 'Licensed Contractor, Austin',
+    icon: HardHat,
+    title: 'For Contractors',
+    description: 'Bid on qualified projects, submit milestone evidence, and receive payments through transparent escrow release workflows.',
   },
   {
-    quote: 'The milestone system is brilliant. We broke our renovation into 6 phases, and each payment released automatically when we approved the work. Zero disputes.',
-    name: 'David & Lisa Park',
-    role: 'Homeowners, Seattle',
+    icon: ShieldCheck,
+    title: 'For Everyone',
+    description: 'Use XPR Network settlement, verified identities, and clear milestone records to reduce payment uncertainty for both sides.',
   },
 ]
 
@@ -788,12 +787,12 @@ const partners = [
   { name: 'Metal Pay', logo: '/logos/metalpay-logo.png', href: 'https://metalpay.com/' },
 ]
 
-function TestimonialsSection() {
+function PlatformFeaturesSection() {
   const sectionRef = useRef<HTMLElement>(null)
 
   useGSAP(() => {
     if (!sectionRef.current) return
-    const cards = sectionRef.current.querySelectorAll('.testimonial-card')
+    const cards = sectionRef.current.querySelectorAll('.platform-feature-card')
     const logos = sectionRef.current.querySelectorAll('.partner-logo')
 
     gsap.fromTo(
@@ -836,54 +835,33 @@ function TestimonialsSection() {
       <div className="relative mx-auto max-w-container container-padding py-24 lg:py-32">
         {/* Header */}
         <div className="text-center mb-16">
-          <SectionLabel text="TRUSTED BY BUILDERS" />
+          <SectionLabel text="PLATFORM FEATURES" />
           <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2" style={{ color: '#0F172A' }}>
-            What Our Users Say
+            Platform Features
           </h2>
+          <p className="font-inter text-body-lg leading-body-lg mt-4 max-w-[720px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
+            GCSC is designed to coordinate project bidding, milestone escrow, and payment release with clear records for every participant.
+          </p>
         </div>
 
-        {/* Testimonial cards */}
+        {/* Feature cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          {testimonials.map((t) => (
+          {platformFeatures.map((feature) => (
             <div
-              key={t.name}
-              className="testimonial-card bg-white rounded-[16px] p-8 transition-all duration-300"
+              key={feature.title}
+              className="platform-feature-card bg-white rounded-[16px] p-8 transition-all duration-300"
               style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}
             >
-              <div className="mb-4">
-                <span className="font-outfit text-[2rem] leading-none" style={{ color: '#7B2FF7' }}>&ldquo;</span>
-              </div>
-              <p className="font-inter text-body-lg leading-body-lg italic" style={{ color: '#0F172A' }}>
-                {t.quote}
-              </p>
-
-              {/* Author row */}
               <div
-                className="flex items-center gap-3 mt-6 pt-5"
-                style={{ borderTop: '1px solid rgba(15,23,42,0.06)' }}
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5"
+                style={{ background: 'linear-gradient(135deg, rgba(123,47,247,0.12), rgba(0,212,255,0.12))' }}
               >
-                {/* Avatar */}
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center font-outfit font-bold text-white text-[1rem]"
-                  style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 50%, #00D4FF 100%)' }}
-                >
-                  {t.name.charAt(0)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-outfit font-semibold text-body" style={{ color: '#0F172A' }}>
-                    {t.name}
-                  </p>
-                  <p className="font-inter text-body-sm" style={{ color: '#475569' }}>
-                    {t.role}
-                  </p>
-                </div>
-                {/* Stars */}
-                <div className="flex gap-0.5 shrink-0">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={16} fill="#F59E0B" style={{ color: '#F59E0B' }} />
-                  ))}
-                </div>
+                <feature.icon size={28} style={{ color: '#7B2FF7' }} />
               </div>
+              <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{feature.title}</h3>
+              <p className="font-inter text-body leading-body mt-3" style={{ color: 'rgba(15,23,42,0.65)' }}>
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
@@ -946,7 +924,7 @@ const faqItems = [
   },
   {
     question: "What happens if there's a dispute?",
-    answer: "In the rare event of a dispute, GCSC's decentralized arbitration system reviews on-chain evidence and milestone records. Our 99.7% resolution rate speaks to the clarity that smart contract milestones provide. Most disputes are resolved within 48 hours.",
+    answer: "If a dispute occurs, GCSC is designed to preserve milestone records, submitted evidence, and escrow status so the parties can review the facts before funds are released.",
   },
   {
     question: 'Can I use GCSC for any type of construction project?',
@@ -1143,7 +1121,7 @@ export default function HomePage() {
       <StatsSection />
       <HowItWorksSection />
       <EscrowSimulation />
-      <TestimonialsSection />
+      <PlatformFeaturesSection />
       <FAQSection />
       <CTASection />
     </div>
