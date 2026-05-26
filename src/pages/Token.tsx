@@ -7,7 +7,7 @@ const fadeUpChild = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0
 
 function SectionLabel({ text }: { text: string }) {
   return (
-    <span className="inline-flex items-center gap-2 font-inter font-semibold text-label uppercase tracking-label" style={{ color: '#00D4FF' }}>
+    <span className="inline-flex items-center gap-2 font-inter font-semibold text-label uppercase tracking-label gradient-text">
       <span>&#9670;</span> {text}
     </span>
   )
@@ -29,7 +29,11 @@ export default function Token() {
                 <SectionLabel text="GCSC ECOSYSTEM" />
               </div>
             </motion.div>
-            <motion.h1 variants={fadeUpChild} className="font-outfit font-bold text-hero leading-hero tracking-hero break-words mt-4 gradient-text">
+            <motion.h1
+              variants={fadeUpChild}
+              className="font-outfit font-bold leading-[1.04] tracking-normal break-words mt-4 gradient-text"
+              style={{ fontSize: 'clamp(2.75rem, 5vw, 4.75rem)' }}
+            >
               GCSC Token
             </motion.h1>
             <motion.p variants={fadeUpChild} className="font-inter text-body-lg mt-4 mx-auto" style={{ color: '#475569', maxWidth: '560px' }}>
@@ -48,7 +52,7 @@ export default function Token() {
             <div className="w-3 h-3 rounded-full bg-amber-400 animate-pulse" />
             <div className="text-left">
               <p className="font-inter text-body-sm" style={{ color: '#94A3B8' }}>Status</p>
-              <p className="font-outfit font-bold text-h3" style={{ color: '#0F172A' }}>Coming Soon</p>
+              <p className="font-outfit font-bold text-h3 gradient-text">Coming Soon</p>
             </div>
           </motion.div>
 
@@ -69,8 +73,14 @@ export default function Token() {
       <section style={{ background: '#F8FAFC', padding: '80px 0' }}>
         <div className="mx-auto max-w-container container-padding">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="text-center mb-12">
+            <img
+              src="/gcsc-logo-round-80.png"
+              alt="GCSC"
+              className="w-16 h-16 rounded-full object-cover mx-auto mb-5"
+              style={{ boxShadow: '0 10px 32px rgba(123,47,247,0.22)' }}
+            />
             <SectionLabel text="TOKEN UTILITY" />
-            <h2 className="font-outfit font-bold text-h2 break-words mt-3" style={{ color: '#0F172A' }}>Why Hold GCSC?</h2>
+            <h2 className="font-outfit font-bold text-h2 break-words mt-3 gradient-text">Why Hold GCSC?</h2>
           </motion.div>
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -83,7 +93,7 @@ export default function Token() {
                 <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center rounded-2xl" style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}>
                   <card.icon size={28} className="text-white" />
                 </div>
-                <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{card.title}</h3>
+                <h3 className="font-outfit font-semibold text-h3 gradient-text">{card.title}</h3>
                 <p className="font-inter text-body mt-2" style={{ color: '#475569' }}>{card.desc}</p>
               </motion.div>
             ))}
@@ -103,8 +113,8 @@ export default function Token() {
               transition={{ duration: 0.6 }}
             >
               <SectionLabel text="GET GCSC TOKENS" />
-              <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1 mt-4" style={{ color: '#0F172A' }}>
-                Buy with <span className="gradient-text">Metal Pay</span>
+              <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1 mt-4 gradient-text">
+                Buy with Metal Pay
               </h2>
               <p className="font-inter text-body-lg mt-4" style={{ color: '#475569' }}>
                 GCSC tokens will be available for purchase through Metal Pay — the compliant, 
@@ -183,7 +193,7 @@ export default function Token() {
                         {item.step}
                       </div>
                       <div>
-                        <h4 className="font-outfit font-semibold text-body" style={{ color: '#0F172A' }}>{item.title}</h4>
+                        <h4 className="font-outfit font-semibold text-body gradient-text">{item.title}</h4>
                         <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>{item.desc}</p>
                       </div>
                     </motion.div>
@@ -214,7 +224,7 @@ export default function Token() {
       <section style={{ background: '#F8FAFC', padding: '80px 0' }}>
         <div className="mx-auto max-w-container container-padding text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="gradient-card p-12 rounded-[24px]">
-            <h2 className="font-outfit font-bold text-h2 text-[#0F172A] break-words">Ready to Join the Ecosystem?</h2>
+            <h2 className="font-outfit font-bold text-h2 gradient-text break-words">Ready to Join the Ecosystem?</h2>
             <p className="font-inter text-body-lg mt-3" style={{ color: '#475569' }}>
               Be among the first to access GCSC tokens and transform construction payments.
             </p>

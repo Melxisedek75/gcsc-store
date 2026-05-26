@@ -24,12 +24,10 @@ function SectionLabel({ text }: { text: string }) {
   return (
     <div className="flex items-center gap-2 mb-4">
       <span
-        className="w-[6px] h-[6px] rounded-full"
-        style={{ backgroundColor: '#00D4FF' }}
+        className="w-[6px] h-[6px] rounded-full gradient-primary"
       />
       <span
-        className="font-outfit font-semibold text-label uppercase tracking-label"
-        style={{ color: '#00D4FF' }}
+        className="font-outfit font-semibold text-label uppercase tracking-label gradient-text"
       >
         {text}
       </span>
@@ -119,7 +117,7 @@ function HeroSection() {
               { label: 'Zero gas fees', detail: 'Fast settlement on XPR Network' },
             ].map((item) => (
               <div key={item.label} className="rounded-xl border border-[#E2E8F0] bg-white px-4 py-4">
-                <p className="font-outfit font-semibold text-[0.95rem] text-[#0F172A]">{item.label}</p>
+                <p className="font-outfit font-semibold text-[0.95rem] gradient-text">{item.label}</p>
                 <p className="font-inter text-[0.82rem] mt-1 text-[#64748B]">{item.detail}</p>
               </div>
             ))}
@@ -178,7 +176,7 @@ function FeatureBlock({ feature, index }: { feature: typeof features[0]; index: 
       >
         <feature.icon className="w-6 h-6" style={{ color: feature.color }} />
       </motion.div>
-      <h3 className="font-outfit font-semibold text-body" style={{ color: '#0F172A' }}>
+      <h3 className="font-outfit font-semibold text-body gradient-text">
         {feature.title}
       </h3>
       <p className="font-inter text-body-sm mt-2 max-w-[200px] mx-auto" style={{ color: '#475569' }}>
@@ -288,7 +286,7 @@ function HowItWorksSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <SectionLabel text="SIMPLE PROCESS" />
-          <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1" style={{ color: '#0F172A' }}>
+          <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1 gradient-text">
             Three Steps to Secure Construction Payments
           </h2>
           <p className="font-inter text-body-lg leading-body-lg mt-4 max-w-[640px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
@@ -328,7 +326,7 @@ function HowItWorksSection() {
               </div>
 
               {/* Title */}
-              <h3 className="font-outfit font-semibold text-h3 leading-h3" style={{ color: '#0F172A' }}>
+              <h3 className="font-outfit font-semibold text-h3 leading-h3 gradient-text">
                 {step.title}
               </h3>
 
@@ -407,7 +405,7 @@ function EscrowSimulation() {
         {/* Header */}
         <div className="mx-auto max-w-container container-padding pt-20 pb-10 text-center">
           <SectionLabel text="LIVE DEMO" />
-          <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1" style={{ color: '#0F172A' }}>
+          <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1 gradient-text">
             See How Escrow Works
           </h2>
           <p className="font-inter text-body-lg leading-body-lg mt-4 max-w-[600px] mx-auto" style={{ color: '#475569' }}>
@@ -441,7 +439,7 @@ function EscrowSimulation() {
               <div className="flex justify-center mb-3" style={{ color: activePhase >= 0 ? '#00D4FF' : '#94A3B8' }}>
                 <Home size={40} />
               </div>
-              <h4 className="font-outfit font-semibold text-h4 text-[#0F172A]">Homeowner</h4>
+              <h4 className="font-outfit font-semibold text-h4 gradient-text">Homeowner</h4>
               <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>Deposits Funds</p>
             </div>
 
@@ -471,7 +469,7 @@ function EscrowSimulation() {
               <div className="flex justify-center mb-3" style={{ color: activePhase >= 1 ? '#00D4FF' : '#94A3B8' }}>
                 <Lock size={40} />
               </div>
-              <h4 className="font-outfit font-semibold text-h4 text-[#0F172A]">XPR Escrow</h4>
+              <h4 className="font-outfit font-semibold text-h4 gradient-text">XPR Escrow</h4>
               <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>Funds Locked</p>
             </div>
 
@@ -495,7 +493,7 @@ function EscrowSimulation() {
               <div className="flex justify-center mb-3" style={{ color: activePhase >= 3 ? '#10B981' : '#94A3B8' }}>
                 <HardHat size={40} />
               </div>
-              <h4 className="font-outfit font-semibold text-h4 text-[#0F172A]">Contractor</h4>
+              <h4 className="font-outfit font-semibold text-h4 gradient-text">Contractor</h4>
               <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>Gets Paid</p>
             </div>
           </div>
@@ -518,7 +516,7 @@ function EscrowSimulation() {
                   >
                     {phases[activePhase].number}
                   </div>
-                  <h3 className="font-outfit font-semibold text-h3 text-[#0F172A]">
+                  <h3 className="font-outfit font-semibold text-h3 gradient-text">
                     {phases[activePhase].title}
                   </h3>
                   {activePhase === 3 && (
@@ -658,7 +656,7 @@ function PlatformFeaturesSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <SectionLabel text="PLATFORM FEATURES" />
-          <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2" style={{ color: '#0F172A' }}>
+          <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2 gradient-text">
             Platform Features
           </h2>
           <p className="font-inter text-body-lg leading-body-lg mt-4 max-w-[720px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
@@ -680,7 +678,7 @@ function PlatformFeaturesSection() {
               >
                 <feature.icon size={28} style={{ color: '#7B2FF7' }} />
               </div>
-              <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{feature.title}</h3>
+              <h3 className="font-outfit font-semibold text-h3 gradient-text">{feature.title}</h3>
               <p className="font-inter text-body leading-body mt-3" style={{ color: 'rgba(15,23,42,0.65)' }}>
                 {feature.description}
               </p>
@@ -769,7 +767,7 @@ function FAQItem({
         className="w-full flex items-center justify-between py-6 text-left"
         onClick={onClick}
       >
-        <span className="font-outfit font-semibold text-body pr-8" style={{ color: '#0F172A' }}>
+        <span className="font-outfit font-semibold text-body pr-8 gradient-text">
           {item.question}
         </span>
         <span
@@ -831,7 +829,7 @@ function FAQSection() {
         {/* Header */}
         <div className="text-center mb-16">
           <SectionLabel text="GOT QUESTIONS?" />
-          <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2" style={{ color: '#0F172A' }}>
+          <h2 className="font-outfit font-bold text-h2 leading-h2 tracking-h2 gradient-text">
             Frequently Asked Questions
           </h2>
         </div>
