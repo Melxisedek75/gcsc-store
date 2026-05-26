@@ -57,7 +57,7 @@ function InfoCard({
         <Icon size={24} style={{ color: '#7B2FF7' }} />
       </div>
       <div>
-        <h4 className="font-outfit font-semibold text-body" style={{ color: '#0F172A' }}>{title}</h4>
+        <h4 className="font-outfit font-semibold text-body gradient-text">{title}</h4>
         <p className="font-inter text-body-sm text-[#475569]">{detail}</p>
         {secondary && <p className="font-inter text-body-sm text-[#475569]">{secondary}</p>}
         {badge && (
@@ -99,7 +99,7 @@ function ChannelCard({
       >
         <Icon size={28} style={{ color: iconColor }} />
       </div>
-      <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{title}</h3>
+      <h3 className="font-outfit font-semibold text-h3 gradient-text">{title}</h3>
       <p className="font-inter text-body-sm mt-2" style={{ color: 'rgba(15,23,42,0.65)' }}>{description}</p>
       <span
         className="inline-flex items-center gap-1 font-inter font-semibold text-body-sm mt-4 cursor-pointer hover:underline"
@@ -232,7 +232,7 @@ export default function Contact() {
           className="relative z-10 text-center max-w-[700px] mx-auto container-padding"
         >
           <SectionLabel text="GET IN TOUCH" />
-          <motion.h1 variants={fadeUpChild} className="font-outfit font-bold text-h1 text-[#0F172A]">
+          <motion.h1 variants={fadeUpChild} className="font-outfit font-bold brand-heading-hero shimmer-text">
             We're Here to Help
           </motion.h1>
           <motion.p
@@ -265,16 +265,16 @@ export default function Contact() {
                   style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.08)', padding: '64px 48px', minHeight: '500px' }}
                 >
                   <CheckCircle size={48} style={{ color: '#10B981' }} />
-                  <h3 className="font-outfit font-semibold text-h3 mt-6" style={{ color: '#0F172A' }}>Message Sent!</h3>
-                  <p className="font-inter text-body text-[#475569] mt-2">We'll get back to you within 24 hours.</p>
+                  <h3 className="font-outfit font-semibold text-h3 mt-6 gradient-text">Message Sent!</h3>
+                  <p className="font-inter text-body text-[#475569] mt-2">We'll review your message and respond as soon as possible.</p>
                 </motion.div>
               ) : (
                 <div
                   className="bg-white rounded-[20px]"
                   style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.08)', padding: '48px' }}
                 >
-                  <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>Send Us a Message</h3>
-                  <p className="font-inter text-body-sm text-[#475569] mt-1">Fill out the form below and our team will respond within 24 hours.</p>
+                  <h3 className="font-outfit font-semibold text-h3 gradient-text">Send Us a Message</h3>
+                  <p className="font-inter text-body-sm text-[#475569] mt-1">Fill out the form below and our team will review your message.</p>
 
                   <form onSubmit={handleSubmit} className="flex flex-col gap-6 mt-8">
                     {/* Full Name */}
@@ -420,26 +420,26 @@ export default function Contact() {
               <InfoCard
                 icon={Phone}
                 title="Call Us"
-                detail="+1 (888) 555-GCSC"
-                secondary="Mon–Fri, 9AM–6PM EST"
+                detail="Phone support is planned"
+                secondary="Email is the primary channel during launch"
               />
               <InfoCard
                 icon={MessageCircle}
                 title="Live Chat"
-                detail="Available on web and mobile app"
-                secondary="Avg. response: 2 minutes"
-                badge={{ text: 'Online now', color: '#10B981' }}
+                detail="Live chat is planned for production"
+                secondary="Support workflows are being prepared"
+                badge={{ text: 'Planned', color: '#F59E0B' }}
               />
               <InfoCard
                 icon={MapPin}
                 title="Headquarters"
-                detail="1200 Brickell Avenue, Suite 400"
-                secondary="Miami, FL 33131, USA"
+                detail="Remote-first operations"
+                secondary="United States"
               />
 
               {/* Social Links */}
               <motion.div variants={fadeUpChild} className="mt-2">
-                <h4 className="font-outfit font-semibold text-body mb-3" style={{ color: '#0F172A' }}>Follow Us</h4>
+                <h4 className="font-outfit font-semibold text-body mb-3 gradient-text">Follow Us</h4>
                 <div className="flex items-center gap-3">
                   {socialIcons.map((social) => (
                     <a
@@ -480,7 +480,7 @@ export default function Contact() {
             className="text-center mb-12"
           >
             <SectionLabel text="MULTIPLE WAYS TO REACH US" />
-            <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2" style={{ color: '#0F172A' }}>
+            <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2 gradient-text">
               Choose Your Support Channel
             </motion.h2>
           </motion.div>
@@ -557,17 +557,15 @@ export default function Contact() {
             className="glass-card mt-2"
             style={{ padding: '20px 24px', minWidth: '220px', textAlign: 'center' }}
           >
-            <h4 className="font-outfit font-semibold text-body text-[#0F172A]">GCSC Headquarters</h4>
-            <p className="font-inter text-body-sm text-[#475569] mt-1">1200 Brickell Avenue, Suite 400</p>
-            <p className="font-inter text-body-sm text-[#475569]">Miami, FL 33131</p>
+            <h4 className="font-outfit font-semibold text-body gradient-text">GCSC Operations</h4>
+            <p className="font-inter text-body-sm text-[#475569] mt-1">Remote-first construction technology team</p>
+            <p className="font-inter text-body-sm text-[#475569]">United States</p>
             <a
-              href="https://maps.google.com/?q=1200+Brickell+Avenue+Miami+FL"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:support@gcsc.store"
               className="inline-flex items-center gap-1 font-inter font-semibold text-body-sm mt-2 hover:underline"
               style={{ color: '#7B2FF7' }}
             >
-              Get Directions <ArrowRight size={12} />
+              Contact Team <ArrowRight size={12} />
             </a>
           </div>
         </motion.div>
@@ -582,7 +580,7 @@ export default function Contact() {
           variants={fadeUpStagger}
           className="mx-auto max-w-[700px] container-padding text-center"
         >
-          <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2 text-[#0F172A]">
+          <motion.h2 variants={fadeUpChild} className="font-outfit font-bold text-h2 gradient-text">
             Prefer to Start Right Away?
           </motion.h2>
           <motion.p

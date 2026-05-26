@@ -217,7 +217,7 @@ function FaqItem({ question, answer, isOpen, onClick }: { question: string; answ
         onClick={onClick}
         className="w-full flex items-center justify-between py-5 text-left group"
       >
-        <span className="font-outfit font-semibold text-h4 text-[#0F172A] pr-4">{question}</span>
+        <span className="font-outfit font-semibold text-h4 gradient-text pr-4">{question}</span>
         <ChevronDown
           size={20}
           className="shrink-0 text-[#475569] transition-transform duration-300"
@@ -314,7 +314,7 @@ export default function Pricing() {
             {/* Heading */}
             <motion.h1
               variants={staggerChild}
-              className="font-outfit font-bold text-h1 text-[#0F172A] mb-4"
+              className="font-outfit font-bold brand-heading-hero shimmer-text mb-4"
             >
               Simple, Fair Pricing
             </motion.h1>
@@ -430,13 +430,13 @@ export default function Pricing() {
                     )}
 
                     {/* Plan name */}
-                    <h3 className="font-outfit font-bold text-h3" style={{ color: '#0F172A' }}>
+                    <h3 className="font-outfit font-bold text-h3 gradient-text">
                       {tier.name}
                     </h3>
 
                     {/* Price */}
                     <div className="mt-2 flex items-baseline gap-1">
-                      <span className="font-outfit font-bold" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', color: '#0F172A' }}>
+                      <span className="font-outfit font-bold gradient-text" style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)' }}>
                         {tier.price}
                       </span>
                       {tier.priceNote && (
@@ -517,7 +517,7 @@ export default function Pricing() {
       <section className="w-full bg-surface-alt" style={{ padding: '100px 0' }}>
         <div className="mx-auto max-w-[1000px] container-padding">
           <ScrollReveal className="text-center mb-12">
-            <h2 className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">Compare All Features</h2>
+            <h2 className="font-outfit font-bold text-h2 gradient-text mb-3">Compare All Features</h2>
             <p className="font-inter text-body" style={{ color: 'rgba(15,23,42,0.6)' }}>
               A detailed breakdown of what&apos;s included in each plan.
             </p>
@@ -533,10 +533,10 @@ export default function Pricing() {
                   gridTemplateColumns: '2fr 1fr 1fr 1fr',
                 }}
               >
-                <span className="font-outfit font-semibold text-[0.875rem] text-[#0F172A] uppercase tracking-[0.05em]">Feature</span>
-                <span className="font-outfit font-semibold text-[0.875rem] text-[#0F172A] uppercase tracking-[0.05em] text-center">Starter</span>
-                <span className="font-outfit font-semibold text-[0.875rem] text-[#0F172A] uppercase tracking-[0.05em] text-center">Pro</span>
-                <span className="font-outfit font-semibold text-[0.875rem] text-[#0F172A] uppercase tracking-[0.05em] text-center">Enterprise</span>
+                <span className="font-outfit font-semibold text-[0.875rem] gradient-text uppercase tracking-[0.05em]">Feature</span>
+                <span className="font-outfit font-semibold text-[0.875rem] gradient-text uppercase tracking-[0.05em] text-center">Starter</span>
+                <span className="font-outfit font-semibold text-[0.875rem] gradient-text uppercase tracking-[0.05em] text-center">Pro</span>
+                <span className="font-outfit font-semibold text-[0.875rem] gradient-text uppercase tracking-[0.05em] text-center">Enterprise</span>
               </div>
 
               {/* Table body */}
@@ -596,7 +596,7 @@ export default function Pricing() {
                 Pricing Questions
               </span>
             </div>
-            <h2 className="font-outfit font-bold text-h2 text-[#0F172A]">Common Pricing Questions</h2>
+            <h2 className="font-outfit font-bold text-h2 gradient-text">Common Pricing Questions</h2>
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>

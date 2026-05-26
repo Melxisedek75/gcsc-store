@@ -89,6 +89,12 @@
     background-clip: text;
   }
 
+  .brand-heading-hero {
+    font-size: clamp(2.5rem, 5vw, 4.6rem);
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
   .container-padding {
     padding-left: clamp(1.5rem, 5vw, 4rem);
     padding-right: clamp(1.5rem, 5vw, 4rem);
@@ -133,6 +139,22 @@
   }
 
   /* ── Partner Logo Hover ── */
+  .brand-logo-wave {
+    animation: logo-wave 8s ease-in-out infinite;
+    will-change: transform, filter;
+  }
+
+  @keyframes logo-wave {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+      filter: drop-shadow(0 8px 18px rgba(123, 47, 247, 0.18));
+    }
+    50% {
+      transform: translateY(-2px) scale(1.01);
+      filter: drop-shadow(0 14px 28px rgba(0, 212, 255, 0.28));
+    }
+  }
+
   .partner-logo-real {
     opacity: 0.6;
     filter: grayscale(1);

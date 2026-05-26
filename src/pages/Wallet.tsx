@@ -8,7 +8,7 @@ const fadeUpChild = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0
 
 function SectionLabel({ text }: { text: string }) {
   return (
-    <span className="inline-flex items-center gap-2 font-inter font-semibold text-label uppercase tracking-label" style={{ color: '#00D4FF' }}>
+    <span className="inline-flex items-center gap-2 font-inter font-semibold text-label uppercase tracking-label gradient-text">
       <span>&#9670;</span> {text}
     </span>
   )
@@ -41,7 +41,7 @@ export default function Wallet() {
         <div className="mx-auto max-w-container container-padding text-center" style={{ padding: '120px 0 80px' }}>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
             <motion.div variants={fadeUpChild}><SectionLabel text="GETTING STARTED" /></motion.div>
-            <motion.h1 variants={fadeUpChild} className="font-outfit font-bold text-hero leading-hero tracking-hero break-words mt-4 gradient-text">
+            <motion.h1 variants={fadeUpChild} className="font-outfit font-bold brand-heading-hero shimmer-text break-words mt-4">
               Connect Your XPR Wallet
             </motion.h1>
             <motion.p variants={fadeUpChild} className="font-inter text-body-lg mt-4 mx-auto" style={{ color: '#475569', maxWidth: '560px' }}>
@@ -56,7 +56,7 @@ export default function Wallet() {
         <div className="mx-auto max-w-container container-padding">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="text-center mb-12">
             <SectionLabel text="SETUP GUIDE" />
-            <h2 className="font-outfit font-bold text-h2 break-words mt-3" style={{ color: '#0F172A' }}>4 Easy Steps</h2>
+            <h2 className="font-outfit font-bold text-h2 break-words mt-3 gradient-text">4 Easy Steps</h2>
           </motion.div>
 
           <div className="max-w-[720px] mx-auto space-y-6">
@@ -75,7 +75,7 @@ export default function Wallet() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-1">
                     <span className="font-outfit font-bold text-sm" style={{ color: '#7B2FF7' }}>{step.num}</span>
-                    <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{step.title}</h3>
+                    <h3 className="font-outfit font-semibold text-h3 gradient-text">{step.title}</h3>
                   </div>
                   <p className="font-inter text-body-sm" style={{ color: '#475569' }}>{step.desc}</p>
                   <div className="flex gap-2 mt-2">
@@ -97,7 +97,7 @@ export default function Wallet() {
         <div className="mx-auto max-w-container container-padding">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="text-center mb-10">
             <SectionLabel text="FIAT ON-RAMP" />
-            <h2 className="font-outfit font-bold text-h2 break-words mt-3" style={{ color: '#0F172A' }}>Buy GCSC with Metal Pay</h2>
+            <h2 className="font-outfit font-bold text-h2 break-words mt-3 gradient-text">Buy GCSC with Metal Pay</h2>
             <p className="font-inter text-body-lg mt-3 mx-auto" style={{ color: '#475569', maxWidth: '520px' }}>
               Use Metal Pay as your fiat on-ramp to purchase GCSC tokens directly with USD.
             </p>
@@ -113,7 +113,7 @@ export default function Wallet() {
                       <Check size={16} style={{ color: '#10B981' }} />
                     </div>
                     <div>
-                      <p className="font-inter font-medium text-sm" style={{ color: '#0F172A' }}>{f.title}</p>
+                      <p className="font-inter font-medium text-sm gradient-text">{f.title}</p>
                       <p className="font-inter text-xs" style={{ color: '#475569' }}>{f.desc}</p>
                     </div>
                   </div>
@@ -125,7 +125,7 @@ export default function Wallet() {
                 <div className="w-16 h-16 flex items-center justify-center rounded-2xl mb-4" style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}>
                   <CreditCard size={32} className="text-white" />
                 </div>
-                <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>Metal Pay</h3>
+                <h3 className="font-outfit font-semibold text-h3 gradient-text">Metal Pay</h3>
                 <p className="font-inter text-body-sm mt-1" style={{ color: '#475569' }}>Fiat-to-crypto on-ramp</p>
                 <button
                   onClick={() => setMetalConnected(!metalConnected)}
@@ -148,7 +148,7 @@ export default function Wallet() {
         <div className="mx-auto max-w-container container-padding">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="text-center mb-10">
             <SectionLabel text="NETWORK" />
-            <h2 className="font-outfit font-bold text-h2 break-words mt-3" style={{ color: '#0F172A' }}>XPR Network Details</h2>
+            <h2 className="font-outfit font-bold text-h2 break-words mt-3 gradient-text">XPR Network Details</h2>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-[560px] mx-auto">

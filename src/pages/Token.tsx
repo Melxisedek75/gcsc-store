@@ -31,7 +31,7 @@ export default function Token() {
             </motion.div>
             <motion.h1
               variants={fadeUpChild}
-              className="font-outfit font-bold leading-[1.04] tracking-normal break-words mt-4 gradient-text"
+              className="font-outfit font-bold leading-[1.04] tracking-normal break-words mt-4 gradient-text shimmer-text"
               style={{ fontSize: 'clamp(2.75rem, 5vw, 4.75rem)' }}
             >
               GCSC Token
@@ -76,7 +76,7 @@ export default function Token() {
             <img
               src="/gcsc-logo-round-80.png"
               alt="GCSC"
-              className="w-16 h-16 rounded-full object-cover mx-auto mb-5"
+              className="w-16 h-16 rounded-full object-cover mx-auto mb-5 brand-logo-wave"
               style={{ boxShadow: '0 10px 32px rgba(123,47,247,0.22)' }}
             />
             <SectionLabel text="TOKEN UTILITY" />

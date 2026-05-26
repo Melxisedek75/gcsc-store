@@ -82,10 +82,10 @@ function HeroSection() {
             className="font-outfit font-bold leading-[1.04] tracking-normal"
             style={{ fontSize: 'clamp(2.5rem, 5vw, 4.75rem)' }}
           >
-            <span className="hero-h1-l1 block opacity-0 gradient-text">
+            <span className="hero-h1-l1 block opacity-0 gradient-text shimmer-text">
               Construction payments
             </span>
-            <span className="hero-h1-l2 block opacity-0 gradient-text">
+            <span className="hero-h1-l2 block opacity-0 gradient-text shimmer-text">
               protected by escrow.
             </span>
           </h1>
@@ -908,7 +908,7 @@ function CTASection() {
           Ready to Build with Confidence?
         </h2>
         <p className="cta-animate font-inter text-body-lg leading-body-lg max-w-[640px] mx-auto mb-8" style={{ color: 'rgba(255,255,255,0.85)' }}>
-          Join thousands of homeowners and contractors who trust GCSC for secure, transparent construction payments.
+          Start using GCSC to protect construction payments with milestone-based escrow and transparent project records.
         </p>
         <div className="cta-animate">
           <Link

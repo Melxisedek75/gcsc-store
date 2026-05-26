@@ -275,7 +275,7 @@ export default function Security() {
             </motion.div>
 
             {/* Heading */}
-            <motion.h1 variants={staggerChild} className="font-outfit font-bold text-h1 text-[#0F172A] mb-4">
+            <motion.h1 variants={staggerChild} className="font-outfit font-bold brand-heading-hero shimmer-text mb-4">
               Fortress-Grade Protection
             </motion.h1>
 
@@ -312,7 +312,7 @@ export default function Security() {
                   }}
                 >
                   <badge.icon size={16} className="text-electric shrink-0" />
-                  <span className="font-inter font-medium text-body-sm text-[#0F172A]">{badge.text}</span>
+                  <span className="font-inter font-medium text-body-sm gradient-text">{badge.text}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -351,7 +351,7 @@ export default function Security() {
                 Blockchain Escrow
               </span>
             </div>
-            <h2 className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">
+            <h2 className="font-outfit font-bold text-h2 gradient-text mb-3">
               How XPR Blockchain Secures Every Payment
             </h2>
             <p className="font-inter text-body-lg max-w-[720px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
@@ -387,7 +387,7 @@ export default function Security() {
                       >
                         <node.icon size={28} className="text-violet" />
                       </div>
-                      <h4 className="font-outfit font-semibold text-h4" style={{ color: '#0F172A' }}>
+                      <h4 className="font-outfit font-semibold text-h4 gradient-text">
                         {node.title}
                       </h4>
                       <p className="font-inter text-body-sm mt-1" style={{ color: 'rgba(15,23,42,0.65)' }}>
@@ -427,7 +427,7 @@ export default function Security() {
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: 'rgba(123,47,247,0.08)' }}>
                     <card.icon size={20} className="text-violet" />
                   </div>
-                  <h4 className="font-outfit font-semibold text-h4 mb-2" style={{ color: '#0F172A' }}>
+                  <h4 className="font-outfit font-semibold text-h4 mb-2 gradient-text">
                     {card.title}
                   </h4>
                   <p className="font-inter text-body-sm leading-body-sm" style={{ color: 'rgba(15,23,42,0.65)' }}>
@@ -450,7 +450,7 @@ export default function Security() {
                 Defense in Depth
               </span>
             </div>
-            <h2 className="font-outfit font-bold text-h2 text-[#0F172A]">
+            <h2 className="font-outfit font-bold text-h2 gradient-text">
               Multi-Layered Security Architecture
             </h2>
           </ScrollReveal>
@@ -478,7 +478,7 @@ export default function Security() {
                 >
                   <div className="flex items-center gap-4 md:gap-6">
                     <span className="font-outfit font-bold text-body-sm text-electric">{layer.num}</span>
-                    <span className="font-outfit font-semibold text-body text-[#0F172A]">{layer.title}</span>
+                    <span className="font-outfit font-semibold text-body gradient-text">{layer.title}</span>
                   </div>
                   <ChevronDown
                     size={20}
@@ -534,7 +534,7 @@ export default function Security() {
                 Compliance Roadmap
               </span>
             </div>
-            <h2 className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">
+            <h2 className="font-outfit font-bold text-h2 gradient-text mb-3">
               Compliance & Security Roadmap
             </h2>
             <p className="font-inter text-body max-w-[560px] mx-auto" style={{ color: 'rgba(15,23,42,0.6)' }}>
@@ -557,7 +557,7 @@ export default function Security() {
                   >
                     <cert.icon size={28} className="text-violet" />
                   </div>
-                  <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>
+                  <h3 className="font-outfit font-semibold text-h3 gradient-text">
                     {cert.title}
                   </h3>
                   <p className="font-inter text-body-sm mt-2 leading-body-sm" style={{ color: 'rgba(15,23,42,0.65)' }}>
@@ -601,7 +601,7 @@ export default function Security() {
             >
               <FileSearch size={32} className="text-electric" />
             </motion.div>
-            <motion.h2 variants={staggerChild} className="font-outfit font-bold text-h2 text-[#0F172A] mb-3">
+            <motion.h2 variants={staggerChild} className="font-outfit font-bold text-h2 gradient-text mb-3">
               Independent Security Audits
             </motion.h2>
             <motion.p variants={staggerChild} className="font-inter text-body-lg text-[#475569] max-w-[600px] mx-auto mb-8">
@@ -648,7 +648,7 @@ export default function Security() {
               Ready to Build with Confidence?
             </motion.h2>
             <motion.p variants={staggerChild} className="font-inter text-body-lg mx-auto mb-8 max-w-[560px]" style={{ color: 'rgba(255,255,255,0.85)' }}>
-              Join thousands of homeowners and contractors who trust GCSC&apos;s fortress-grade security for their construction payments.
+              Use GCSC&apos;s security-focused escrow workflow to protect construction payments with clear milestone records.
             </motion.p>
             <motion.div variants={staggerChild}>
               <Link

@@ -4,7 +4,7 @@ export default function HeaderBanner() {
       <img
         src="/gcsc-header-banner.jpg"
         alt="GCSC Smart Contract - Blockchain Powered Construction Escrow"
-        className="w-full object-cover"
+        className="w-full object-cover brand-logo-wave"
         style={{ maxHeight: '280px' }}
       />
     </div>

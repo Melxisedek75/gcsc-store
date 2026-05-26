@@ -50,7 +50,7 @@ function VisionItem({ icon: Icon, title, description }: { icon: typeof Globe; ti
   return (
     <motion.div variants={fadeUpChild} className="flex flex-col items-start">
       <Icon size={48} style={{ color: '#00D4FF' }} />
-      <h3 className="font-outfit font-semibold text-h3 text-[#0F172A] mt-4">{title}</h3>
+      <h3 className="font-outfit font-semibold text-h3 gradient-text mt-4">{title}</h3>
       <p className="font-inter text-body text-[#475569] mt-2">{description}</p>
     </motion.div>
   )
@@ -81,7 +81,7 @@ function ValueCard({
       }}
     >
       <Icon size={40} style={{ color: '#7B2FF7', marginBottom: '20px' }} />
-      <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>{title}</h3>
+      <h3 className="font-outfit font-semibold text-h3 gradient-text">{title}</h3>
       <p className="font-inter text-body mt-3" style={{ color: 'rgba(15,23,42,0.7)' }}>{description}</p>
     </motion.div>
   )
@@ -130,7 +130,7 @@ export default function About() {
           <SectionLabel text="ABOUT GCSC" />
           <motion.h1
             variants={fadeUpChild}
-            className="font-outfit font-bold text-h1 text-[#0F172A]"
+            className="font-outfit font-bold brand-heading-hero shimmer-text"
           >
             Building Trust, One Block at a Time
           </motion.h1>
@@ -154,7 +154,7 @@ export default function About() {
               variants={slideRight}
             >
               <SectionLabel text="OUR STORY" />
-              <h2 className="font-outfit font-bold text-h2" style={{ color: '#0F172A' }}>
+              <h2 className="font-outfit font-bold text-h2 gradient-text">
                 Why We Built GCSC
               </h2>
               <div className="flex flex-col gap-5 mt-8">
@@ -179,7 +179,7 @@ export default function About() {
               style={{ padding: '40px' }}
             >
               <SectionLabel text="PAYMENT CLARITY" />
-              <h3 className="font-outfit font-semibold text-h3" style={{ color: '#0F172A' }}>
+              <h3 className="font-outfit font-semibold text-h3 gradient-text">
                 Built Around Milestones
               </h3>
               <p className="font-inter text-body mt-4" style={{ color: 'rgba(15,23,42,0.7)' }}>
@@ -201,7 +201,7 @@ export default function About() {
             <SectionLabel text="MISSION & VISION" />
             <motion.h2
               variants={fadeUpChild}
-              className="font-outfit font-bold text-[#0F172A] mx-auto"
+              className="font-outfit font-bold gradient-text mx-auto"
               style={{
                 fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
                 lineHeight: 1.2,
@@ -250,8 +250,7 @@ export default function About() {
             <SectionLabel text="WHAT WE BELIEVE" />
             <motion.h2
               variants={fadeUpChild}
-              className="font-outfit font-bold text-h2"
-              style={{ color: '#0F172A' }}
+              className="font-outfit font-bold text-h2 gradient-text"
             >
               Our Core Values
             </motion.h2>

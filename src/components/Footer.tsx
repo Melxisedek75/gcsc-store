@@ -40,7 +40,7 @@ export default function Footer() {
               <img
                 src="/gcsc-logo-round-64.png"
                 alt="GCSC Smart Contract"
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-12 h-12 rounded-full object-cover brand-logo-wave"
               />
             </Link>
             <p className="font-inter text-body-sm text-[#475569] leading-body-sm mb-6 max-w-[260px]">
@@ -63,7 +63,7 @@ export default function Footer() {
 
           {/* Product column */}
           <div>
-            <h4 className="font-outfit font-semibold text-label text-[#0F172A] uppercase tracking-label mb-5">
+            <h4 className="font-outfit font-semibold text-label gradient-text uppercase tracking-label mb-5">
               Product
             </h4>
             <ul className="flex flex-col gap-3">
@@ -82,7 +82,7 @@ export default function Footer() {
 
           {/* Company column */}
           <div>
-            <h4 className="font-outfit font-semibold text-label text-[#0F172A] uppercase tracking-label mb-5">
+            <h4 className="font-outfit font-semibold text-label gradient-text uppercase tracking-label mb-5">
               Company
             </h4>
             <ul className="flex flex-col gap-3">
@@ -101,7 +101,7 @@ export default function Footer() {
 
           {/* Legal + Connect column */}
           <div>
-            <h4 className="font-outfit font-semibold text-label text-[#0F172A] uppercase tracking-label mb-5">
+            <h4 className="font-outfit font-semibold text-label gradient-text uppercase tracking-label mb-5">
               Legal
             </h4>
             <ul className="flex flex-col gap-3 mb-8">
@@ -116,7 +116,7 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            <h4 className="font-outfit font-semibold text-label text-[#0F172A] uppercase tracking-label mb-5">
+            <h4 className="font-outfit font-semibold text-label gradient-text uppercase tracking-label mb-5">
               Connect
             </h4>
             <ul className="flex flex-col gap-3">
