@@ -1,6 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, type FormEvent, type ChangeEvent } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
+import { api, type GcscProfile, type GcscUser } from '../services/api';
+import { connectWebAuthWallet } from '../services/webauth';
 import {
   BarChart,
   Bar,
@@ -31,6 +33,14 @@ import {
   XCircle,
   Search,
   SlidersHorizontal,
+  Save,
+  Upload,
+  LogOut,
+  Building2,
+  Home,
+  Loader2,
+  PlugZap,
+  ShieldCheck,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -82,7 +92,7 @@ type LaborComplexity = 'Simple' | 'Moderate' | 'Complex';
 const projects: Project[] = [
   {
     id: 'PRJ-2026-0042',
-    homeowner: 'Demo Homeowner A',
+    homeowner: 'Homeowner Request A',
     type: 'Kitchen Remodel',
     location: 'Austin, TX',
     budgetMin: 25000,
@@ -92,7 +102,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0038',
-    homeowner: 'Demo Homeowner B',
+    homeowner: 'Homeowner Request B',
     type: 'Full Renovation',
     location: 'Denver, CO',
     budgetMin: 120000,
@@ -102,7 +112,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0035',
-    homeowner: 'Demo Homeowner C',
+    homeowner: 'Homeowner Request C',
     type: 'Roofing',
     location: 'Phoenix, AZ',
     budgetMin: 15000,
@@ -112,7 +122,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0029',
-    homeowner: 'Demo Homeowner D',
+    homeowner: 'Homeowner Request D',
     type: 'Bathroom',
     location: 'Seattle, WA',
     budgetMin: 18000,
@@ -122,7 +132,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0021',
-    homeowner: 'Demo Homeowner E',
+    homeowner: 'Homeowner Request E',
     type: 'Electrical',
     location: 'Miami, FL',
     budgetMin: 8000,
@@ -132,7 +142,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0018',
-    homeowner: 'Demo Homeowner F',
+    homeowner: 'Homeowner Request F',
     type: 'Flooring',
     location: 'Portland, OR',
     budgetMin: 12000,
@@ -147,7 +157,7 @@ const bids: Bid[] = [
     id: 'BID-0091',
     projectId: 'PRJ-2026-0042',
     projectName: 'Kitchen Remodel',
-    homeowner: 'Demo Homeowner A',
+    homeowner: 'Homeowner Request A',
     amount: 32500,
     status: 'Submitted',
     date: '2026-02-19',
@@ -156,7 +166,7 @@ const bids: Bid[] = [
     id: 'BID-0085',
     projectId: 'PRJ-2026-0038',
     projectName: 'Full Renovation',
-    homeowner: 'Demo Homeowner B',
+    homeowner: 'Homeowner Request B',
     amount: 155000,
     status: 'Under Review',
     date: '2026-02-17',
@@ -165,7 +175,7 @@ const bids: Bid[] = [
     id: 'BID-0079',
     projectId: 'PRJ-2026-0035',
     projectName: 'Roofing Replacement',
-    homeowner: 'Demo Homeowner C',
+    homeowner: 'Homeowner Request C',
     amount: 22000,
     status: 'Accepted',
     date: '2026-02-16',
@@ -174,7 +184,7 @@ const bids: Bid[] = [
     id: 'BID-0072',
     projectId: 'PRJ-2026-0029',
     projectName: 'Bathroom Renovation',
-    homeowner: 'Demo Homeowner D',
+    homeowner: 'Homeowner Request D',
     amount: 28500,
     status: 'Awarded',
     date: '2026-02-12',
@@ -183,7 +193,7 @@ const bids: Bid[] = [
     id: 'BID-0065',
     projectId: 'PRJ-2026-0015',
     projectName: 'Plumbing Overhaul',
-    homeowner: 'Demo Homeowner E',
+    homeowner: 'Homeowner Request E',
     amount: 14200,
     status: 'Declined',
     date: '2026-02-08',
@@ -918,9 +928,248 @@ function BidsPanel() {
   );
 }
 
+type AccountRole = 'contractor' | 'homeowner';
+
+const fieldClass =
+  'w-full px-4 py-2.5 rounded-lg border border-[#E2E8F0] bg-white text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all';
+
+function getProfile(user: GcscUser): GcscProfile {
+  return {
+    accountType: user.role,
+    companyName: '',
+    businessName: '',
+    ein: '',
+    licenseNumber: '',
+    serviceArea: '',
+    address: '',
+    city: '',
+    state: '',
+    zip: '',
+    specialties: [],
+    yearsInBusiness: '',
+    website: '',
+    bio: '',
+    logoDataUrl: '',
+    projectNeeds: '',
+    propertyAddress: '',
+    propertyType: '',
+    budgetRange: '',
+    ...(user.profile || {}),
+  };
+}
+
+function initials(user: GcscUser): string {
+  const label = user.fullName || user.full_name || user.email;
+  return label
+    .split(/\s|@/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('') || 'GC';
+}
+
+function RoleBadge({ role }: { role: AccountRole }) {
+  const isContractor = role === 'contractor';
+  return (
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(123,47,247,0.08)] text-[#7B2FF7]">
+      {isContractor ? <Building2 size={13} /> : <Home size={13} />}
+      {isContractor ? 'Builder / Contractor' : 'Owner / Homeowner'}
+    </span>
+  );
+}
+
+function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: GcscUser) => void }) {
+  const [mode, setMode] = useState<'register' | 'login'>('register');
+  const [role, setRole] = useState<AccountRole>('contractor');
+  const [form, setForm] = useState({ fullName: '', email: '', password: '', phone: '' });
+  const [status, setStatus] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    setStatus('');
+    setSubmitting(true);
+    try {
+      const response = mode === 'register'
+        ? await api.register({ ...form, role })
+        : await api.login({ email: form.email, password: form.password });
+      api.setToken(response.token);
+      onAuthenticated(response.user);
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not complete account request');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="min-h-[100dvh] bg-white flex items-center justify-center container-padding py-16">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="w-full max-w-[920px] grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-6"
+      >
+        <div className="glass-card p-8">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#7B2FF7] via-[#3B6BF7] to-[#00D4FF] flex items-center justify-center mb-5">
+            <ShieldCheck size={30} className="text-white" />
+          </div>
+          <p className="text-xs font-semibold uppercase tracking-wider gradient-text mb-3">Real GCSC account</p>
+          <h1 className="font-outfit font-bold text-[2.2rem] leading-tight gradient-text shimmer-text">
+            Register your construction profile.
+          </h1>
+          <p className="font-inter text-sm text-[#475569] mt-4 leading-7">
+            Create a real account for the dashboard. Builders can save business, EIN, license,
+            logo, and service data. Owners can save project and property information before escrow.
+          </p>
+          <div className="mt-6 space-y-3 text-sm text-[#475569]">
+            <div className="flex gap-2"><CheckCircle2 size={18} className="text-[#10B981] shrink-0" /> Profile is saved through the backend API.</div>
+            <div className="flex gap-2"><CheckCircle2 size={18} className="text-[#10B981] shrink-0" /> WebAuth wallet can be linked after login.</div>
+            <div className="flex gap-2"><CheckCircle2 size={18} className="text-[#10B981] shrink-0" /> No demo account is shown by default.</div>
+          </div>
+        </div>
+
+        <form onSubmit={submit} className="glass-card p-8 space-y-5">
+          <div className="flex rounded-full bg-[#F1F5F9] p-1">
+            {(['register', 'login'] as const).map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setMode(item)}
+                className="flex-1 py-2.5 rounded-full text-sm font-semibold transition-all"
+                style={{
+                  background: mode === item ? 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' : 'transparent',
+                  color: mode === item ? '#FFFFFF' : '#475569',
+                }}
+              >
+                {item === 'register' ? 'Create account' : 'Sign in'}
+              </button>
+            ))}
+          </div>
+
+          {mode === 'register' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {(['contractor', 'homeowner'] as const).map((item) => {
+                const Icon = item === 'contractor' ? Building2 : Home;
+                return (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setRole(item)}
+                    className="flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition-all"
+                    style={{
+                      borderColor: role === item ? '#7B2FF7' : '#E2E8F0',
+                      background: role === item ? 'rgba(123,47,247,0.08)' : '#FFFFFF',
+                    }}
+                  >
+                    <Icon size={20} className={role === item ? 'text-[#7B2FF7]' : 'text-[#64748B]'} />
+                    <span>
+                      <span className="block text-sm font-semibold text-[#0F172A]">{item === 'contractor' ? 'Builder' : 'Owner'}</span>
+                      <span className="block text-xs text-[#64748B]">{item === 'contractor' ? 'Business profile' : 'Project profile'}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {mode === 'register' && (
+            <input
+              className={fieldClass}
+              placeholder="Full name"
+              value={form.fullName}
+              onChange={(e) => setForm((current) => ({ ...current, fullName: e.target.value }))}
+              required
+            />
+          )}
+          <input
+            className={fieldClass}
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) => setForm((current) => ({ ...current, email: e.target.value }))}
+            required
+          />
+          <input
+            className={fieldClass}
+            type="password"
+            placeholder="Password, minimum 8 characters"
+            value={form.password}
+            onChange={(e) => setForm((current) => ({ ...current, password: e.target.value }))}
+            minLength={8}
+            required
+          />
+          {mode === 'register' && (
+            <input
+              className={fieldClass}
+              placeholder="Phone"
+              value={form.phone}
+              onChange={(e) => setForm((current) => ({ ...current, phone: e.target.value }))}
+            />
+          )}
+
+          {status && <p className="text-sm text-[#EF4444]">{status}</p>}
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-full text-white font-inter font-semibold text-sm transition-all disabled:opacity-60"
+            style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 55%, #00D4FF 100%)' }}
+          >
+            {submitting && <Loader2 size={16} className="animate-spin" />}
+            {mode === 'register' ? 'Create GCSC Account' : 'Open Dashboard'}
+          </button>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
 /* ---- Profile Panel ---- */
 
-function ProfilePanel() {
+function ProfilePanel({ user, onUserChange }: { user: GcscUser; onUserChange: (user: GcscUser) => void }) {
+  const [profile, setProfile] = useState<GcscProfile>(() => getProfile(user));
+  const [fullName, setFullName] = useState(user.fullName || user.full_name || '');
+  const [phone, setPhone] = useState(user.phone || '');
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState('');
+  const isContractor = user.role === 'contractor';
+
+  const updateProfile = (field: keyof GcscProfile, value: string | string[]) => {
+    setProfile((current) => ({ ...current, [field]: value }));
+  };
+
+  const onLogoChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (file.size > 750000) {
+      setStatus('Logo file is too large. Please use an image under 750KB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => updateProfile('logoDataUrl', String(reader.result || ''));
+    reader.readAsDataURL(file);
+  };
+
+  const saveProfile = async () => {
+    setSaving(true);
+    setStatus('');
+    try {
+      const response = await api.updateProfile({
+        ...profile,
+        fullName,
+        phone,
+        specialties: profile.specialties || [],
+      });
+      onUserChange(response.user);
+      setStatus('Profile saved.');
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not save profile');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -929,47 +1178,134 @@ function ProfilePanel() {
       className="space-y-6"
     >
       <div>
-        <h2 className="font-outfit font-bold text-[1.5rem] text-[#0F172A]">Contractor Profile</h2>
-        <p className="font-inter text-sm text-[#475569] mt-1">Manage your business information and credentials</p>
+        <h2 className="font-outfit font-bold text-[1.5rem] gradient-text">Account Profile</h2>
+        <p className="font-inter text-sm text-[#475569] mt-1">
+          Save real business or property information for your GCSC account.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Avatar + Name Card */}
         <div className="glass-card p-6 text-center">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#3B6BF7] flex items-center justify-center mx-auto mb-3">
-            <span className="font-outfit font-bold text-2xl text-white">GC</span>
+          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#3B6BF7] flex items-center justify-center mx-auto mb-3 overflow-hidden">
+            {profile.logoDataUrl ? (
+              <img src={profile.logoDataUrl} alt="Account logo" className="w-full h-full object-cover" />
+            ) : (
+              <span className="font-outfit font-bold text-2xl text-white">{initials(user)}</span>
+            )}
           </div>
-          <h3 className="font-outfit font-bold text-[#0F172A]">Demo Contractor Profile</h3>
-          <p className="text-sm text-[#475569] mt-1">Contractor account preview</p>
-          <div className="mt-3 inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[rgba(245,158,11,0.1)] text-[#F59E0B]">
-            <CheckCircle2 size={12} />
-            Verification Flow Preview
-          </div>
+          <h3 className="font-outfit font-bold gradient-text">{fullName || user.email}</h3>
+          <p className="text-sm text-[#475569] mt-1">{user.email}</p>
+          <div className="mt-3"><RoleBadge role={user.role} /></div>
+          <label className="mt-5 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-[#C4B5FD] text-sm font-semibold text-[#7B2FF7] cursor-pointer hover:bg-[rgba(123,47,247,0.06)] transition-colors">
+            <Upload size={15} />
+            Upload logo
+            <input type="file" accept="image/png,image/jpeg,image/webp,image/gif" className="hidden" onChange={onLogoChange} />
+          </label>
+          <p className="text-xs text-[#94A3B8] mt-3">PNG, JPG, WEBP or GIF under 750KB.</p>
         </div>
 
-        {/* Details */}
         <div className="lg:col-span-2 glass-card p-6 space-y-4">
-          <h3 className="font-outfit font-semibold text-[1.0625rem] text-[#0F172A] mb-4">Business Details</h3>
-          {[
-            { label: 'Company Name', value: 'Connect business profile' },
-            { label: 'License Number', value: 'Pending contractor verification' },
-            { label: 'Email', value: 'Add business email' },
-            { label: 'Phone', value: 'Add business phone' },
-            { label: 'Address', value: 'Add service address' },
-            { label: 'Specialties', value: 'Select service categories' },
-            { label: 'Years in Business', value: 'Add business history' },
-            { label: 'Completed Projects', value: 'Connect completed jobs' },
-          ].map((field) => (
-            <div key={field.label} className="flex items-center justify-between py-2 border-b border-[#F1F5F9] last:border-0">
-              <span className="text-sm text-[#475569]">{field.label}</span>
-              <span className="text-sm font-medium text-[#0F172A]">{field.value}</span>
-            </div>
-          ))}
+          <h3 className="font-outfit font-semibold text-[1.0625rem] gradient-text mb-4">
+            {isContractor ? 'Builder Business Details' : 'Owner Project Details'}
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <label className="space-y-1.5">
+              <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Full name</span>
+              <input className={fieldClass} value={fullName} onChange={(e) => setFullName(e.target.value)} />
+            </label>
+            <label className="space-y-1.5">
+              <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Phone</span>
+              <input className={fieldClass} value={phone} onChange={(e) => setPhone(e.target.value)} />
+            </label>
+          </div>
+
+          {isContractor ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <label className="space-y-1.5">
+                  <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Company name</span>
+                  <input className={fieldClass} value={profile.companyName || ''} onChange={(e) => updateProfile('companyName', e.target.value)} />
+                </label>
+                <label className="space-y-1.5">
+                  <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">EIN</span>
+                  <input className={fieldClass} value={profile.ein || ''} onChange={(e) => updateProfile('ein', e.target.value)} placeholder="XX-XXXXXXX" />
+                </label>
+                <label className="space-y-1.5">
+                  <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">License number</span>
+                  <input className={fieldClass} value={profile.licenseNumber || ''} onChange={(e) => updateProfile('licenseNumber', e.target.value)} />
+                </label>
+                <label className="space-y-1.5">
+                  <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Years in business</span>
+                  <input className={fieldClass} value={profile.yearsInBusiness || ''} onChange={(e) => updateProfile('yearsInBusiness', e.target.value)} />
+                </label>
+              </div>
+              <label className="space-y-1.5 block">
+                <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Service area</span>
+                <input className={fieldClass} value={profile.serviceArea || ''} onChange={(e) => updateProfile('serviceArea', e.target.value)} placeholder="City, county, or state" />
+              </label>
+              <label className="space-y-1.5 block">
+                <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Specialties</span>
+                <input
+                  className={fieldClass}
+                  value={(profile.specialties || []).join(', ')}
+                  onChange={(e) => updateProfile('specialties', e.target.value.split(',').map((item) => item.trim()).filter(Boolean))}
+                  placeholder="Kitchen, roofing, plumbing"
+                />
+              </label>
+            </>
+          ) : (
+            <>
+              <label className="space-y-1.5 block">
+                <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Property address</span>
+                <input className={fieldClass} value={profile.propertyAddress || ''} onChange={(e) => updateProfile('propertyAddress', e.target.value)} />
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <label className="space-y-1.5">
+                  <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Property type</span>
+                  <input className={fieldClass} value={profile.propertyType || ''} onChange={(e) => updateProfile('propertyType', e.target.value)} placeholder="House, condo, duplex" />
+                </label>
+                <label className="space-y-1.5">
+                  <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Budget range</span>
+                  <input className={fieldClass} value={profile.budgetRange || ''} onChange={(e) => updateProfile('budgetRange', e.target.value)} placeholder="$10k - $40k" />
+                </label>
+              </div>
+              <label className="space-y-1.5 block">
+                <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Project needs</span>
+                <textarea className={`${fieldClass} min-h-[110px] resize-y`} value={profile.projectNeeds || ''} onChange={(e) => updateProfile('projectNeeds', e.target.value)} />
+              </label>
+            </>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <label className="space-y-1.5">
+              <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">City</span>
+              <input className={fieldClass} value={profile.city || ''} onChange={(e) => updateProfile('city', e.target.value)} />
+            </label>
+            <label className="space-y-1.5">
+              <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">State</span>
+              <input className={fieldClass} value={profile.state || ''} onChange={(e) => updateProfile('state', e.target.value)} />
+            </label>
+            <label className="space-y-1.5">
+              <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">ZIP</span>
+              <input className={fieldClass} value={profile.zip || ''} onChange={(e) => updateProfile('zip', e.target.value)} />
+            </label>
+          </div>
+
+          <label className="space-y-1.5 block">
+            <span className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Public bio / notes</span>
+            <textarea className={`${fieldClass} min-h-[110px] resize-y`} value={profile.bio || ''} onChange={(e) => updateProfile('bio', e.target.value)} />
+          </label>
+
+          {status && <p className={`text-sm ${status.includes('saved') ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{status}</p>}
           <button
+            onClick={saveProfile}
+            disabled={saving}
             className="mt-4 px-6 py-2.5 rounded-full text-white font-inter font-semibold text-sm transition-all hover:scale-[1.04]"
             style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}
           >
-            Edit Profile
+            {saving ? <Loader2 size={16} className="inline animate-spin mr-2" /> : <Save size={16} className="inline mr-2" />}
+            Save Profile
           </button>
         </div>
       </div>
@@ -979,7 +1315,26 @@ function ProfilePanel() {
 
 /* ---- Wallet Panel ---- */
 
-function WalletPanel() {
+function WalletPanel({ user, onUserChange }: { user: GcscUser; onUserChange: (user: GcscUser) => void }) {
+  const [connecting, setConnecting] = useState(false);
+  const [status, setStatus] = useState('');
+  const wallet = user.wallet || null;
+
+  const connectWallet = async () => {
+    setConnecting(true);
+    setStatus('');
+    try {
+      const webauthWallet = await connectWebAuthWallet();
+      const response = await api.connectWallet(webauthWallet);
+      onUserChange(response.user);
+      setStatus('WebAuth wallet connected.');
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not connect WebAuth wallet');
+    } finally {
+      setConnecting(false);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -988,80 +1343,46 @@ function WalletPanel() {
       className="space-y-6"
     >
       <div>
-        <h2 className="font-outfit font-bold text-[1.5rem] text-[#0F172A]">Wallet</h2>
-        <p className="font-inter text-sm text-[#475569] mt-1">Manage your funds and payment methods</p>
+        <h2 className="font-outfit font-bold text-[1.5rem] gradient-text">WebAuth Wallet</h2>
+        <p className="font-inter text-sm text-[#475569] mt-1">Connect your decentralized XPR Network wallet to this account.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Balance Card */}
-        <div className="glass-card p-6">
-          <div className="flex items-center gap-2 mb-2">
-            <DollarSign size={16} className="text-[#10B981]" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">Available Balance</span>
+        <div className="glass-card p-6 md:col-span-2">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7B2FF7] to-[#00D4FF] flex items-center justify-center shrink-0">
+              <Wallet size={24} className="text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-outfit font-bold text-[1.25rem] gradient-text">
+                {wallet ? wallet.accountName : 'Connect WebAuth Wallet'}
+              </h3>
+              <p className="text-sm text-[#475569] mt-1">
+                {wallet
+                  ? `Permission: ${wallet.permission}. This XPR account is linked to your GCSC profile.`
+                  : 'Use WebAuth to authorize your XPR account. The site stores only your account name and permission, not private keys.'}
+              </p>
+              {status && <p className={`text-sm mt-3 ${status.includes('connected') ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{status}</p>}
+              <button
+                onClick={connectWallet}
+                disabled={connecting}
+                className="mt-5 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-white font-inter font-semibold text-sm transition-all disabled:opacity-60 hover:scale-[1.04]"
+                style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 55%, #00D4FF 100%)' }}
+              >
+                {connecting ? <Loader2 size={16} className="animate-spin" /> : <PlugZap size={16} />}
+                {wallet ? 'Reconnect WebAuth' : 'Connect WebAuth'}
+              </button>
+            </div>
           </div>
-          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">Funds</p>
-          <p className="text-xs text-[#94A3B8] mt-1">Connect wallet to view live balance</p>
         </div>
 
-        {/* Escrow Card */}
         <div className="glass-card p-6">
           <div className="flex items-center gap-2 mb-2">
             <LockIcon />
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">In Escrow</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">Private keys</span>
           </div>
-          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">Funds</p>
-          <p className="text-xs text-[#94A3B8] mt-1">Milestone escrow preview</p>
-        </div>
-
-        {/* Pending Card */}
-        <div className="glass-card p-6">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock size={16} className="text-[#F59E0B]" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">Pending Payout</span>
-          </div>
-          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">Pending</p>
-          <p className="text-xs text-[#94A3B8] mt-1">Release after owner approval</p>
-        </div>
-      </div>
-
-      {/* Transactions */}
-      <div className="glass-card overflow-hidden">
-        <div className="px-6 py-4 border-b border-[#E2E8F0]">
-          <h3 className="font-outfit font-semibold text-[#0F172A]">Recent Transactions</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-[#E2E8F0] bg-[#F8FAFC]">
-                <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Transaction</th>
-                <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Project</th>
-                <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Date</th>
-                <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Amount</th>
-                <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                { tx: 'Escrow Release', project: 'Kitchen Remodel Demo', date: 'Demo', amount: 12500, status: 'Completed' },
-                { tx: 'Milestone Payment', project: 'Bathroom Demo', date: 'Demo', amount: 8750, status: 'Completed' },
-                { tx: 'Escrow Deposit', project: 'Roofing Demo', date: 'Demo', amount: -11000, status: 'Completed' },
-                { tx: 'Platform Fee', project: 'Demo', date: 'Demo', amount: -425, status: 'Completed' },
-                { tx: 'Milestone Payment', project: 'Renovation Demo', date: 'Demo', amount: 15500, status: 'Pending' },
-              ].map((t, i) => (
-                <tr key={i} className="border-b border-[#F1F5F9] hover:bg-[#F8FAFC]/60 transition-colors">
-                  <td className="px-4 py-3 font-medium text-[#0F172A]">{t.tx}</td>
-                  <td className="px-4 py-3 text-[#475569]">{t.project}</td>
-                  <td className="px-4 py-3 text-[#475569]">{t.date}</td>
-                  <td className={`px-4 py-3 font-semibold ${t.amount > 0 ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
-                    {t.amount > 0 ? '+' : ''}{formatCurrency(t.amount)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={t.status} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <p className="font-outfit font-bold text-[1.75rem] gradient-text">Never stored</p>
+          <p className="text-xs text-[#94A3B8] mt-1">WebAuth signs in its own wallet flow.</p>
         </div>
       </div>
     </motion.div>
@@ -1084,6 +1405,38 @@ function LockIcon() {
 export default function Dashboard() {
   const [activeSection, setActiveSection] = useState<Section>('projects');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<GcscUser | null>(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    const loadProfile = async () => {
+      try {
+        const response = await api.getProfile();
+        if (mounted) setUser(response.user);
+      } catch {
+        api.clearToken();
+      } finally {
+        if (mounted) setLoadingUser(false);
+      }
+    };
+
+    if (localStorage.getItem('gcsc_auth_token')) {
+      loadProfile();
+    } else {
+      setLoadingUser(false);
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const logout = () => {
+    api.logout();
+    setUser(null);
+    setActiveSection('projects');
+  };
 
   const renderPanel = () => {
     switch (activeSection) {
@@ -1094,15 +1447,32 @@ export default function Dashboard() {
       case 'bids':
         return <BidsPanel />;
       case 'profile':
-        return <ProfilePanel />;
+        return user ? <ProfilePanel user={user} onUserChange={setUser} /> : null;
       case 'wallet':
-        return <WalletPanel />;
+        return user ? <WalletPanel user={user} onUserChange={setUser} /> : null;
       case 'token':
         return <TokenRedirect />;
       default:
         return <ProjectsPanel />;
     }
   };
+
+  if (loadingUser) {
+    return (
+      <div className="min-h-[100dvh] bg-white flex items-center justify-center">
+        <div className="flex items-center gap-3 text-[#7B2FF7] font-inter font-semibold">
+          <Loader2 size={22} className="animate-spin" />
+          Loading dashboard...
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AccountAccess onAuthenticated={setUser} />;
+  }
+
+  const profile = getProfile(user);
 
   return (
     <div className="min-h-[100dvh] bg-white flex">
@@ -1154,14 +1524,25 @@ export default function Dashboard() {
         {/* Sidebar Footer */}
         <div className="px-4 py-4 border-t border-[#E2E8F0]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#3B6BF7] flex items-center justify-center">
-              <span className="text-xs font-bold text-white">GC</span>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#3B6BF7] flex items-center justify-center overflow-hidden">
+              {profile.logoDataUrl ? (
+                <img src={profile.logoDataUrl} alt="Account logo" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-xs font-bold text-white">{initials(user)}</span>
+              )}
             </div>
             <div className="overflow-hidden">
-              <p className="text-sm font-medium text-[#0F172A] truncate">Demo Account</p>
-              <p className="text-xs text-[#94A3B8] truncate">Contractor Preview</p>
+              <p className="text-sm font-medium text-[#0F172A] truncate">{user.fullName || user.full_name || user.email}</p>
+              <p className="text-xs text-[#94A3B8] truncate">{user.role === 'contractor' ? 'Builder account' : 'Owner account'}</p>
             </div>
           </div>
+          <button
+            onClick={logout}
+            className="mt-4 w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-[#64748B] hover:text-[#7B2FF7] hover:bg-[rgba(123,47,247,0.06)] transition-colors"
+          >
+            <LogOut size={14} />
+            Sign out
+          </button>
         </div>
       </aside>
 
@@ -1221,6 +1602,16 @@ export default function Dashboard() {
                   Token
                   <ChevronRight size={14} className="ml-auto text-[#94A3B8]" />
                 </Link>
+                <button
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium text-[#475569] hover:bg-[rgba(123,47,247,0.06)] hover:text-[#7B2FF7] transition-all duration-200"
+                >
+                  <LogOut size={18} />
+                  Sign out
+                </button>
               </nav>
             </motion.aside>
           </>

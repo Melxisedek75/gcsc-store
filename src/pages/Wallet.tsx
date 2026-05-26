@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { motion } from 'framer-motion'
-import { Download, UserPlus, Link2, Coins, CreditCard, Check, ExternalLink, ArrowRight } from 'lucide-react'
+import { Link2, Coins, CreditCard, Check, ExternalLink, ArrowRight, Loader2, PlugZap, ShieldCheck } from 'lucide-react'
+import { api, type GcscUser, type GcscWallet } from '../services/api'
+import { connectWebAuthWallet } from '../services/webauth'
 
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }
 const fadeUpChild = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } } }
@@ -19,11 +21,53 @@ function SectionLabel({ text }: { text: string }) {
    ════════════════════════════════════════════ */
 export default function Wallet() {
   const [metalConnected, setMetalConnected] = useState(false)
+  const [user, setUser] = useState<GcscUser | null>(null)
+  const [wallet, setWallet] = useState<GcscWallet | null>(null)
+  const [connecting, setConnecting] = useState(false)
+  const [status, setStatus] = useState('')
+
+  useEffect(() => {
+    let mounted = true
+    if (!localStorage.getItem('gcsc_auth_token')) return
+
+    api.getProfile()
+      .then((response) => {
+        if (!mounted) return
+        setUser(response.user)
+        setWallet(response.user.wallet || null)
+      })
+      .catch(() => api.clearToken())
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const connectWallet = async () => {
+    setConnecting(true)
+    setStatus('')
+    try {
+      const connected = await connectWebAuthWallet()
+      if (user) {
+        const response = await api.connectWallet(connected)
+        setUser(response.user)
+        setWallet(response.wallet)
+        setStatus('WebAuth wallet connected and saved to your GCSC account.')
+      } else {
+        setWallet({ ...connected })
+        setStatus('WebAuth wallet connected locally. Open Dashboard and sign in to save it to your profile.')
+      }
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not connect WebAuth wallet')
+    } finally {
+      setConnecting(false)
+    }
+  }
 
   const steps = [
-    { icon: Download, num: '01', title: 'Download XPR Wallet', desc: 'Get the XPR Network wallet from the App Store or Google Play. Available for iOS and Android devices.', tags: ['iOS', 'Android'] },
-    { icon: UserPlus, num: '02', title: 'Create Your Account', desc: 'Follow the in-app instructions to create a new XPR Network account. Your private keys are stored locally on your device — only you have access.', tags: ['Self-Custody', 'Secure'] },
-    { icon: Link2, num: '03', title: 'Connect to GCSC', desc: 'Link your XPR wallet to the GCSC platform. Go to your Dashboard → Wallet and click "Connect XPR Wallet" to authorize.', tags: ['One-Click'] },
+    { icon: PlugZap, num: '01', title: 'Connect WebAuth', desc: 'Use the WebAuth modal on this page or inside Dashboard to authorize your XPR account.', tags: ['WebAuth', 'XPR'] },
+    { icon: ShieldCheck, num: '02', title: 'Keep Keys Private', desc: 'GCSC stores only your XPR account name and permission. Private keys stay inside your wallet.', tags: ['No Custody', 'Secure'] },
+    { icon: Link2, num: '03', title: 'Save to Dashboard', desc: 'If you are signed in, the connected wallet is attached to your GCSC profile automatically.', tags: ['Profile'] },
     { icon: Coins, num: '04', title: 'Get GCSC Tokens', desc: 'Purchase GCSC tokens through the integrated swap feature or receive them as payment for completed construction projects.', tags: ['Buy', 'Earn'] },
   ]
 
@@ -42,11 +86,44 @@ export default function Wallet() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger}>
             <motion.div variants={fadeUpChild}><SectionLabel text="GETTING STARTED" /></motion.div>
             <motion.h1 variants={fadeUpChild} className="font-outfit font-bold brand-heading-hero shimmer-text break-words mt-4">
-              Connect Your XPR Wallet
+              Connect WebAuth Wallet
             </motion.h1>
             <motion.p variants={fadeUpChild} className="font-inter text-body-lg mt-4 mx-auto" style={{ color: '#475569', maxWidth: '560px' }}>
-              Set up your XPR Network wallet to use GCSC tokens, smart contract escrow, and staking rewards.
+              Link your decentralized XPR account to GCSC for profile identity, escrow workflows, and future on-chain actions.
             </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* WEBAUTH CONNECT */}
+      <section style={{ background: '#FFFFFF', padding: '0 0 80px' }}>
+        <div className="mx-auto max-w-container container-padding">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-[760px] mx-auto glass-card p-8">
+            <div className="flex flex-col md:flex-row md:items-center gap-6">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#7B2FF7] via-[#3B6BF7] to-[#00D4FF] flex items-center justify-center shrink-0">
+                <PlugZap size={30} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="font-outfit font-bold text-[1.5rem] gradient-text">
+                  {wallet ? `Connected: ${wallet.accountName}` : 'Connect with WebAuth'}
+                </h2>
+                <p className="font-inter text-sm mt-2" style={{ color: '#475569' }}>
+                  {wallet
+                    ? `Permission: ${wallet.permission}. ${user ? 'Saved to your Dashboard profile.' : 'Sign in on Dashboard to save this wallet.'}`
+                    : 'Authorize through WebAuth. GCSC never stores your private keys.'}
+                </p>
+                {status && <p className={`font-inter text-sm mt-3 ${status.includes('connected') ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>{status}</p>}
+              </div>
+              <button
+                onClick={connectWallet}
+                disabled={connecting}
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-white font-inter font-semibold text-sm transition-all disabled:opacity-60 hover:scale-[1.04]"
+                style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 55%, #00D4FF 100%)' }}
+              >
+                {connecting ? <Loader2 size={16} className="animate-spin" /> : <PlugZap size={16} />}
+                {wallet ? 'Reconnect' : 'Connect WebAuth'}
+              </button>
+            </div>
           </motion.div>
         </div>
       </section>
