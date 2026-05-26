@@ -10,6 +10,13 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  preview: {
+    allowedHosts: [
+      "gcsc-store-production.up.railway.app",
+      "gcsc.store",
+      "www.gcsc.store",
+    ],
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
