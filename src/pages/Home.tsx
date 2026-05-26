@@ -80,7 +80,7 @@ function HeroSection() {
           </div>
           <h1
             className="font-outfit font-bold leading-[1.04] tracking-normal"
-            style={{ fontSize: 'clamp(2.5rem, 5vw, 4.75rem)' }}
+            style={{ fontSize: 'clamp(2.35rem, 4.2vw, 4.1rem)' }}
           >
             <span className="hero-h1-l1 block opacity-0 gradient-text shimmer-text">
               Construction payments

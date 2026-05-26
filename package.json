@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "check:dashboard-live": "node scripts/validate-dashboard-live-workflow.mjs"
+    "check:dashboard-live": "node scripts/validate-dashboard-live-workflow.mjs",
+    "check:brand-polish": "node scripts/validate-brand-polish.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

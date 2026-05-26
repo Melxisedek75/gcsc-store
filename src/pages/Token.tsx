@@ -32,7 +32,7 @@ export default function Token() {
             <motion.h1
               variants={fadeUpChild}
               className="font-outfit font-bold leading-[1.04] tracking-normal break-words mt-4 gradient-text shimmer-text"
-              style={{ fontSize: 'clamp(2.75rem, 5vw, 4.75rem)' }}
+              style={{ fontSize: 'clamp(2.35rem, 4vw, 3.85rem)' }}
             >
               GCSC Token
             </motion.h1>
