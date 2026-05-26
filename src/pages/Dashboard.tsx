@@ -82,7 +82,7 @@ type LaborComplexity = 'Simple' | 'Moderate' | 'Complex';
 const projects: Project[] = [
   {
     id: 'PRJ-2026-0042',
-    homeowner: 'Michael Torres',
+    homeowner: 'Demo Homeowner A',
     type: 'Kitchen Remodel',
     location: 'Austin, TX',
     budgetMin: 25000,
@@ -92,7 +92,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0038',
-    homeowner: 'Sarah Chen',
+    homeowner: 'Demo Homeowner B',
     type: 'Full Renovation',
     location: 'Denver, CO',
     budgetMin: 120000,
@@ -102,7 +102,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0035',
-    homeowner: 'Robert Williams',
+    homeowner: 'Demo Homeowner C',
     type: 'Roofing',
     location: 'Phoenix, AZ',
     budgetMin: 15000,
@@ -112,7 +112,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0029',
-    homeowner: 'Amanda Foster',
+    homeowner: 'Demo Homeowner D',
     type: 'Bathroom',
     location: 'Seattle, WA',
     budgetMin: 18000,
@@ -122,7 +122,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0021',
-    homeowner: 'James Mitchell',
+    homeowner: 'Demo Homeowner E',
     type: 'Electrical',
     location: 'Miami, FL',
     budgetMin: 8000,
@@ -132,7 +132,7 @@ const projects: Project[] = [
   },
   {
     id: 'PRJ-2026-0018',
-    homeowner: 'Lisa Anderson',
+    homeowner: 'Demo Homeowner F',
     type: 'Flooring',
     location: 'Portland, OR',
     budgetMin: 12000,
@@ -147,7 +147,7 @@ const bids: Bid[] = [
     id: 'BID-0091',
     projectId: 'PRJ-2026-0042',
     projectName: 'Kitchen Remodel',
-    homeowner: 'Michael Torres',
+    homeowner: 'Demo Homeowner A',
     amount: 32500,
     status: 'Submitted',
     date: '2026-02-19',
@@ -156,7 +156,7 @@ const bids: Bid[] = [
     id: 'BID-0085',
     projectId: 'PRJ-2026-0038',
     projectName: 'Full Renovation',
-    homeowner: 'Sarah Chen',
+    homeowner: 'Demo Homeowner B',
     amount: 155000,
     status: 'Under Review',
     date: '2026-02-17',
@@ -165,7 +165,7 @@ const bids: Bid[] = [
     id: 'BID-0079',
     projectId: 'PRJ-2026-0035',
     projectName: 'Roofing Replacement',
-    homeowner: 'Robert Williams',
+    homeowner: 'Demo Homeowner C',
     amount: 22000,
     status: 'Accepted',
     date: '2026-02-16',
@@ -174,7 +174,7 @@ const bids: Bid[] = [
     id: 'BID-0072',
     projectId: 'PRJ-2026-0029',
     projectName: 'Bathroom Renovation',
-    homeowner: 'Amanda Foster',
+    homeowner: 'Demo Homeowner D',
     amount: 28500,
     status: 'Awarded',
     date: '2026-02-12',
@@ -183,7 +183,7 @@ const bids: Bid[] = [
     id: 'BID-0065',
     projectId: 'PRJ-2026-0015',
     projectName: 'Plumbing Overhaul',
-    homeowner: 'David Park',
+    homeowner: 'Demo Homeowner E',
     amount: 14200,
     status: 'Declined',
     date: '2026-02-08',
@@ -937,13 +937,13 @@ function ProfilePanel() {
         {/* Avatar + Name Card */}
         <div className="glass-card p-6 text-center">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#3B6BF7] flex items-center justify-center mx-auto mb-3">
-            <span className="font-outfit font-bold text-2xl text-white">JD</span>
+            <span className="font-outfit font-bold text-2xl text-white">GC</span>
           </div>
-          <h3 className="font-outfit font-bold text-[#0F172A]">John Doe Construction LLC</h3>
-          <p className="text-sm text-[#475569] mt-1">Licensed General Contractor</p>
-          <div className="mt-3 inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[rgba(16,185,129,0.1)] text-[#10B981]">
+          <h3 className="font-outfit font-bold text-[#0F172A]">Demo Contractor Profile</h3>
+          <p className="text-sm text-[#475569] mt-1">Contractor account preview</p>
+          <div className="mt-3 inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[rgba(245,158,11,0.1)] text-[#F59E0B]">
             <CheckCircle2 size={12} />
-            Verified
+            Verification Flow Preview
           </div>
         </div>
 
@@ -951,14 +951,14 @@ function ProfilePanel() {
         <div className="lg:col-span-2 glass-card p-6 space-y-4">
           <h3 className="font-outfit font-semibold text-[1.0625rem] text-[#0F172A] mb-4">Business Details</h3>
           {[
-            { label: 'Company Name', value: 'John Doe Construction LLC' },
-            { label: 'License Number', value: 'GC-2019-8847' },
-            { label: 'Email', value: 'john@johndoeconstruction.com' },
-            { label: 'Phone', value: '(512) 555-0142' },
-            { label: 'Address', value: '1450 Builder Ave, Austin, TX 78701' },
-            { label: 'Specialties', value: 'Kitchen, Bathroom, Full Renovation' },
-            { label: 'Years in Business', value: '8 years' },
-            { label: 'Completed Projects', value: '142' },
+            { label: 'Company Name', value: 'Connect business profile' },
+            { label: 'License Number', value: 'Pending contractor verification' },
+            { label: 'Email', value: 'Add business email' },
+            { label: 'Phone', value: 'Add business phone' },
+            { label: 'Address', value: 'Add service address' },
+            { label: 'Specialties', value: 'Select service categories' },
+            { label: 'Years in Business', value: 'Add business history' },
+            { label: 'Completed Projects', value: 'Connect completed jobs' },
           ].map((field) => (
             <div key={field.label} className="flex items-center justify-between py-2 border-b border-[#F1F5F9] last:border-0">
               <span className="text-sm text-[#475569]">{field.label}</span>
@@ -999,8 +999,8 @@ function WalletPanel() {
             <DollarSign size={16} className="text-[#10B981]" />
             <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">Available Balance</span>
           </div>
-          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">{formatCurrency(48750)}</p>
-          <p className="text-xs text-[#94A3B8] mt-1">Last updated: Feb 20, 2026</p>
+          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">Funds</p>
+          <p className="text-xs text-[#94A3B8] mt-1">Connect wallet to view live balance</p>
         </div>
 
         {/* Escrow Card */}
@@ -1009,8 +1009,8 @@ function WalletPanel() {
             <LockIcon />
             <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">In Escrow</span>
           </div>
-          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">{formatCurrency(32100)}</p>
-          <p className="text-xs text-[#94A3B8] mt-1">3 active contracts</p>
+          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">Funds</p>
+          <p className="text-xs text-[#94A3B8] mt-1">Milestone escrow preview</p>
         </div>
 
         {/* Pending Card */}
@@ -1019,8 +1019,8 @@ function WalletPanel() {
             <Clock size={16} className="text-[#F59E0B]" />
             <span className="text-xs font-semibold uppercase tracking-wider text-[#475569]">Pending Payout</span>
           </div>
-          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">{formatCurrency(12500)}</p>
-          <p className="text-xs text-[#94A3B8] mt-1">Est. release: Feb 25, 2026</p>
+          <p className="font-outfit font-bold text-[2rem] text-[#0F172A]">Pending</p>
+          <p className="text-xs text-[#94A3B8] mt-1">Release after owner approval</p>
         </div>
       </div>
 
@@ -1042,11 +1042,11 @@ function WalletPanel() {
             </thead>
             <tbody>
               {[
-                { tx: 'Escrow Release', project: 'Kitchen Remodel — Torres', date: 'Feb 18, 2026', amount: 12500, status: 'Completed' },
-                { tx: 'Milestone Payment', project: 'Bathroom — Foster', date: 'Feb 15, 2026', amount: 8750, status: 'Completed' },
-                { tx: 'Escrow Deposit', project: 'Roofing — Williams', date: 'Feb 14, 2026', amount: -11000, status: 'Completed' },
-                { tx: 'Platform Fee', project: '—', date: 'Feb 12, 2026', amount: -425, status: 'Completed' },
-                { tx: 'Milestone Payment', project: 'Full Renovation — Chen', date: 'Feb 10, 2026', amount: 15500, status: 'Pending' },
+                { tx: 'Escrow Release', project: 'Kitchen Remodel Demo', date: 'Demo', amount: 12500, status: 'Completed' },
+                { tx: 'Milestone Payment', project: 'Bathroom Demo', date: 'Demo', amount: 8750, status: 'Completed' },
+                { tx: 'Escrow Deposit', project: 'Roofing Demo', date: 'Demo', amount: -11000, status: 'Completed' },
+                { tx: 'Platform Fee', project: 'Demo', date: 'Demo', amount: -425, status: 'Completed' },
+                { tx: 'Milestone Payment', project: 'Renovation Demo', date: 'Demo', amount: 15500, status: 'Pending' },
               ].map((t, i) => (
                 <tr key={i} className="border-b border-[#F1F5F9] hover:bg-[#F8FAFC]/60 transition-colors">
                   <td className="px-4 py-3 font-medium text-[#0F172A]">{t.tx}</td>
@@ -1155,11 +1155,11 @@ export default function Dashboard() {
         <div className="px-4 py-4 border-t border-[#E2E8F0]">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#3B6BF7] flex items-center justify-center">
-              <span className="text-xs font-bold text-white">JD</span>
+              <span className="text-xs font-bold text-white">GC</span>
             </div>
             <div className="overflow-hidden">
-              <p className="text-sm font-medium text-[#0F172A] truncate">John Doe</p>
-              <p className="text-xs text-[#94A3B8] truncate">Contractor</p>
+              <p className="text-sm font-medium text-[#0F172A] truncate">Demo Account</p>
+              <p className="text-xs text-[#94A3B8] truncate">Contractor Preview</p>
             </div>
           </div>
         </div>

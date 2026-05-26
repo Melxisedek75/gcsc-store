@@ -5,6 +5,9 @@ import Pricing from './pages/Pricing'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Security from './pages/Security'
+import Dashboard from './pages/Dashboard'
+import Token from './pages/Token'
+import Wallet from './pages/Wallet'
 
 export default function App() {
   return (
@@ -15,6 +18,9 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/security" element={<Security />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/token" element={<Token />} />
+        <Route path="/wallet" element={<Wallet />} />
       </Routes>
     </Layout>
   )

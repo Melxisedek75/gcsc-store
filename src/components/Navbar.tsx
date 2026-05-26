@@ -8,6 +8,8 @@ const navLinks = [
   { label: 'About', path: '/about' },
   { label: 'Contact', path: '/contact' },
   { label: 'Security', path: '/security' },
+  { label: 'Token', path: '/token' },
+  { label: 'Wallet', path: '/wallet' },
 ]
 
 export default function Navbar() {
@@ -61,11 +63,11 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden lg:block">
             <Link
-              to="/pricing"
+              to="/dashboard"
               className="inline-flex items-center justify-center gradient-primary text-white font-inter font-semibold text-[0.875rem] px-6 py-2.5 rounded-full hover:scale-[1.04] hover:shadow-glow transition-all duration-300"
               style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
             >
-              Get Started
+              Dashboard
             </Link>
           </div>
 
@@ -105,7 +107,7 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            to="/pricing"
+            to="/dashboard"
             className="mt-4 inline-flex items-center justify-center gradient-primary text-white font-inter font-semibold text-[1rem] px-8 py-3.5 rounded-full"
             style={{
               opacity: isOpen ? 1 : 0,
@@ -113,7 +115,7 @@ export default function Navbar() {
               transition: `all 0.4s cubic-bezier(0.16, 1, 0.3, 1) ${navLinks.length * 0.08 + 0.1}s`,
             }}
           >
-            Get Started
+            Dashboard
           </Link>
         </div>
       </div>
