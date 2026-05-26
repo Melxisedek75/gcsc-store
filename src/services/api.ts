@@ -42,6 +42,42 @@ export interface GcscUser {
   wallet?: GcscWallet | null
 }
 
+export interface GcscProject {
+  id: number
+  homeowner_id: number
+  title: string
+  description: string
+  category: string
+  budget_min: number
+  budget_max: number
+  location: string
+  timeline_days: number
+  status: string
+  escrow_id?: number | null
+  created_at: string
+}
+
+export interface GcscBid {
+  id: number
+  project_id: number
+  contractor_id: number
+  amount: number
+  proposed_timeline_days: number
+  message?: string
+  status: string
+  created_at: string
+}
+
+export interface GcscEscrow {
+  id: number
+  project_id: number
+  homeowner_id: number
+  contractor_id: number
+  total_amount: number
+  status: string
+  created_at: string
+}
+
 class ApiClient {
   private token: string | null = null
 
@@ -98,13 +134,30 @@ class ApiClient {
   getProject(id: number) {
     return this.request(`/projects/${id}`)
   }
+  getMyProjects() {
+    return this.request('/projects/my/projects')
+  }
+  createProject(body: {
+    title: string
+    description: string
+    category?: string
+    budget_min?: number
+    budget_max?: number
+    location?: string
+    timeline_days?: number
+  }) {
+    return this.request('/projects', { method: 'POST', body: JSON.stringify(body) })
+  }
 
   // BIDS
-  getBids() {
-    return this.request('/bids')
+  getMyBids() {
+    return this.request('/bids/my/bids')
   }
-  submitBid(body: { projectId: number; contractorId: number; amount: number; message?: string }) {
+  submitBid(body: { project_id: number; amount: number; proposed_timeline_days?: number; message?: string }) {
     return this.request('/bids', { method: 'POST', body: JSON.stringify(body) })
+  }
+  acceptBid(id: number) {
+    return this.request(`/bids/${id}/accept`, { method: 'POST' })
   }
 
   // ESCROW
