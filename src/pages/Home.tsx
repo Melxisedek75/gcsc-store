@@ -84,7 +84,7 @@ function HeroSection() {
             className="font-outfit font-bold leading-[1.04] tracking-normal"
             style={{ fontSize: 'clamp(2.5rem, 5vw, 4.75rem)' }}
           >
-            <span className="hero-h1-l1 block opacity-0" style={{ color: '#0F172A' }}>
+            <span className="hero-h1-l1 block opacity-0 gradient-text">
               Construction payments
             </span>
             <span className="hero-h1-l2 block opacity-0 gradient-text">

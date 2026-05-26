@@ -36,17 +36,8 @@ export default function Navbar() {
       className="sticky top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-xl border-b border-gray-200/50"
     >
       <div className="mx-auto max-w-container container-padding">
-        <div className="flex items-center justify-between h-[72px]">
-          {/* Logo */}
-          <Link to="/" className="flex items-center shrink-0" aria-label="GCSC Smart Contract home">
-            <img
-              src="/gcsc-logo-nav.png"
-              alt="GCSC Smart Contract"
-              className="h-[32px] w-auto object-contain"
-              style={{ filter: 'drop-shadow(0 0 8px rgba(123,47,247,0.15))' }}
-            />
-          </Link>
-
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center h-[72px]">
+          <div className="hidden lg:block" />
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
@@ -61,7 +52,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex justify-end">
             <Link
               to="/dashboard"
               className="inline-flex items-center justify-center gradient-primary text-white font-inter font-semibold text-[0.875rem] px-6 py-2.5 rounded-full hover:scale-[1.04] hover:shadow-glow transition-all duration-300"
@@ -73,7 +64,7 @@ export default function Navbar() {
 
           {/* Mobile Hamburger */}
           <button
-            className="lg:hidden relative z-50 w-10 h-10 flex items-center justify-center text-[#0F172A]"
+            className="lg:hidden relative z-50 col-start-3 justify-self-end w-10 h-10 flex items-center justify-center text-[#0F172A]"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
