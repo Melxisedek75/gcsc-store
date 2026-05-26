@@ -1,7 +1,6 @@
 import { useEffect, type ReactNode } from 'react'
 import { useLocation } from 'react-router'
 import Lenis from 'lenis'
-import HeaderBanner from './HeaderBanner'
 import Navbar from './Navbar'
 import Footer from './Footer'
 
@@ -33,7 +32,6 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col">
-      <HeaderBanner />
       <Navbar />
       <main className="flex-1">
         {children}

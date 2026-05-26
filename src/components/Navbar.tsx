@@ -38,11 +38,11 @@ export default function Navbar() {
       <div className="mx-auto max-w-container container-padding">
         <div className="flex items-center justify-between h-[72px]">
           {/* Logo */}
-          <Link to="/" className="flex items-center shrink-0">
+          <Link to="/" className="flex items-center shrink-0" aria-label="GCSC Smart Contract home">
             <img
               src="/gcsc-logo-nav.png"
               alt="GCSC Smart Contract"
-              className="h-[40px] w-auto object-contain"
+              className="h-[32px] w-auto object-contain"
               style={{ filter: 'drop-shadow(0 0 8px rgba(123,47,247,0.15))' }}
             />
           </Link>

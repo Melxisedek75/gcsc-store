@@ -37,94 +37,15 @@ function SectionLabel({ text }: { text: string }) {
   )
 }
 
-/* ───────── Particle Field (CSS-based) ───────── */
-function ParticleField() {
-  const particles = useRef(
-    Array.from({ length: 30 }, (_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      size: Math.random() * 4 + 2,
-      duration: Math.random() * 15 + 15,
-      delay: Math.random() * 15,
-      opacity: Math.random() * 0.08 + 0.03,
-    }))
-  ).current
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className="absolute rounded-full"
-          style={{
-            left: p.left,
-            top: p.top,
-            width: p.size,
-            height: p.size,
-            backgroundColor: `rgba(123, 47, 247, ${p.opacity})`,
-            animation: `float-up ${p.duration}s linear ${p.delay}s infinite`,
-          }}
-        />
-      ))}
-    </div>
-  )
-}
-
-/* ───────── Progress Ring ───────── */
-function ProgressRing({ progress, size = 60 }: { progress: number; size?: number }) {
-  const radius = (size - 4) / 2
-  const circumference = radius * 2 * Math.PI
-  const offset = circumference - (progress / 100) * circumference
-
-  return (
-    <svg width={size} height={size} className="-rotate-90">
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
-        stroke="rgba(15,23,42,0.1)"
-        strokeWidth={3}
-        fill="none"
-      />
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
-        stroke="#00D4FF"
-        strokeWidth={3}
-        fill="none"
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        strokeLinecap="round"
-        style={{ transition: 'stroke-dashoffset 1.5s ease-out' }}
-      />
-    </svg>
-  )
-}
-
 /* ════════════════════════════════════════════
    SECTION 1 — HERO
    ════════════════════════════════════════════ */
 function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null)
-  const orb1Ref = useRef<HTMLDivElement>(null)
-  const orb2Ref = useRef<HTMLDivElement>(null)
-  const orb3Ref = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
 
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-
-    // Orbs fade in
-    if (orb1Ref.current && orb2Ref.current && orb3Ref.current) {
-      tl.fromTo(
-        [orb1Ref.current, orb2Ref.current, orb3Ref.current],
-        { opacity: 0 },
-        { opacity: 0.3, duration: 1.5 },
-        0
-      )
-    }
 
     // Content animations
     if (contentRef.current && sectionRef.current) {
@@ -133,16 +54,14 @@ function HeroSection() {
       const h1l2 = contentRef.current.querySelector('.hero-h1-l2')
       const sub = contentRef.current.querySelector('.hero-sub')
       const cta = contentRef.current.querySelector('.hero-cta')
-      const card = sectionRef.current.querySelector('.hero-card')
-      const notif = sectionRef.current.querySelector('.hero-notif')
+      const proof = contentRef.current.querySelector('.hero-proof')
 
       if (eyebrow) tl.fromTo(eyebrow, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 0.5)
       if (h1l1) tl.fromTo(h1l1, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 0.7)
       if (h1l2) tl.fromTo(h1l2, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 0.9)
       if (sub) tl.fromTo(sub, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 1.1)
       if (cta) tl.fromTo(cta, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 1.3)
-      if (card) tl.fromTo(card, { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: 'back.out(1.2)' }, 0.8)
-      if (notif) tl.fromTo(notif, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8 }, 1.8)
+      if (proof) tl.fromTo(proof, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 1.45)
     }
   }, { scope: sectionRef })
 
@@ -151,87 +70,37 @@ function HeroSection() {
       ref={sectionRef}
       className="relative w-full overflow-hidden"
       style={{
-        minHeight: '100dvh',
-        background: '#F8FAFC',
+        background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)',
       }}
     >
-      {/* Subtle light overlay for readability */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)' }}
-      />
-
-      {/* Mesh gradient orbs - very subtle for light theme */}
-      <div
-        ref={orb1Ref}
-        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none opacity-0"
-        style={{
-          top: '-20%',
-          left: '-10%',
-          background: 'radial-gradient(circle, rgba(123,47,247,0.12) 0%, transparent 70%)',
-          filter: 'blur(120px)',
-          animation: 'meshBreathe 15s ease-in-out infinite',
-        }}
-      />
-      <div
-        ref={orb2Ref}
-        className="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0"
-        style={{
-          top: '30%',
-          right: '-15%',
-          background: 'radial-gradient(circle, rgba(59,107,247,0.1) 0%, transparent 70%)',
-          filter: 'blur(120px)',
-          animation: 'meshBreathe 18s ease-in-out infinite 3s',
-        }}
-      />
-      <div
-        ref={orb3Ref}
-        className="absolute w-[500px] h-[500px] rounded-full pointer-events-none opacity-0"
-        style={{
-          bottom: '-10%',
-          left: '40%',
-          background: 'radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%)',
-          filter: 'blur(120px)',
-          animation: 'meshBreathe 20s ease-in-out infinite 6s',
-        }}
-      />
-
-      {/* Noise texture overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.02]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
-      {/* Particle field */}
-      <ParticleField />
-
       {/* Content */}
-      <div className="relative z-10 mx-auto max-w-container container-padding flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-8 py-20 lg:py-0" style={{ minHeight: 'calc(100dvh - 72px)' }}>
+      <div className="relative z-10 mx-auto max-w-container container-padding py-16 md:py-20 lg:py-24">
         {/* Left column — Text */}
-        <div ref={contentRef} className="flex-1 max-w-[600px] text-center lg:text-left">
+        <div ref={contentRef} className="max-w-[860px]">
           <div className="hero-eyebrow opacity-0">
-            <SectionLabel text="XPR BLOCKCHAIN POWERED" />
+            <SectionLabel text="Construction escrow on XPR Network" />
           </div>
-          <h1 className="font-outfit font-bold text-hero leading-hero tracking-hero">
+          <h1
+            className="font-outfit font-bold leading-[1.04] tracking-normal"
+            style={{ fontSize: 'clamp(2.5rem, 5vw, 4.75rem)' }}
+          >
             <span className="hero-h1-l1 block opacity-0" style={{ color: '#0F172A' }}>
-              Build with Trust.
+              Construction payments
             </span>
             <span className="hero-h1-l2 block opacity-0 gradient-text">
-              Pay with Confidence.
+              protected by escrow.
             </span>
           </h1>
-          <p className="hero-sub opacity-0 font-inter text-body-lg leading-body-lg mt-6" style={{ color: '#475569' }}>
-            The first construction marketplace powered by XPR blockchain escrow. Smart contracts protect every payment, every milestone, every project.
+          <p className="hero-sub opacity-0 font-inter text-[1.125rem] md:text-[1.25rem] leading-[1.65] mt-6 max-w-[720px]" style={{ color: '#475569' }}>
+            GCSC Smart Contractor connects homeowners and contractors with milestone-based escrow, verified profiles, and clear payment workflows.
           </p>
-          <div className="hero-cta opacity-0 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mt-8">
+          <div className="hero-cta opacity-0 flex flex-col sm:flex-row items-start gap-4 mt-8">
             <Link
-              to="/pricing"
+              to="/dashboard"
               className="inline-flex items-center justify-center gradient-primary text-white font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full hover:scale-[1.04] hover:shadow-glow active:scale-[0.98] transition-all duration-300"
               style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
             >
-              Get Started
+              Open Dashboard
             </Link>
             <button
               className="inline-flex items-center justify-center bg-transparent font-inter font-semibold text-[0.9375rem] px-8 py-[14px] rounded-full border hover:bg-[rgba(123,47,247,0.08)] transition-all duration-300 cursor-pointer"
@@ -243,64 +112,17 @@ function HeroSection() {
               Watch How It Works
             </button>
           </div>
-          <p className="mt-5 font-inter text-body-sm" style={{ color: 'rgba(71,85,105,0.7)' }}>
-            <span style={{ color: '#00D4FF' }}>&#10022;</span> Free to join. No credit card required.
-          </p>
-        </div>
-
-        {/* Right column — Glass Card */}
-        <div className="flex-1 flex justify-center items-center max-w-[460px]">
-          <div className="hero-card opacity-0 relative glass-card p-8 w-full" style={{ maxWidth: '420px', minHeight: '480px' }}>
-            {/* Progress ring */}
-            <div className="flex justify-center mb-6">
-              <ProgressRing progress={35} size={70} />
-            </div>
-
-            {/* GCSC Logo Mark */}
-            <div className="flex justify-center mb-4">
-              <img
-                src="/gcsc-logo-round-80.png"
-                alt="GCSC Smart Contract"
-                className="w-20 h-20 rounded-full animate-glow-pulse object-cover"
-              />
-            </div>
-
-            <div className="text-center mb-6">
-              <h3 className="font-outfit font-semibold text-h3 text-[#0F172A]">GCSC Smart Contract</h3>
-              <p className="font-inter text-body-sm" style={{ color: '#475569' }}>Blockchain Escrow</p>
-            </div>
-
-            {/* Status pills */}
-            <div className="flex justify-center gap-3 mb-6">
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-inter text-[0.75rem] font-medium"
-                style={{ backgroundColor: 'rgba(16,185,129,0.12)', color: '#10B981', border: '1px solid rgba(16,185,129,0.25)' }}
-              >
-                <Lock size={12} /> Protected
-              </span>
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-inter text-[0.75rem] font-medium"
-                style={{ backgroundColor: 'rgba(245,158,11,0.12)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.25)' }}
-              >
-                <span className="text-[0.7rem]">&#9889;</span> Instant
-              </span>
-            </div>
-
-            {/* Notification card */}
-            <div
-              className="hero-notif opacity-0 absolute -bottom-4 -right-4 glass-card p-4 flex items-start gap-3"
-              style={{ maxWidth: '260px', borderRadius: '12px', borderLeft: '3px solid #10B981' }}
-            >
-              <CheckCircle2 size={20} style={{ color: '#10B981', flexShrink: 0 }} className="mt-0.5" />
-              <div>
-                <p className="font-inter text-[0.75rem] font-medium text-[#0F172A] leading-snug">
-                  Payment Released
-                </p>
-                <p className="font-inter text-[0.7rem] mt-1" style={{ color: '#475569' }}>
-                  Milestone 2 of 3 &middot; Funds in Escrow
-                </p>
+          <div className="hero-proof opacity-0 grid grid-cols-1 sm:grid-cols-3 gap-3 mt-10 max-w-[780px]">
+            {[
+              { label: 'Milestone escrow', detail: 'Funds release after approval' },
+              { label: 'Verified profiles', detail: 'Identity and contractor data flow' },
+              { label: 'Zero gas fees', detail: 'Fast settlement on XPR Network' },
+            ].map((item) => (
+              <div key={item.label} className="rounded-xl border border-[#E2E8F0] bg-white px-4 py-4">
+                <p className="font-outfit font-semibold text-[0.95rem] text-[#0F172A]">{item.label}</p>
+                <p className="font-inter text-[0.82rem] mt-1 text-[#64748B]">{item.detail}</p>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
