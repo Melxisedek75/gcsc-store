@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import { motion } from 'framer-motion'
 import { Link2, Coins, CreditCard, Check, ExternalLink, ArrowRight, Loader2, PlugZap, ShieldCheck } from 'lucide-react'
 import { api, type GcscUser, type GcscWallet } from '../services/api'
-import { connectWebAuthWallet } from '../services/webauth'
+import { connectWebAuthWallet, restoreWebAuthWallet } from '../services/webauth'
 
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }
 const fadeUpChild = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } } }
@@ -28,15 +28,39 @@ export default function Wallet() {
 
   useEffect(() => {
     let mounted = true
-    if (!localStorage.getItem('gcsc_auth_token')) return
 
-    api.getProfile()
-      .then((response) => {
-        if (!mounted) return
-        setUser(response.user)
-        setWallet(response.user.wallet || null)
-      })
-      .catch(() => api.clearToken())
+    const loadWallet = async () => {
+      const token = localStorage.getItem('gcsc_auth_token')
+
+      if (token) {
+        try {
+          const response = await api.getProfile()
+          if (!mounted) return
+          setUser(response.user)
+          setWallet(response.user.wallet || null)
+
+          if (!response.user.wallet) {
+            const restored = await restoreWebAuthWallet()
+            if (!mounted || !restored) return
+            const saved = await api.connectWallet(restored)
+            if (!mounted) return
+            setUser(saved.user)
+            setWallet(saved.wallet)
+            setStatus('Restored WebAuth session and saved it to your GCSC account.')
+          }
+        } catch {
+          api.clearToken()
+        }
+        return
+      }
+
+      const restored = await restoreWebAuthWallet()
+      if (!mounted || !restored) return
+      setWallet({ ...restored })
+      setStatus('Restored WebAuth session locally. Sign in on Dashboard to save it.')
+    }
+
+    void loadWallet()
 
     return () => {
       mounted = false
