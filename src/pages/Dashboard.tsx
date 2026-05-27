@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, type GcscBid, type GcscEscrow, type GcscMilestone, type GcscProfile, type GcscProject, type GcscUser } from '../services/api';
 import { connectWebAuthWallet } from '../services/webauth';
+import { signEscrowMilestoneAction, type EscrowMilestoneChainAction } from '../services/xprSettlement';
 import {
   BarChart,
   Bar,
@@ -571,6 +572,8 @@ function MilestoneManager({
 }) {
   const [status, setStatus] = useState('');
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [chainStatus, setChainStatus] = useState('');
+  const [chainBusyId, setChainBusyId] = useState<string | null>(null);
   const isHomeowner = user.role === 'homeowner';
   const isContractor = user.role === 'contractor';
 
@@ -588,6 +591,26 @@ function MilestoneManager({
       setStatus(err instanceof Error ? err.message : 'Could not update milestone');
     } finally {
       setBusyId(null);
+    }
+  };
+
+  const signTestnetAction = async (milestone: GcscMilestone, action: EscrowMilestoneChainAction) => {
+    const key = `${milestone.id}:${action}`;
+    setChainBusyId(key);
+    setChainStatus('');
+    try {
+      const result = await signEscrowMilestoneAction({
+        action,
+        escrowId: escrow.id,
+        milestoneId: milestone.id,
+        evidenceHash: milestone.description || milestone.title || `milestone-${milestone.id}`,
+      });
+      const tx = result.transactionId ? ` Transaction: ${result.transactionId.slice(0, 12)}...` : '';
+      setChainStatus(`Testnet action signed by ${result.wallet.accountName}.${tx}`);
+    } catch (err) {
+      setChainStatus(err instanceof Error ? err.message : 'Could not sign testnet escrow action');
+    } finally {
+      setChainBusyId(null);
     }
   };
 
@@ -615,6 +638,10 @@ function MilestoneManager({
         const canApprove = isHomeowner && milestone.status === 'submitted' && escrow.status !== 'disputed';
         const canRelease = isHomeowner && milestone.status === 'approved' && escrow.status !== 'disputed';
         const canDispute = milestone.status !== 'released' && milestone.status !== 'disputed' && escrow.status !== 'completed';
+        const canSignSubmit = isContractor && (milestone.status === 'pending' || milestone.status === 'submitted') && escrow.status !== 'disputed';
+        const canSignApprove = isHomeowner && (milestone.status === 'submitted' || milestone.status === 'approved') && escrow.status !== 'disputed';
+        const canSignRelease = isHomeowner && milestone.status === 'approved' && escrow.status !== 'disputed';
+        const canSignDispute = canDispute;
         const busy = busyId === milestone.id;
 
         return (
@@ -672,11 +699,62 @@ function MilestoneManager({
                 </button>
               )}
             </div>
+            <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-[#7B2FF7]">
+                Testnet signing only
+              </p>
+              <p className="text-xs text-[#64748B] mt-1">
+                WebAuth can sign the matching gcscrow1111 action on XPR testnet. Backend status changes stay separate.
+              </p>
+              <div className="flex flex-wrap gap-2 mt-3">
+                {canSignSubmit && (
+                  <button
+                    onClick={() => void signTestnetAction(milestone, 'submitmilestone')}
+                    disabled={chainBusyId === `${milestone.id}:submitmilestone`}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-[#7B2FF7] border border-[#C4B5FD] disabled:opacity-60"
+                  >
+                    {chainBusyId === `${milestone.id}:submitmilestone` ? <Loader2 size={12} className="animate-spin" /> : <PlugZap size={12} />}
+                    Sign Testnet Submit
+                  </button>
+                )}
+                {canSignApprove && (
+                  <button
+                    onClick={() => void signTestnetAction(milestone, 'approvemilestone')}
+                    disabled={chainBusyId === `${milestone.id}:approvemilestone`}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-[#3B6BF7] border border-[#BFDBFE] disabled:opacity-60"
+                  >
+                    {chainBusyId === `${milestone.id}:approvemilestone` ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
+                    Sign Testnet Approve
+                  </button>
+                )}
+                {canSignRelease && (
+                  <button
+                    onClick={() => void signTestnetAction(milestone, 'releasemilestone')}
+                    disabled={chainBusyId === `${milestone.id}:releasemilestone`}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-[#10B981] border border-[#A7F3D0] disabled:opacity-60"
+                  >
+                    {chainBusyId === `${milestone.id}:releasemilestone` ? <Loader2 size={12} className="animate-spin" /> : <DollarSign size={12} />}
+                    Sign Testnet Release
+                  </button>
+                )}
+                {canSignDispute && (
+                  <button
+                    onClick={() => void signTestnetAction(milestone, 'disputemilestone')}
+                    disabled={chainBusyId === `${milestone.id}:disputemilestone`}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-[#EF4444] border border-[#FECACA] disabled:opacity-60"
+                  >
+                    {chainBusyId === `${milestone.id}:disputemilestone` ? <Loader2 size={12} className="animate-spin" /> : <AlertTriangle size={12} />}
+                    Sign Testnet Dispute
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         );
       })}
 
       {status && <p className="text-sm text-[#475569]">{status}</p>}
+      {chainStatus && <p className="text-sm text-[#475569]">{chainStatus}</p>}
     </div>
   );
 }

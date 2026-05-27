@@ -11,7 +11,8 @@
     "check:dashboard-live": "node scripts/validate-dashboard-live-workflow.mjs",
     "check:brand-polish": "node scripts/validate-brand-polish.mjs",
     "check:webauth": "node scripts/validate-webauth-integration.mjs",
-    "check:milestones": "node scripts/validate-milestones-workflow.mjs"
+    "check:milestones": "node scripts/validate-milestones-workflow.mjs",
+    "check:xpr-settlement": "node scripts/validate-xpr-settlement-layer.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
