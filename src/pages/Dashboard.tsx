@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, type FormEvent, type ChangeEvent } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { api, type GcscBid, type GcscChainTx, type GcscCompliance, type GcscEscrow, type GcscMilestone, type GcscProfile, type GcscProject, type GcscRequiredDocument, type GcscUser } from '../services/api';
+import { api, type GcscBid, type GcscChainTx, type GcscCompliance, type GcscEscrow, type GcscMilestone, type GcscProfile, type GcscProject, type GcscRequiredDocument, type GcscUser, type GcscUserDocument } from '../services/api';
 import { connectWebAuthWallet } from '../services/webauth';
 import { signEscrowMilestoneAction, type EscrowMilestoneChainAction } from '../services/xprSettlement';
 import {
@@ -49,7 +49,7 @@ import {
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
 
-type Section = 'projects' | 'estimator' | 'bids' | 'profile' | 'compliance' | 'wallet' | 'token';
+type Section = 'projects' | 'estimator' | 'bids' | 'profile' | 'compliance' | 'admin-review' | 'wallet' | 'token';
 
 type ProjectType =
   | 'Kitchen Remodel'
@@ -257,12 +257,13 @@ const statusConfig: Record<string, { color: string; bg: string; icon: typeof Che
 /*  Sidebar                                                            */
 /* ------------------------------------------------------------------ */
 
-const navItems: { key: Section; label: string; icon: typeof LayoutDashboard }[] = [
+const navItems: { key: Section; label: string; icon: typeof LayoutDashboard; adminOnly?: boolean }[] = [
   { key: 'projects', label: 'Projects', icon: LayoutDashboard },
   { key: 'estimator', label: 'Estimator', icon: Calculator },
   { key: 'bids', label: 'My Bids', icon: ClipboardList },
   { key: 'profile', label: 'Profile', icon: UserCircle },
   { key: 'compliance', label: 'Compliance', icon: ShieldCheck },
+  { key: 'admin-review', label: 'Admin Review', icon: ShieldCheck, adminOnly: true },
   { key: 'wallet', label: 'Wallet', icon: Wallet },
 ];
 
@@ -902,11 +903,16 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
     }
   };
 
-  const acceptBid = async (bidId: number) => {
+  const acceptBid = async (bid: GcscBid) => {
     if (!selectedProject) return;
     setDetailMessage('');
+    if (!bid.contractor_verification?.ready_for_bids) {
+      setDetailMessage('Contractor must be verified before bid acceptance.');
+      return;
+    }
+
     try {
-      await api.acceptBid(bidId);
+      await api.acceptBid(bid.id);
       setDetailMessage('Bid accepted. Escrow record created.');
       await Promise.all([loadDetails(selectedProject.id), loadProjects()]);
     } catch (err) {
@@ -1094,6 +1100,7 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
                     const contractor = bid.contractor;
                     const contractorName = contractor?.companyName || contractor?.full_name || `Contractor #${bid.contractor_id}`;
                     const specialties = contractor?.specialties || [];
+                    const canAccept = !!bid.contractor_verification?.ready_for_bids;
                     return (
                       <div key={bid.id} className="rounded-2xl border border-[#E2E8F0] p-4 space-y-3">
                         <div className="flex items-start justify-between gap-3">
@@ -1135,11 +1142,12 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
                         {bid.message && <p className="text-sm text-[#475569] leading-6">{bid.message}</p>}
                         {bid.status === 'pending' && selectedProject.status === 'open' && (
                           <button
-                            onClick={() => void acceptBid(bid.id)}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-xs font-semibold"
+                            onClick={() => void acceptBid(bid)}
+                            disabled={!canAccept}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-50"
                             style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}
                           >
-                            <CheckCircle2 size={14} /> Accept and Create Escrow
+                            <CheckCircle2 size={14} /> {canAccept ? 'Accept and Create Escrow' : 'Verification Required'}
                           </button>
                         )}
                       </div>
@@ -1649,9 +1657,16 @@ function formatFileSize(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+function documentTypeLabel(type: string) {
+  return String(type || 'Document')
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
 function getProfile(user: GcscUser): GcscProfile {
   return {
-    accountType: user.role,
+    accountType: user.role === 'contractor' ? 'contractor' : 'homeowner',
     companyName: '',
     businessName: '',
     ein: '',
@@ -1727,7 +1742,16 @@ function ContractorTrustBadge({ verification }: { verification?: GcscCompliance 
   );
 }
 
-function RoleBadge({ role }: { role: AccountRole }) {
+function RoleBadge({ role }: { role: AccountRole | 'admin' }) {
+  if (role === 'admin') {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(123,47,247,0.08)] text-[#7B2FF7]">
+        <ShieldCheck size={13} />
+        Admin
+      </span>
+    );
+  }
+
   const isContractor = role === 'contractor';
   return (
     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(123,47,247,0.08)] text-[#7B2FF7]">
@@ -2301,6 +2325,183 @@ function CompliancePanel({ user }: { user: GcscUser }) {
   );
 }
 
+/* ---- Admin Document Review Panel ---- */
+
+type DocumentReviewFilter = '' | 'submitted' | 'approved' | 'rejected';
+
+function AdminDocumentReviewPanel() {
+  const [documents, setDocuments] = useState<GcscUserDocument[]>([]);
+  const [filter, setFilter] = useState<DocumentReviewFilter>('submitted');
+  const [loading, setLoading] = useState(true);
+  const [reviewingId, setReviewingId] = useState<number | null>(null);
+  const [status, setStatus] = useState('');
+
+  const loadDocuments = async () => {
+    setLoading(true);
+    try {
+      const response = await api.getAdminDocuments(filter);
+      setDocuments(response.documents || []);
+      setStatus('');
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not load submitted documents');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadDocuments();
+  }, [filter]);
+
+  const reviewDocument = async (document: GcscUserDocument, reviewStatus: 'approved' | 'rejected') => {
+    setReviewingId(document.id);
+    setStatus('');
+    try {
+      await api.reviewDocument(document.id, {
+        status: reviewStatus,
+        reviewNote: reviewStatus === 'approved' ? 'Approved by admin review.' : 'Rejected by admin review.',
+      });
+      await loadDocuments();
+      setStatus(`${documentTypeLabel(document.document_type)} ${reviewStatus}.`);
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not save document review');
+    } finally {
+      setReviewingId(null);
+    }
+  };
+
+  const filters: { value: DocumentReviewFilter; label: string }[] = [
+    { value: 'submitted', label: 'Submitted' },
+    { value: 'approved', label: 'Approved' },
+    { value: 'rejected', label: 'Rejected' },
+    { value: '', label: 'All' },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+      className="space-y-6"
+    >
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider gradient-text">Admin Review</p>
+          <h2 className="font-outfit font-bold text-[1.5rem] gradient-text mt-1">Submitted Documents</h2>
+          <p className="font-inter text-sm text-[#475569] mt-1">
+            Review contractor verification files before homeowners can rely on verified bidding signals.
+          </p>
+        </div>
+        <div className="inline-flex flex-wrap gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-1">
+          {filters.map((item) => {
+            const isActive = filter === item.value;
+            return (
+              <button
+                key={item.label}
+                onClick={() => setFilter(item.value)}
+                className="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all"
+                style={{
+                  backgroundColor: isActive ? 'rgba(123,47,247,0.1)' : 'transparent',
+                  color: isActive ? '#7B2FF7' : '#64748B',
+                }}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="glass-card p-6">
+        {loading ? (
+          <div className="flex items-center gap-2 text-sm text-[#64748B]">
+            <Loader2 size={16} className="animate-spin" />
+            Loading submitted documents...
+          </div>
+        ) : documents.length === 0 ? (
+          <div className="text-center py-10">
+            <ShieldCheck size={30} className="mx-auto text-[#94A3B8]" />
+            <p className="mt-3 font-outfit font-bold gradient-text">No documents in this queue</p>
+            <p className="text-sm text-[#64748B] mt-1">Switch filters or wait for contractors to submit verification files.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {documents.map((document) => {
+              const owner = document.user;
+              const ownerName = owner?.companyName || owner?.businessName || owner?.full_name || `User #${document.user_id}`;
+              const isReviewing = reviewingId === document.id;
+              const statusCopy = complianceStatusCopy[document.status] || { label: document.status, tone: '#7B2FF7' };
+
+              return (
+                <div key={document.id} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 space-y-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3 min-w-0">
+                      <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#7B2FF7] via-[#3B6BF7] to-[#00D4FF] flex items-center justify-center overflow-hidden shrink-0">
+                        {owner?.logoDataUrl ? (
+                          <img src={owner.logoDataUrl} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <Building2 size={20} className="text-white" />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-outfit font-bold gradient-text truncate">{ownerName}</h3>
+                        <p className="text-xs text-[#64748B] truncate">{owner?.email || 'Email unavailable'}</p>
+                        <p className="text-xs text-[#94A3B8] truncate">{owner?.serviceArea || owner?.role || 'Contractor profile'}</p>
+                      </div>
+                    </div>
+                    <span
+                      className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider shrink-0"
+                      style={{ color: statusCopy.tone, backgroundColor: 'rgba(123,47,247,0.08)' }}
+                    >
+                      {statusCopy.label}
+                    </span>
+                  </div>
+
+                  <div className="rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[#7B2FF7]">{documentTypeLabel(document.document_type)}</p>
+                    <p className="mt-1 text-sm font-semibold text-[#0F172A] break-words">{document.file_name}</p>
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#64748B]">
+                      <span>Size: {formatFileSize(document.file_size)}</span>
+                      <span>Submitted: {document.submitted_at ? formatDate(document.submitted_at) : 'Unknown'}</span>
+                    </div>
+                    {document.file_sha256 && (
+                      <p className="mt-3 text-[0.7rem] text-[#94A3B8] break-all">SHA-256: {document.file_sha256}</p>
+                    )}
+                    {document.review_note && (
+                      <p className="mt-3 text-xs text-[#64748B]">Review note: {document.review_note}</p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <button
+                      onClick={() => reviewDocument(document, 'approved')}
+                      disabled={isReviewing || document.status === 'approved'}
+                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-white transition-all disabled:opacity-50"
+                      style={{ background: 'linear-gradient(135deg, #10B981 0%, #3B6BF7 100%)' }}
+                    >
+                      {isReviewing ? <Loader2 size={15} className="animate-spin" /> : <CheckCircle2 size={15} />}
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => reviewDocument(document, 'rejected')}
+                      disabled={isReviewing || document.status === 'rejected'}
+                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-[#FCA5A5] px-4 py-2.5 text-sm font-semibold text-[#EF4444] transition-all disabled:opacity-50 hover:bg-[#FEF2F2]"
+                    >
+                      {isReviewing ? <Loader2 size={15} className="animate-spin" /> : <XCircle size={15} />}
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+        {status && <p className={`text-sm mt-4 ${status.includes('Could') || status.includes('Unauthorized') ? 'text-[#EF4444]' : 'text-[#10B981]'}`}>{status}</p>}
+      </div>
+    </motion.div>
+  );
+}
+
 /* ---- Wallet Panel ---- */
 
 function WalletPanel({ user, onUserChange }: { user: GcscUser; onUserChange: (user: GcscUser) => void }) {
@@ -2440,6 +2641,8 @@ export default function Dashboard() {
         return user ? <ProfilePanel user={user} onUserChange={setUser} /> : null;
       case 'compliance':
         return <CompliancePanel user={user} />;
+      case 'admin-review':
+        return user.role === 'admin' ? <AdminDocumentReviewPanel /> : <ProjectsPanel user={user} />;
       case 'wallet':
         return user ? <WalletPanel user={user} onUserChange={setUser} /> : null;
       case 'token':
@@ -2465,6 +2668,7 @@ export default function Dashboard() {
   }
 
   const profile = getProfile(user);
+  const visibleNavItems = navItems.filter((item) => !item.adminOnly || user.role === 'admin');
 
   return (
     <div className="min-h-[100dvh] bg-white flex">
@@ -2473,7 +2677,7 @@ export default function Dashboard() {
         className="hidden lg:flex flex-col w-[240px] shrink-0 border-r border-[#E2E8F0] bg-[#F8FAFC] fixed left-0 top-[72px] bottom-0 overflow-y-auto z-40"
       >
         <nav className="flex-1 px-3 py-6 space-y-1">
-          {navItems.map((item) => {
+          {visibleNavItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeSection === item.key;
             return (
@@ -2563,7 +2767,7 @@ export default function Dashboard() {
                 </button>
               </div>
               <nav className="flex-1 px-3 py-4 space-y-1">
-                {navItems.map((item) => {
+                {visibleNavItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = activeSection === item.key;
                   return (
@@ -2621,7 +2825,7 @@ export default function Dashboard() {
             <Menu size={20} />
           </button>
           <span className="font-outfit font-semibold text-[#0F172A]">
-            {navItems.find((n) => n.key === activeSection)?.label || 'Dashboard'}
+            {visibleNavItems.find((n) => n.key === activeSection)?.label || 'Dashboard'}
           </span>
         </div>
 

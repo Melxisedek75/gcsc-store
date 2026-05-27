@@ -16,7 +16,8 @@
     "check:chain-audit": "node scripts/validate-chain-tx-audit.mjs",
     "check:profile-onboarding": "node scripts/validate-profile-onboarding.mjs",
     "check:compliance-documents": "node scripts/validate-compliance-documents.mjs",
-    "check:contractor-verification": "node scripts/validate-contractor-verification-visibility.mjs"
+    "check:contractor-verification": "node scripts/validate-contractor-verification-visibility.mjs",
+    "check:admin-documents": "node scripts/validate-admin-document-review.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

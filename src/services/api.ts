@@ -34,6 +34,7 @@ export interface GcscProfileCompletion {
 export interface GcscUserDocument {
   id: number
   user_id: number
+  user?: GcscDocumentOwner | null
   document_type: string
   file_name: string
   mime_type: string
@@ -46,6 +47,18 @@ export interface GcscUserDocument {
   reviewed_by?: number | null
   created_at?: string
   updated_at?: string
+}
+
+export interface GcscDocumentOwner {
+  id: number
+  email: string
+  role: 'homeowner' | 'contractor' | 'admin' | string
+  full_name: string
+  companyName?: string
+  businessName?: string
+  serviceArea?: string
+  accountType?: string
+  logoDataUrl?: string
 }
 
 export interface GcscRequiredDocument {
@@ -85,7 +98,7 @@ export interface GcscWallet {
 export interface GcscUser {
   id: number
   email: string
-  role: 'homeowner' | 'contractor'
+  role: 'homeowner' | 'contractor' | 'admin'
   full_name: string
   fullName?: string
   phone?: string
@@ -225,6 +238,10 @@ class ApiClient {
   }
   reviewDocument(id: number, body: { status: 'approved' | 'rejected'; reviewNote?: string }) {
     return this.request(`/admin/documents/${id}/review`, { method: 'PUT', body: JSON.stringify(body) })
+  }
+  getAdminDocuments(status?: string) {
+    const qs = status ? '?' + new URLSearchParams({ status }) : ''
+    return this.request(`/admin/documents${qs}`)
   }
   logout() {
     this.clearToken()

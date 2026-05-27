@@ -24,6 +24,10 @@ const checks = [
     message: 'Bid cards must explain whether the contractor is ready for escrow bidding.',
   },
   {
+    ok: dashboard.includes('Contractor must be verified before bid acceptance') && dashboard.includes('Verification Required'),
+    message: 'Dashboard must block bid acceptance until contractor verification is complete.',
+  },
+  {
     ok: pkg.scripts?.['check:contractor-verification'] === 'node scripts/validate-contractor-verification-visibility.mjs',
     message: 'package.json must expose check:contractor-verification.',
   },
