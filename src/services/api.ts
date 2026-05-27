@@ -109,6 +109,17 @@ export interface GcscProject {
   created_at: string
 }
 
+export interface GcscBidContractor {
+  id: number
+  full_name: string
+  companyName?: string
+  serviceArea?: string
+  specialties?: string[]
+  yearsInBusiness?: string
+  bio?: string
+  logoDataUrl?: string
+}
+
 export interface GcscBid {
   id: number
   project_id: number
@@ -117,6 +128,8 @@ export interface GcscBid {
   proposed_timeline_days: number
   message?: string
   status: string
+  contractor?: GcscBidContractor | null
+  contractor_verification?: GcscCompliance | null
   created_at: string
 }
 

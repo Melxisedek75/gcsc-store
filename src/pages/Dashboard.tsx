@@ -1091,15 +1091,47 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
                     <p className="text-sm text-[#64748B]">No bids yet.</p>
                   ) : selectedBids.map((bid) => {
                     const label = bidStatusLabel(bid.status);
+                    const contractor = bid.contractor;
+                    const contractorName = contractor?.companyName || contractor?.full_name || `Contractor #${bid.contractor_id}`;
+                    const specialties = contractor?.specialties || [];
                     return (
                       <div key={bid.id} className="rounded-2xl border border-[#E2E8F0] p-4 space-y-3">
                         <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="font-semibold text-[#0F172A]">{formatCurrency(bid.amount)}</p>
-                            <p className="text-xs text-[#64748B]">Contractor #{bid.contractor_id} - {bid.proposed_timeline_days || 30} days</p>
+                          <div className="flex items-start gap-3 min-w-0">
+                            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#00D4FF] flex items-center justify-center overflow-hidden shrink-0">
+                              {contractor?.logoDataUrl ? (
+                                <img src={contractor.logoDataUrl} alt={contractorName} className="w-full h-full object-cover" />
+                              ) : (
+                                <Building2 size={18} className="text-white" />
+                              )}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-[#0F172A] truncate">{contractorName}</p>
+                              <p className="text-xs text-[#64748B]">
+                                Contractor #{bid.contractor_id} - {bid.proposed_timeline_days || 30} days
+                              </p>
+                            </div>
                           </div>
-                          <StatusBadge status={label} />
+                          <div className="text-right shrink-0">
+                            <p className="font-semibold text-[#0F172A]">{formatCurrency(bid.amount)}</p>
+                            <StatusBadge status={label} />
+                          </div>
                         </div>
+                        <ContractorTrustBadge verification={bid.contractor_verification} />
+                        {(contractor?.serviceArea || specialties.length > 0) && (
+                          <div className="flex flex-wrap gap-2 text-xs">
+                            {contractor?.serviceArea && (
+                              <span className="px-2.5 py-1 rounded-full bg-[rgba(59,107,247,0.08)] text-[#3B6BF7] font-semibold">
+                                {contractor.serviceArea}
+                              </span>
+                            )}
+                            {specialties.slice(0, 3).map((item) => (
+                              <span key={item} className="px-2.5 py-1 rounded-full bg-[rgba(123,47,247,0.08)] text-[#7B2FF7] font-semibold">
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                         {bid.message && <p className="text-sm text-[#475569] leading-6">{bid.message}</p>}
                         {bid.status === 'pending' && selectedProject.status === 'open' && (
                           <button
@@ -1602,6 +1634,15 @@ const complianceStatusCopy: Record<string, { label: string; tone: string }> = {
   rejected: { label: 'Needs correction', tone: '#EF4444' },
 };
 
+const contractorTrustCopy: Record<string, { label: string; detail: string; tone: string }> = {
+  verified: { label: 'Verified Contractor', detail: 'Ready for escrow bidding', tone: '#10B981' },
+  pending_review: { label: 'Pending review', detail: 'Documents submitted, awaiting review', tone: '#3B6BF7' },
+  documents_missing: { label: 'Missing documents', detail: 'Required verification documents are not complete', tone: '#F59E0B' },
+  wallet_missing: { label: 'Wallet missing', detail: 'WebAuth wallet is not connected yet', tone: '#7B2FF7' },
+  profile_incomplete: { label: 'Profile incomplete', detail: 'Business profile needs more details', tone: '#F59E0B' },
+  rejected: { label: 'Needs correction', detail: 'One or more documents need review', tone: '#EF4444' },
+};
+
 function formatFileSize(bytes: number) {
   if (!bytes) return '0 KB';
   if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
@@ -1665,6 +1706,25 @@ function getLocalProfileCompletion(user: GcscUser) {
 
 function profileFieldLabel(field: string) {
   return profileFieldLabels[field] || field;
+}
+
+function ContractorTrustBadge({ verification }: { verification?: GcscCompliance | null }) {
+  const status = verification?.overall_status || 'profile_incomplete';
+  const copy = contractorTrustCopy[status] || contractorTrustCopy.profile_incomplete;
+  return (
+    <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2">
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: copy.tone }}>
+          Verification status
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold" style={{ color: copy.tone, backgroundColor: 'rgba(123,47,247,0.08)' }}>
+          {verification?.ready_for_bids ? <CheckCircle2 size={12} /> : <Clock4 size={12} />}
+          {copy.label}
+        </span>
+      </div>
+      <p className="text-xs text-[#64748B] mt-2">{copy.detail}</p>
+    </div>
+  );
 }
 
 function RoleBadge({ role }: { role: AccountRole }) {

@@ -15,7 +15,8 @@
     "check:xpr-settlement": "node scripts/validate-xpr-settlement-layer.mjs",
     "check:chain-audit": "node scripts/validate-chain-tx-audit.mjs",
     "check:profile-onboarding": "node scripts/validate-profile-onboarding.mjs",
-    "check:compliance-documents": "node scripts/validate-compliance-documents.mjs"
+    "check:compliance-documents": "node scripts/validate-compliance-documents.mjs",
+    "check:contractor-verification": "node scripts/validate-contractor-verification-visibility.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",
