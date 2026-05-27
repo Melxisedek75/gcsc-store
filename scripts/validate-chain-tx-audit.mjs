@@ -20,6 +20,7 @@ const checks = [
       api.includes('interface GcscChainTx') &&
       api.includes('chain_txs?: GcscChainTx[]') &&
       api.includes('recordMilestoneChainTx') &&
+      api.includes('verifyMilestoneChainTx') &&
       api.includes('/chain-txs'),
   },
   {
@@ -42,7 +43,9 @@ const checks = [
     ok:
       dashboard.includes('chain_txs') &&
       dashboard.includes('testnet.explorer.xprnetwork.org') &&
-      dashboard.includes('On-chain audit trail'),
+      dashboard.includes('On-chain audit trail') &&
+      dashboard.includes('Verify Tx') &&
+      dashboard.includes('tx.status'),
   },
 ];
 

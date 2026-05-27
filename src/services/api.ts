@@ -219,6 +219,9 @@ class ApiClient {
   }) {
     return this.request(`/milestones/${id}/chain-txs`, { method: 'POST', body: JSON.stringify(body) })
   }
+  verifyMilestoneChainTx(milestoneId: number, txId: string) {
+    return this.request(`/milestones/${milestoneId}/chain-txs/${txId}/verify`, { method: 'POST' })
+  }
 
   // TOKEN
   getTokenInfo() {

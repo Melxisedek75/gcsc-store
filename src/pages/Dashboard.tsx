@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, type FormEvent, type ChangeEvent } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { api, type GcscBid, type GcscEscrow, type GcscMilestone, type GcscProfile, type GcscProject, type GcscUser } from '../services/api';
+import { api, type GcscBid, type GcscChainTx, type GcscEscrow, type GcscMilestone, type GcscProfile, type GcscProject, type GcscUser } from '../services/api';
 import { connectWebAuthWallet } from '../services/webauth';
 import { signEscrowMilestoneAction, type EscrowMilestoneChainAction } from '../services/xprSettlement';
 import {
@@ -574,6 +574,7 @@ function MilestoneManager({
   const [busyId, setBusyId] = useState<number | null>(null);
   const [chainStatus, setChainStatus] = useState('');
   const [chainBusyId, setChainBusyId] = useState<string | null>(null);
+  const [verifyBusyId, setVerifyBusyId] = useState<string | null>(null);
   const isHomeowner = user.role === 'homeowner';
   const isContractor = user.role === 'contractor';
 
@@ -591,6 +592,20 @@ function MilestoneManager({
       setStatus(err instanceof Error ? err.message : 'Could not update milestone');
     } finally {
       setBusyId(null);
+    }
+  };
+
+  const verifyChainTx = async (milestone: GcscMilestone, tx: GcscChainTx) => {
+    setVerifyBusyId(tx.tx_id);
+    setChainStatus('');
+    try {
+      const response = await api.verifyMilestoneChainTx(milestone.id, tx.tx_id);
+      setChainStatus(`Transaction ${response.chain_tx.status}: ${tx.tx_id.slice(0, 12)}...`);
+      onChanged();
+    } catch (err) {
+      setChainStatus(err instanceof Error ? err.message : 'Could not verify chain transaction');
+    } finally {
+      setVerifyBusyId(null);
     }
   };
 
@@ -673,17 +688,45 @@ function MilestoneManager({
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {chainTxs.slice(0, 3).map((tx) => (
-                    <a
+                    <span
                       key={tx.id}
-                      href={`https://testnet.explorer.xprnetwork.org/transaction/${tx.tx_id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-[#3B6BF7] border border-[#BFDBFE] hover:border-[#7B2FF7]"
-                      title={tx.tx_id}
+                      className="inline-flex items-center gap-1.5 rounded-md bg-white border border-[#BFDBFE] px-2.5 py-1"
                     >
-                      {tx.action.replace('milestone', '')}
-                      <span className="text-[#64748B]">{tx.tx_id.slice(0, 8)}...</span>
-                    </a>
+                      <a
+                        href={`https://testnet.explorer.xprnetwork.org/transaction/${tx.tx_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#3B6BF7] hover:text-[#7B2FF7]"
+                        title={tx.tx_id}
+                      >
+                        {tx.action.replace('milestone', '')}
+                        <span className="text-[#64748B]">{tx.tx_id.slice(0, 8)}...</span>
+                      </a>
+                      <span
+                        className="rounded-full px-1.5 py-0.5 text-[10px] font-semibold uppercase"
+                        style={{
+                          color: tx.status === 'confirmed' ? '#10B981' : tx.status === 'failed' ? '#EF4444' : '#F59E0B',
+                          backgroundColor: tx.status === 'confirmed'
+                            ? 'rgba(16,185,129,0.12)'
+                            : tx.status === 'failed'
+                              ? 'rgba(239,68,68,0.12)'
+                              : 'rgba(245,158,11,0.12)',
+                        }}
+                      >
+                        {tx.status}
+                      </span>
+                      {tx.status === 'broadcast' && (
+                        <button
+                          type="button"
+                          onClick={() => void verifyChainTx(milestone, tx)}
+                          disabled={verifyBusyId === tx.tx_id}
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#7B2FF7] disabled:opacity-60"
+                        >
+                          {verifyBusyId === tx.tx_id ? <Loader2 size={11} className="animate-spin" /> : <ShieldCheck size={11} />}
+                          Verify Tx
+                        </button>
+                      )}
+                    </span>
                   ))}
                 </div>
               </div>
