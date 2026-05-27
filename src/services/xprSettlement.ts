@@ -29,6 +29,9 @@ interface SignEscrowMilestoneParams {
 
 export interface XprSettlementResult {
   transactionId?: string
+  action: EscrowMilestoneChainAction
+  chainId: string
+  contractAccount: string
   wallet: ConnectedWebAuthWallet
   raw: unknown
 }
@@ -107,6 +110,9 @@ export async function signEscrowMilestoneAction(params: SignEscrowMilestoneParam
 
   return {
     transactionId: getTransactionId(raw),
+    action: params.action,
+    chainId: XPR_TESTNET_CHAIN_ID,
+    contractAccount: GCSC_ESCROW_CONTRACT,
     wallet: connected.wallet,
     raw,
   }

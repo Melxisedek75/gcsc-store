@@ -605,8 +605,19 @@ function MilestoneManager({
         milestoneId: milestone.id,
         evidenceHash: milestone.description || milestone.title || `milestone-${milestone.id}`,
       });
+      if (result.transactionId) {
+        await api.recordMilestoneChainTx(milestone.id, {
+          action: result.action,
+          tx_id: result.transactionId,
+          chain_id: result.chainId,
+          contract_account: result.contractAccount,
+          actor: result.wallet.accountName,
+          status: 'broadcast',
+        });
+        onChanged();
+      }
       const tx = result.transactionId ? ` Transaction: ${result.transactionId.slice(0, 12)}...` : '';
-      setChainStatus(`Testnet action signed by ${result.wallet.accountName}.${tx}`);
+      setChainStatus(`Testnet action signed by ${result.wallet.accountName} and saved to audit trail.${tx}`);
     } catch (err) {
       setChainStatus(err instanceof Error ? err.message : 'Could not sign testnet escrow action');
     } finally {
@@ -642,6 +653,7 @@ function MilestoneManager({
         const canSignApprove = isHomeowner && (milestone.status === 'submitted' || milestone.status === 'approved') && escrow.status !== 'disputed';
         const canSignRelease = isHomeowner && milestone.status === 'approved' && escrow.status !== 'disputed';
         const canSignDispute = canDispute;
+        const chainTxs = milestone.chain_txs || [];
         const busy = busyId === milestone.id;
 
         return (
@@ -654,6 +666,28 @@ function MilestoneManager({
               <StatusBadge status={label} />
             </div>
             {milestone.description && <p className="text-sm text-[#475569] leading-6">{milestone.description}</p>}
+            {chainTxs.length > 0 && (
+              <div className="rounded-xl border border-[#DBEAFE] bg-[#EFF6FF] p-3">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[#3B6BF7]">
+                  On-chain audit trail
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {chainTxs.slice(0, 3).map((tx) => (
+                    <a
+                      key={tx.id}
+                      href={`https://testnet.explorer.xprnetwork.org/transaction/${tx.tx_id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white text-[11px] font-semibold text-[#3B6BF7] border border-[#BFDBFE] hover:border-[#7B2FF7]"
+                      title={tx.tx_id}
+                    >
+                      {tx.action.replace('milestone', '')}
+                      <span className="text-[#64748B]">{tx.tx_id.slice(0, 8)}...</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="flex flex-wrap gap-2">
               {canSubmit && (
                 <button

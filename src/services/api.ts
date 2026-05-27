@@ -78,6 +78,20 @@ export interface GcscEscrow {
   created_at: string
 }
 
+export interface GcscChainTx {
+  id: number
+  milestone_id: number
+  escrow_id: number
+  action: string
+  tx_id: string
+  chain_id: string
+  contract_account: string
+  actor: string
+  status: string
+  created_by?: number | null
+  created_at: string
+}
+
 export interface GcscMilestone {
   id: number
   escrow_id: number
@@ -86,6 +100,7 @@ export interface GcscMilestone {
   amount: number
   status: string
   verified_by?: string
+  chain_txs?: GcscChainTx[]
   created_at: string
   updated_at?: string
 }
@@ -193,6 +208,16 @@ class ApiClient {
   }
   disputeMilestone(id: number) {
     return this.request(`/milestones/${id}/dispute`, { method: 'POST' })
+  }
+  recordMilestoneChainTx(id: number, body: {
+    action: string
+    tx_id: string
+    chain_id: string
+    contract_account: string
+    actor: string
+    status?: string
+  }) {
+    return this.request(`/milestones/${id}/chain-txs`, { method: 'POST', body: JSON.stringify(body) })
   }
 
   // TOKEN
