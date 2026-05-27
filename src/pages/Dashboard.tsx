@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, type FormEvent, type ChangeEvent } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { api, type GcscBid, type GcscProfile, type GcscProject, type GcscUser } from '../services/api';
+import { api, type GcscBid, type GcscEscrow, type GcscMilestone, type GcscProfile, type GcscProject, type GcscUser } from '../services/api';
 import { connectWebAuthWallet } from '../services/webauth';
 import {
   BarChart,
@@ -41,6 +41,7 @@ import {
   Loader2,
   PlugZap,
   ShieldCheck,
+  Plus,
 } from 'lucide-react';
 
 /* ------------------------------------------------------------------ */
@@ -207,6 +208,8 @@ function projectStatusLabel(status: string): string {
     open: 'Open',
     pending: 'Pending',
     in_progress: 'In Progress',
+    active: 'In Progress',
+    disputed: 'Disputed',
     completed: 'Completed',
     cancelled: 'Cancelled',
   };
@@ -222,6 +225,17 @@ function bidStatusLabel(status: string): string {
   return map[status] || status;
 }
 
+function milestoneStatusLabel(status: string): string {
+  const map: Record<string, string> = {
+    pending: 'Pending',
+    submitted: 'Submitted',
+    approved: 'Approved',
+    released: 'Released',
+    disputed: 'Disputed',
+  };
+  return map[status] || status;
+}
+
 const statusConfig: Record<string, { color: string; bg: string; icon: typeof CheckCircle2 }> = {
   New: { color: '#7B2FF7', bg: 'rgba(123,47,247,0.1)', icon: Award },
   Open: { color: '#7B2FF7', bg: 'rgba(123,47,247,0.1)', icon: Award },
@@ -230,6 +244,9 @@ const statusConfig: Record<string, { color: string; bg: string; icon: typeof Che
   'In Progress': { color: '#3B6BF7', bg: 'rgba(59,107,247,0.1)', icon: Clock4 },
   Completed: { color: '#10B981', bg: 'rgba(16,185,129,0.1)', icon: CheckCircle2 },
   Submitted: { color: '#7B2FF7', bg: 'rgba(123,47,247,0.1)', icon: ClipboardList },
+  Approved: { color: '#3B6BF7', bg: 'rgba(59,107,247,0.1)', icon: CheckCircle2 },
+  Released: { color: '#10B981', bg: 'rgba(16,185,129,0.1)', icon: CheckCircle2 },
+  Disputed: { color: '#EF4444', bg: 'rgba(239,68,68,0.1)', icon: AlertTriangle },
   'Under Review': { color: '#F59E0B', bg: 'rgba(245,158,11,0.1)', icon: Clock4 },
   Awarded: { color: '#10B981', bg: 'rgba(16,185,129,0.1)', icon: Award },
   Declined: { color: '#EF4444', bg: 'rgba(239,68,68,0.1)', icon: XCircle },
@@ -474,12 +491,204 @@ function BidComposer({ project, onSubmitted }: { project: GcscProject; onSubmitt
   );
 }
 
+function MilestoneComposer({ escrow, onCreated }: { escrow: GcscEscrow; onCreated: () => void }) {
+  const [form, setForm] = useState({ title: '', description: '', amount: '' });
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState('');
+
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    setSaving(true);
+    setStatus('');
+    try {
+      await api.createMilestone(escrow.id, {
+        title: form.title,
+        description: form.description,
+        amount: Number(form.amount || 0),
+      });
+      setForm({ title: '', description: '', amount: '' });
+      setStatus('Milestone created.');
+      onCreated();
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not create milestone');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit} className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-4 space-y-3">
+      <div>
+        <h4 className="font-outfit font-semibold gradient-text">Add milestone</h4>
+        <p className="text-xs text-[#64748B] mt-1">Split escrow work into clear payment checkpoints.</p>
+      </div>
+      <input
+        className={fieldClass}
+        placeholder="Milestone title"
+        value={form.title}
+        onChange={(event) => setForm((current) => ({ ...current, title: event.target.value }))}
+        required
+      />
+      <input
+        className={fieldClass}
+        type="number"
+        min="1"
+        placeholder="Amount"
+        value={form.amount}
+        onChange={(event) => setForm((current) => ({ ...current, amount: event.target.value }))}
+        required
+      />
+      <textarea
+        className={fieldClass + ' min-h-[82px] resize-none'}
+        placeholder="Describe the acceptance criteria."
+        value={form.description}
+        onChange={(event) => setForm((current) => ({ ...current, description: event.target.value }))}
+      />
+      {status && <p className="text-sm text-[#475569]">{status}</p>}
+      <button
+        type="submit"
+        disabled={saving}
+        className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-white text-xs font-semibold disabled:opacity-60"
+        style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}
+      >
+        {saving ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+        Add Milestone
+      </button>
+    </form>
+  );
+}
+
+function MilestoneManager({
+  escrow,
+  milestones,
+  user,
+  onChanged,
+}: {
+  escrow: GcscEscrow;
+  milestones: GcscMilestone[];
+  user: GcscUser;
+  onChanged: () => void;
+}) {
+  const [status, setStatus] = useState('');
+  const [busyId, setBusyId] = useState<number | null>(null);
+  const isHomeowner = user.role === 'homeowner';
+  const isContractor = user.role === 'contractor';
+
+  const runAction = async (milestoneId: number, action: 'submit' | 'approve' | 'release' | 'dispute') => {
+    setBusyId(milestoneId);
+    setStatus('');
+    try {
+      if (action === 'submit') await api.submitMilestone(milestoneId);
+      if (action === 'approve') await api.approveMilestone(milestoneId);
+      if (action === 'release') await api.releaseMilestone(milestoneId);
+      if (action === 'dispute') await api.disputeMilestone(milestoneId);
+      setStatus(`Milestone ${action} saved.`);
+      onChanged();
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not update milestone');
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <h4 className="font-outfit font-semibold gradient-text">Milestones</h4>
+          <p className="text-xs text-[#64748B] mt-1">
+            Escrow #{escrow.id} - {formatCurrency(escrow.total_amount)} - {projectStatusLabel(escrow.status)}
+          </p>
+        </div>
+        <StatusBadge status={projectStatusLabel(escrow.status)} />
+      </div>
+
+      {isHomeowner && escrow.status !== 'disputed' && escrow.status !== 'completed' && (
+        <MilestoneComposer escrow={escrow} onCreated={onChanged} />
+      )}
+
+      {milestones.length === 0 ? (
+        <p className="text-sm text-[#64748B]">No milestones yet.</p>
+      ) : milestones.map((milestone) => {
+        const label = milestoneStatusLabel(milestone.status);
+        const canSubmit = isContractor && milestone.status === 'pending' && escrow.status !== 'disputed';
+        const canApprove = isHomeowner && milestone.status === 'submitted' && escrow.status !== 'disputed';
+        const canRelease = isHomeowner && milestone.status === 'approved' && escrow.status !== 'disputed';
+        const canDispute = milestone.status !== 'released' && milestone.status !== 'disputed' && escrow.status !== 'completed';
+        const busy = busyId === milestone.id;
+
+        return (
+          <div key={milestone.id} className="rounded-2xl border border-[#E2E8F0] p-4 space-y-3">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="font-semibold text-[#0F172A]">{milestone.title}</p>
+                <p className="text-xs text-[#64748B]">{formatCurrency(milestone.amount)}</p>
+              </div>
+              <StatusBadge status={label} />
+            </div>
+            {milestone.description && <p className="text-sm text-[#475569] leading-6">{milestone.description}</p>}
+            <div className="flex flex-wrap gap-2">
+              {canSubmit && (
+                <button
+                  onClick={() => void runAction(milestone.id, 'submit')}
+                  disabled={busy}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold text-white disabled:opacity-60"
+                  style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}
+                >
+                  {busy ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
+                  Submit
+                </button>
+              )}
+              {canApprove && (
+                <button
+                  onClick={() => void runAction(milestone.id, 'approve')}
+                  disabled={busy}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold text-white disabled:opacity-60"
+                  style={{ background: 'linear-gradient(135deg, #3B6BF7 0%, #00D4FF 100%)' }}
+                >
+                  {busy ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
+                  Approve
+                </button>
+              )}
+              {canRelease && (
+                <button
+                  onClick={() => void runAction(milestone.id, 'release')}
+                  disabled={busy}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold text-white disabled:opacity-60"
+                  style={{ background: '#10B981' }}
+                >
+                  {busy ? <Loader2 size={12} className="animate-spin" /> : <DollarSign size={12} />}
+                  Release
+                </button>
+              )}
+              {canDispute && (
+                <button
+                  onClick={() => void runAction(milestone.id, 'dispute')}
+                  disabled={busy}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-[#FEF2F2] text-[#EF4444] disabled:opacity-60"
+                >
+                  {busy ? <Loader2 size={12} className="animate-spin" /> : <AlertTriangle size={12} />}
+                  Dispute
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })}
+
+      {status && <p className="text-sm text-[#475569]">{status}</p>}
+    </div>
+  );
+}
+
 function ProjectsPanel({ user }: { user: GcscUser }) {
   const [filter, setFilter] = useState<string>('All');
   const [search, setSearch] = useState('');
   const [projects, setProjects] = useState<GcscProject[]>([]);
   const [selectedProject, setSelectedProject] = useState<GcscProject | null>(null);
   const [selectedBids, setSelectedBids] = useState<GcscBid[]>([]);
+  const [selectedEscrow, setSelectedEscrow] = useState<GcscEscrow | null>(null);
+  const [selectedMilestones, setSelectedMilestones] = useState<GcscMilestone[]>([]);
   const [biddingProjectId, setBiddingProjectId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -491,8 +700,20 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
     setLoading(true);
     setError('');
     try {
-      const response = isHomeowner ? await api.getMyProjects() : await api.getProjects({ status: 'open' });
-      setProjects(response.projects || []);
+      if (isHomeowner) {
+        const response = await api.getMyProjects();
+        setProjects(response.projects || []);
+      } else {
+        const [openResponse, myResponse] = await Promise.all([
+          api.getProjects({ status: 'open' }),
+          api.getMyProjects(),
+        ]);
+        const merged = new Map<number, GcscProject>();
+        for (const project of [...(openResponse.projects || []), ...(myResponse.projects || [])]) {
+          merged.set(project.id, project);
+        }
+        setProjects([...merged.values()]);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not load projects');
     } finally {
@@ -511,6 +732,13 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
       const response = await api.getProject(projectId);
       setSelectedProject(response.project);
       setSelectedBids(response.bids || []);
+      setSelectedEscrow(null);
+      setSelectedMilestones([]);
+      if (response.project?.escrow_id) {
+        const escrowResponse = await api.getEscrow(response.project.escrow_id);
+        setSelectedEscrow(escrowResponse.escrow);
+        setSelectedMilestones(escrowResponse.milestones || []);
+      }
     } catch (err) {
       setDetailMessage(err instanceof Error ? err.message : 'Could not load project details');
     } finally {
@@ -534,6 +762,8 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
     setProjects((current) => [project, ...current]);
     setSelectedProject(project);
     setSelectedBids([]);
+    setSelectedEscrow(null);
+    setSelectedMilestones([]);
   };
 
   const filtered = useMemo(() => {
@@ -651,6 +881,8 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
                                 setBiddingProjectId(project.id);
                                 setSelectedProject(project);
                                 setSelectedBids([]);
+                                setSelectedEscrow(null);
+                                setSelectedMilestones([]);
                               }}
                               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium text-white transition-all hover:scale-[1.04]"
                               style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}
@@ -736,6 +968,15 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
                 >
                   <Gavel size={15} /> Prepare Bid
                 </button>
+              )}
+
+              {selectedEscrow && (
+                <MilestoneManager
+                  escrow={selectedEscrow}
+                  milestones={selectedMilestones}
+                  user={user}
+                  onChanged={() => void loadDetails(selectedProject.id)}
+                />
               )}
 
               {detailMessage && <p className="text-sm text-[#475569]">{detailMessage}</p>}

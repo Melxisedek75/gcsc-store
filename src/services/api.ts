@@ -78,6 +78,18 @@ export interface GcscEscrow {
   created_at: string
 }
 
+export interface GcscMilestone {
+  id: number
+  escrow_id: number
+  title: string
+  description: string
+  amount: number
+  status: string
+  verified_by?: string
+  created_at: string
+  updated_at?: string
+}
+
 class ApiClient {
   private token: string | null = null
 
@@ -166,6 +178,21 @@ class ApiClient {
   }
   getEscrow(id: number) {
     return this.request(`/escrow/${id}`)
+  }
+  createMilestone(escrowId: number, body: { title: string; description?: string; amount: number }) {
+    return this.request(`/escrow/${escrowId}/milestones`, { method: 'POST', body: JSON.stringify(body) })
+  }
+  submitMilestone(id: number) {
+    return this.request(`/milestones/${id}/submit`, { method: 'POST' })
+  }
+  approveMilestone(id: number) {
+    return this.request(`/milestones/${id}/approve`, { method: 'POST' })
+  }
+  releaseMilestone(id: number) {
+    return this.request(`/milestones/${id}/release`, { method: 'POST' })
+  }
+  disputeMilestone(id: number) {
+    return this.request(`/milestones/${id}/dispute`, { method: 'POST' })
   }
 
   // TOKEN
