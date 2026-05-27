@@ -1576,6 +1576,22 @@ type AccountRole = 'contractor' | 'homeowner';
 const fieldClass =
   'w-full px-4 py-2.5 rounded-lg border border-[#E2E8F0] bg-white text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all';
 
+const profileFieldLabels: Record<string, string> = {
+  fullName: 'Full name',
+  phone: 'Phone',
+  companyName: 'Company name',
+  ein: 'EIN',
+  licenseNumber: 'License number',
+  serviceArea: 'Service area',
+  specialties: 'Specialties',
+  propertyAddress: 'Property address',
+  propertyType: 'Property type',
+  budgetRange: 'Budget range',
+  projectNeeds: 'Project needs',
+  city: 'City',
+  state: 'State',
+};
+
 function getProfile(user: GcscUser): GcscProfile {
   return {
     accountType: user.role,
@@ -1609,6 +1625,30 @@ function initials(user: GcscUser): string {
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join('') || 'GC';
+}
+
+function getLocalProfileCompletion(user: GcscUser) {
+  const profile = getProfile(user);
+  const required = user.role === 'contractor'
+    ? ['fullName', 'phone', 'companyName', 'ein', 'licenseNumber', 'serviceArea', 'specialties']
+    : ['fullName', 'phone', 'propertyAddress', 'propertyType', 'budgetRange', 'projectNeeds', 'city', 'state'];
+  const missing = required.filter((field) => {
+    if (field === 'fullName') return !(user.fullName || user.full_name);
+    if (field === 'phone') return !user.phone;
+    if (field === 'specialties') return !profile.specialties?.length;
+    return !String(profile[field as keyof GcscProfile] || '').trim();
+  });
+
+  return {
+    percent: Math.round(((required.length - missing.length) / required.length) * 100),
+    completed: missing.length === 0,
+    missing,
+    required,
+  };
+}
+
+function profileFieldLabel(field: string) {
+  return profileFieldLabels[field] || field;
 }
 
 function RoleBadge({ role }: { role: AccountRole }) {
@@ -1777,6 +1817,7 @@ function ProfilePanel({ user, onUserChange }: { user: GcscUser; onUserChange: (u
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState('');
   const isContractor = user.role === 'contractor';
+  const completion = user.profile_completion || getLocalProfileCompletion(user);
 
   const updateProfile = (field: keyof GcscProfile, value: string | string[]) => {
     setProfile((current) => ({ ...current, [field]: value }));
@@ -1804,6 +1845,7 @@ function ProfilePanel({ user, onUserChange }: { user: GcscUser; onUserChange: (u
         phone,
         specialties: profile.specialties || [],
       });
+      setProfile(getProfile(response.user));
       onUserChange(response.user);
       setStatus('Profile saved.');
     } catch (err) {
@@ -1825,6 +1867,42 @@ function ProfilePanel({ user, onUserChange }: { user: GcscUser; onUserChange: (u
         <p className="font-inter text-sm text-[#475569] mt-1">
           Save real business or property information for your GCSC account.
         </p>
+      </div>
+
+      <div className="glass-card p-5">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider gradient-text">Profile completeness</p>
+            <h3 className="font-outfit font-bold text-[1.25rem] gradient-text mt-1">
+              {completion.completed ? 'Profile ready for review' : 'Finish your account details'}
+            </h3>
+          </div>
+          <div className="text-left md:text-right">
+            <p className="font-outfit font-bold text-[2rem] gradient-text">{completion.percent}%</p>
+            <p className="text-xs text-[#64748B]">Saved through backend profile storage</p>
+          </div>
+        </div>
+        <div className="mt-4 h-2 rounded-full bg-[#E2E8F0] overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-500"
+            style={{
+              width: `${completion.percent}%`,
+              background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 55%, #00D4FF 100%)',
+            }}
+          />
+        </div>
+        {!completion.completed && (
+          <div className="mt-4">
+            <p className="text-xs font-semibold text-[#7B2FF7] uppercase tracking-wider">Missing profile data</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {completion.missing.map((field) => (
+                <span key={field} className="px-3 py-1 rounded-full bg-[rgba(123,47,247,0.08)] text-xs font-semibold text-[#7B2FF7]">
+                  {profileFieldLabel(field)}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

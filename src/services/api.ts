@@ -21,6 +21,14 @@ export interface GcscProfile {
   propertyAddress?: string
   propertyType?: string
   budgetRange?: string
+  updatedAt?: string
+}
+
+export interface GcscProfileCompletion {
+  percent: number
+  completed: boolean
+  missing: string[]
+  required: string[]
 }
 
 export interface GcscWallet {
@@ -39,6 +47,7 @@ export interface GcscUser {
   fullName?: string
   phone?: string
   profile?: GcscProfile
+  profile_completion?: GcscProfileCompletion
   wallet?: GcscWallet | null
 }
 
