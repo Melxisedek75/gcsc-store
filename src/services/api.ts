@@ -31,6 +31,49 @@ export interface GcscProfileCompletion {
   required: string[]
 }
 
+export interface GcscUserDocument {
+  id: number
+  user_id: number
+  document_type: string
+  file_name: string
+  mime_type: string
+  file_size: number
+  file_sha256: string
+  status: 'submitted' | 'approved' | 'rejected' | 'missing'
+  review_note?: string
+  submitted_at?: string
+  reviewed_at?: string | null
+  reviewed_by?: number | null
+  created_at?: string
+  updated_at?: string
+}
+
+export interface GcscRequiredDocument {
+  document_type: string
+  label: string
+  status: 'missing' | 'submitted' | 'approved' | 'rejected'
+  document: GcscUserDocument | null
+}
+
+export interface GcscComplianceChecklistItem {
+  key: string
+  label: string
+  completed: boolean
+  status?: string
+}
+
+export interface GcscCompliance {
+  overall_status: 'profile_incomplete' | 'documents_missing' | 'pending_review' | 'wallet_missing' | 'verified' | 'rejected'
+  profile_completion: GcscProfileCompletion
+  required_documents: GcscRequiredDocument[]
+  documents?: GcscUserDocument[]
+  documents_submitted: boolean
+  documents_approved: boolean
+  wallet_connected: boolean
+  ready_for_bids: boolean
+  checklist: GcscComplianceChecklistItem[]
+}
+
 export interface GcscWallet {
   accountName: string
   permission: string
@@ -157,6 +200,18 @@ class ApiClient {
   }
   updateProfile(body: Partial<GcscProfile> & { fullName?: string; full_name?: string; phone?: string }) {
     return this.request('/auth/profile', { method: 'PUT', body: JSON.stringify(body) })
+  }
+  getDocuments() {
+    return this.request('/auth/documents')
+  }
+  submitDocument(body: { documentType: string; fileName: string; mimeType: string; fileDataUrl: string; reviewNote?: string }) {
+    return this.request('/auth/documents', { method: 'POST', body: JSON.stringify(body) })
+  }
+  getCompliance() {
+    return this.request('/auth/compliance')
+  }
+  reviewDocument(id: number, body: { status: 'approved' | 'rejected'; reviewNote?: string }) {
+    return this.request(`/admin/documents/${id}/review`, { method: 'PUT', body: JSON.stringify(body) })
   }
   logout() {
     this.clearToken()
