@@ -17,7 +17,8 @@
     "check:profile-onboarding": "node scripts/validate-profile-onboarding.mjs",
     "check:compliance-documents": "node scripts/validate-compliance-documents.mjs",
     "check:contractor-verification": "node scripts/validate-contractor-verification-visibility.mjs",
-    "check:admin-documents": "node scripts/validate-admin-document-review.mjs"
+    "check:admin-documents": "node scripts/validate-admin-document-review.mjs",
+    "check:public-contractor-profile": "node scripts/validate-public-contractor-profile.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

@@ -8,6 +8,7 @@ import Security from './pages/Security'
 import Dashboard from './pages/Dashboard'
 import Token from './pages/Token'
 import Wallet from './pages/Wallet'
+import ContractorProfile from './pages/ContractorProfile'
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/security" element={<Security />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/contractors/:id" element={<ContractorProfile />} />
         <Route path="/token" element={<Token />} />
         <Route path="/wallet" element={<Wallet />} />
       </Routes>

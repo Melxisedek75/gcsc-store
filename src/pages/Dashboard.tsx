@@ -1140,6 +1140,12 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
                           </div>
                         )}
                         {bid.message && <p className="text-sm text-[#475569] leading-6">{bid.message}</p>}
+                        <Link
+                          to={`/contractors/${bid.contractor_id}`}
+                          className="inline-flex items-center gap-2 rounded-full border border-[#C4B5FD] px-4 py-2 text-xs font-semibold text-[#7B2FF7] hover:bg-[rgba(123,47,247,0.06)] transition-colors"
+                        >
+                          <UserCircle size={14} /> View profile
+                        </Link>
                         {bid.status === 'pending' && selectedProject.status === 'open' && (
                           <button
                             onClick={() => void acceptBid(bid)}

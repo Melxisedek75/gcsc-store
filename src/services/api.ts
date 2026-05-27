@@ -133,6 +133,11 @@ export interface GcscBidContractor {
   logoDataUrl?: string
 }
 
+export interface GcscPublicContractorProfile {
+  contractor: GcscBidContractor
+  verification: GcscCompliance
+}
+
 export interface GcscBid {
   id: number
   project_id: number
@@ -254,6 +259,9 @@ class ApiClient {
   }
   getProject(id: number) {
     return this.request(`/projects/${id}`)
+  }
+  getPublicContractorProfile(id: number | string) {
+    return this.request(`/contractors/${id}/public`)
   }
   getMyProjects() {
     return this.request('/projects/my/projects')
