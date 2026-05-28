@@ -20,7 +20,8 @@
     "check:admin-documents": "node scripts/validate-admin-document-review.mjs",
     "check:public-contractor-profile": "node scripts/validate-public-contractor-profile.mjs",
     "check:admin-audit-log": "node scripts/validate-admin-audit-log.mjs",
-    "check:auth-registration-feedback": "node scripts/validate-auth-registration-feedback.mjs"
+    "check:auth-registration-feedback": "node scripts/validate-auth-registration-feedback.mjs",
+    "check:auth-channel-verification-ui": "node scripts/validate-auth-channel-verification-ui.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

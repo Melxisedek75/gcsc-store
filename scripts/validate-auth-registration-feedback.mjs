@@ -15,13 +15,13 @@ const checks = [
   {
     ok: dashboard.includes('gcsc_registration_notice') &&
       dashboard.includes('GCSC account created') &&
-      dashboard.includes('Email/SMS verification is not enabled in the current production flow yet'),
+      dashboard.includes('Check the verification status panel before using sensitive owner, contractor, claim, or finance workflows'),
     message: 'Dashboard must show a clear post-registration notice explaining account status and missing email/SMS verification.',
   },
   {
-    ok: dashboard.includes('Current production registration creates a password-based dashboard account') &&
-      dashboard.includes('Email and SMS confirmation are not active yet'),
-    message: 'Registration form must disclose the current password-based flow before account creation.',
+    ok: dashboard.includes('Contractors verify by email and homeowners verify by SMS') &&
+      dashboard.includes('pending provider setup'),
+    message: 'Registration form must disclose the role-based verification flow before account creation.',
   },
 ];
 

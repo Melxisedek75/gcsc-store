@@ -118,6 +118,10 @@ export interface GcscUser {
   profile?: GcscProfile
   profile_completion?: GcscProfileCompletion
   wallet?: GcscWallet | null
+  email_verified?: boolean
+  phone_verified?: boolean
+  verification_status?: string
+  verification_channel?: 'email' | 'sms' | string
 }
 
 export interface GcscProject {
@@ -233,8 +237,11 @@ class ApiClient {
   }
 
   // AUTH
-  register(body: { email: string; password: string; role: string; fullName: string; phone?: string }) {
+  register(body: { email: string; password: string; role: string; fullName: string; phone?: string; verificationMode?: string }) {
     return this.request('/auth/register', { method: 'POST', body: JSON.stringify(body) })
+  }
+  checkVerification(body: { email: string; phone?: string; role: string; channel: 'email' | 'sms'; code: string }) {
+    return this.request('/auth/verification/check', { method: 'POST', body: JSON.stringify(body) })
   }
   login(body: { email: string; password: string }) {
     return this.request('/auth/login', { method: 'POST', body: JSON.stringify(body) })
