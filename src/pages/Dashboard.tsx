@@ -1785,6 +1785,13 @@ function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: GcscUser) 
         ? await api.register({ ...form, role })
         : await api.login({ email: form.email, password: form.password });
       api.setToken(response.token);
+      if (mode === 'register') {
+        sessionStorage.setItem('gcsc_registration_notice', JSON.stringify({
+          email: form.email,
+          phone: form.phone,
+          createdAt: new Date().toISOString(),
+        }));
+      }
       onAuthenticated(response.user);
     } catch (err) {
       setStatus(err instanceof Error ? err.message : 'Could not complete account request');
@@ -1817,6 +1824,10 @@ function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: GcscUser) 
             <div className="flex gap-2"><CheckCircle2 size={18} className="text-[#10B981] shrink-0" /> Profile is saved through the backend API.</div>
             <div className="flex gap-2"><CheckCircle2 size={18} className="text-[#10B981] shrink-0" /> WebAuth wallet can be linked after login.</div>
             <div className="flex gap-2"><CheckCircle2 size={18} className="text-[#10B981] shrink-0" /> No demo account is shown by default.</div>
+          </div>
+          <div className="mt-5 rounded-2xl border border-[#FDE68A] bg-[#FFFBEB] p-4 text-sm text-[#92400E] leading-6">
+            Current production registration creates a password-based dashboard account and opens it immediately.
+            Email and SMS confirmation are not active yet; profile, document, and wallet review happen inside the dashboard.
           </div>
         </div>
 
@@ -2763,6 +2774,7 @@ export default function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<GcscUser | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [registrationNotice, setRegistrationNotice] = useState<{ email?: string; phone?: string } | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -2787,6 +2799,19 @@ export default function Dashboard() {
       mounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    const rawNotice = sessionStorage.getItem('gcsc_registration_notice');
+    if (!rawNotice) return;
+    try {
+      const notice = JSON.parse(rawNotice) as { email?: string; phone?: string };
+      setRegistrationNotice(notice);
+    } catch {
+      setRegistrationNotice({});
+    }
+    sessionStorage.removeItem('gcsc_registration_notice');
+  }, [user]);
 
   const logout = () => {
     api.logout();
@@ -2999,6 +3024,33 @@ export default function Dashboard() {
         </div>
 
         <div className="container-padding py-8 max-w-[1200px]">
+          {registrationNotice && (
+            <div className="mb-6 rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF] p-5">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex gap-3">
+                  <CheckCircle2 size={22} className="text-[#2563EB] shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-outfit font-bold text-[#0F172A]">GCSC account created</p>
+                    <p className="text-sm text-[#475569] mt-1 leading-6">
+                      Your dashboard account is active with email {registrationNotice.email || user.email}.
+                      {registrationNotice.phone ? ' Your phone number was saved on the profile.' : ' No phone confirmation was sent.'}
+                      {' '}Email/SMS verification is not enabled in the current production flow yet.
+                    </p>
+                    <p className="text-xs text-[#64748B] mt-2">
+                      Next step: complete Profile, upload contractor documents if needed, and connect WebAuth wallet.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setRegistrationNotice(null)}
+                  className="self-start rounded-lg px-3 py-2 text-xs font-semibold text-[#2563EB] hover:bg-white transition-colors"
+                >
+                  Dismiss
+                </button>
+              </div>
+            </div>
+          )}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSection}
