@@ -2342,6 +2342,7 @@ function AdminDocumentReviewPanel() {
   const [filter, setFilter] = useState<DocumentReviewFilter>('submitted');
   const [loading, setLoading] = useState(true);
   const [reviewingId, setReviewingId] = useState<number | null>(null);
+  const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
   const [status, setStatus] = useState('');
 
   const loadDocuments = async () => {
@@ -2362,14 +2363,21 @@ function AdminDocumentReviewPanel() {
   }, [filter]);
 
   const reviewDocument = async (document: GcscUserDocument, reviewStatus: 'approved' | 'rejected') => {
+    const manualNote = (reviewNotes[document.id] || '').trim();
+    if (reviewStatus === 'rejected' && !manualNote) {
+      setStatus('Manual note required when rejecting a document.');
+      return;
+    }
+
     setReviewingId(document.id);
     setStatus('');
     try {
       await api.reviewDocument(document.id, {
         status: reviewStatus,
-        reviewNote: reviewStatus === 'approved' ? 'Approved by admin review.' : 'Rejected by admin review.',
+        reviewNote: manualNote || 'Approved by admin review.',
       });
       await loadDocuments();
+      setReviewNotes((current) => ({ ...current, [document.id]: '' }));
       setStatus(`${documentTypeLabel(document.document_type)} ${reviewStatus}.`);
     } catch (err) {
       setStatus(err instanceof Error ? err.message : 'Could not save document review');
@@ -2479,6 +2487,18 @@ function AdminDocumentReviewPanel() {
                       <p className="mt-3 text-xs text-[#64748B]">Review note: {document.review_note}</p>
                     )}
                   </div>
+
+                  <label className="block">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-[#64748B]">Admin review note</span>
+                    <textarea
+                      value={reviewNotes[document.id] || ''}
+                      onChange={(event) => setReviewNotes((current) => ({ ...current, [document.id]: event.target.value }))}
+                      placeholder="Add an approval note or rejection reason for the contractor."
+                      maxLength={300}
+                      rows={3}
+                      className="mt-2 w-full rounded-xl border border-[#CBD5E1] bg-white px-3 py-2 text-sm text-[#0F172A] outline-none transition focus:border-[#7B2FF7] focus:ring-2 focus:ring-[#7B2FF7]/20"
+                    />
+                  </label>
 
                   <div className="flex flex-col sm:flex-row gap-2">
                     <button

@@ -28,6 +28,15 @@ const checks = [
     message: 'Admin review panel must expose approve and reject actions.',
   },
   {
+    ok:
+      dashboard.includes('reviewNotes') &&
+      dashboard.includes('setReviewNotes') &&
+      dashboard.includes('Admin review note') &&
+      dashboard.includes('Manual note required when rejecting a document') &&
+      dashboard.includes('reviewNote: manualNote'),
+    message: 'Admin review panel must require an editable review note before rejection and send the manual note to the backend.',
+  },
+  {
     ok: dashboard.includes('api.getAdminDocuments') && dashboard.includes('api.reviewDocument'),
     message: 'Admin review panel must use live admin document APIs.',
   },
