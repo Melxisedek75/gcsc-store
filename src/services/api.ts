@@ -61,6 +61,19 @@ export interface GcscDocumentOwner {
   logoDataUrl?: string
 }
 
+export interface GcscAuditEvent {
+  id: number
+  actor_id: number | null
+  target_user_id: number | null
+  action: string
+  entity_type: string
+  entity_id: number | null
+  metadata: Record<string, unknown>
+  ip_address?: string
+  user_agent?: string
+  created_at?: string
+}
+
 export interface GcscRequiredDocument {
   document_type: string
   label: string
@@ -247,6 +260,15 @@ class ApiClient {
   getAdminDocuments(status?: string) {
     const qs = status ? '?' + new URLSearchParams({ status }) : ''
     return this.request(`/admin/documents${qs}`)
+  }
+  getAdminAuditEvents(filters?: { action?: string; actor_id?: number | string; target_user_id?: number | string; limit?: number | string }) {
+    const params = new URLSearchParams()
+    if (filters?.action) params.set('action', filters.action)
+    if (filters?.actor_id) params.set('actor_id', String(filters.actor_id))
+    if (filters?.target_user_id) params.set('target_user_id', String(filters.target_user_id))
+    if (filters?.limit) params.set('limit', String(filters.limit))
+    const qs = params.toString() ? `?${params.toString()}` : ''
+    return this.request(`/admin/audit-events${qs}`)
   }
   logout() {
     this.clearToken()
