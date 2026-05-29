@@ -1,0 +1,58 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+const root = process.cwd();
+const dashboard = fs.readFileSync(path.join(root, 'src/pages/Dashboard.tsx'), 'utf8');
+const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+
+const checks = [
+  {
+    ok: dashboard.includes("'loans'") && dashboard.includes('LoansFinancingPanel') && dashboard.includes('SmartContractor Financing'),
+    message: 'Dashboard must expose a Loans / Financing section.',
+  },
+  {
+    ok:
+      dashboard.includes('Escrow-Backed Contractor Advance') &&
+      dashboard.includes('Token-Collateral Equipment Credit') &&
+      dashboard.includes('ClaimBridge Emergency Advance') &&
+      dashboard.includes('Contract-Backed Working Capital'),
+    message: 'Loans panel must include all four future financing products.',
+  },
+  {
+    ok:
+      dashboard.includes('Demo/MVP gate only') &&
+      dashboard.includes('No live funds are issued yet') &&
+      dashboard.includes('No token lock, liquidation, or live lending yet') &&
+      dashboard.includes('No assignment of benefits, insurer integration, or claim payout routing yet') &&
+      dashboard.includes('No live loan issuance or repayment routing yet'),
+    message: 'Loans panel must clearly avoid live lending promises.',
+  },
+  {
+    ok:
+      dashboard.includes('Availability and terms may depend on your state') &&
+      dashboard.includes('Your selected state:') &&
+      dashboard.includes('Add your property or business state to check future eligibility'),
+    message: 'Loans panel must include state-aware eligibility copy.',
+  },
+  {
+    ok:
+      dashboard.includes('These financing workflows are in demo/MVP readiness') &&
+      dashboard.includes('Real-money activation requires identity verification'),
+    message: 'Loans panel must include safety/legal readiness copy.',
+  },
+  {
+    ok: pkg.scripts?.['check:loans-financing'] === 'node scripts/validate-loans-financing-ui.mjs',
+    message: 'package.json must expose check:loans-financing.',
+  },
+];
+
+const failed = checks.filter((check) => !check.ok);
+
+if (failed.length) {
+  for (const check of failed) {
+    console.error(`FAIL: ${check.message}`);
+  }
+  process.exit(1);
+}
+
+console.log('loans financing UI validation passed');
