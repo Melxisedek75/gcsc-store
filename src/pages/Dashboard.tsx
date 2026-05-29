@@ -617,6 +617,12 @@ function MilestoneManager({
 
   const signTestnetAction = async (milestone: GcscMilestone, action: EscrowMilestoneChainAction) => {
     const key = `${milestone.id}:${action}`;
+    const expectedWallet = user.wallet?.accountName?.trim();
+    if (!expectedWallet) {
+      setChainStatus('Connect WebAuth wallet before signing escrow actions.');
+      return;
+    }
+
     setChainBusyId(key);
     setChainStatus('');
     try {
@@ -626,19 +632,22 @@ function MilestoneManager({
         milestoneId: milestone.id,
         evidenceHash: milestone.description || milestone.title || `milestone-${milestone.id}`,
       });
-      if (result.transactionId) {
-        await api.recordMilestoneChainTx(milestone.id, {
-          action: result.action,
-          tx_id: result.transactionId,
-          chain_id: result.chainId,
-          contract_account: result.contractAccount,
-          actor: result.wallet.accountName,
-          status: 'broadcast',
-        });
-        onChanged();
+      if (result.wallet.accountName !== expectedWallet) {
+        throw new Error(`Connected WebAuth account must match saved wallet ${expectedWallet}.`);
       }
-      const tx = result.transactionId ? ` Transaction: ${result.transactionId.slice(0, 12)}...` : '';
-      setChainStatus(`Testnet action signed by ${result.wallet.accountName} and saved to audit trail.${tx}`);
+      if (!result.transactionId) {
+        throw new Error('WebAuth did not return a transaction id. Nothing was recorded.');
+      }
+      await api.recordMilestoneChainTx(milestone.id, {
+        action: result.action,
+        tx_id: result.transactionId,
+        chain_id: result.chainId,
+        contract_account: result.contractAccount,
+        actor: result.wallet.accountName,
+        status: 'broadcast',
+      });
+      onChanged();
+      setChainStatus(`Testnet action signed by ${result.wallet.accountName} and saved to audit trail. Transaction: ${result.transactionId.slice(0, 12)}...`);
     } catch (err) {
       setChainStatus(err instanceof Error ? err.message : 'Could not sign testnet escrow action');
     } finally {

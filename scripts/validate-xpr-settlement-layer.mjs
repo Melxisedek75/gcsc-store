@@ -49,6 +49,31 @@ checks.push(
       dashboard.includes('Sign Testnet') &&
       dashboard.includes('Testnet signing only'),
   },
+  {
+    name: 'dashboard requires a saved WebAuth wallet before escrow signing',
+    ok:
+      dashboard.includes('user.wallet?.accountName') &&
+      dashboard.includes('Connect WebAuth wallet before signing escrow actions'),
+  },
+  {
+    name: 'dashboard refuses to record missing WebAuth transaction ids',
+    ok:
+      dashboard.includes('if (!result.transactionId)') &&
+      dashboard.includes('WebAuth did not return a transaction id'),
+  },
+  {
+    name: 'dashboard rejects WebAuth account mismatch before recording tx evidence',
+    ok:
+      dashboard.includes('result.wallet.accountName !== expectedWallet') &&
+      dashboard.includes('Connected WebAuth account must match saved wallet'),
+  },
+  {
+    name: 'dashboard scopes settlement controls to accepted escrow details',
+    ok:
+      dashboard.includes('selectedEscrow &&') &&
+      dashboard.includes('<MilestoneManager') &&
+      dashboard.includes('Bid accepted. Escrow record created.'),
+  },
 );
 
 const failed = checks.filter((check) => !check.ok);
