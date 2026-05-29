@@ -15,10 +15,10 @@ const DEFAULT_TESTNET_ENDPOINTS = [
 ]
 
 export type EscrowMilestoneChainAction =
-  | 'submitmilestone'
-  | 'approvemilestone'
-  | 'releasemilestone'
-  | 'disputemilestone'
+  | 'submitms'
+  | 'approvems'
+  | 'releasems'
+  | 'disputems'
 
 interface SignEscrowMilestoneParams {
   action: EscrowMilestoneChainAction
@@ -71,7 +71,7 @@ function buildMilestoneData(params: SignEscrowMilestoneParams): Record<string, n
     milestone_id: params.milestoneId,
   }
 
-  if (params.action !== 'submitmilestone') return base
+  if (params.action !== 'submitms') return base
 
   return {
     ...base,

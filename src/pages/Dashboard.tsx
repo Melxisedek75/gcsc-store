@@ -801,41 +801,41 @@ function MilestoneManager({
               <div className="flex flex-wrap gap-2 mt-3">
                 {canSignSubmit && (
                   <button
-                    onClick={() => void signTestnetAction(milestone, 'submitmilestone')}
-                    disabled={chainBusyId === `${milestone.id}:submitmilestone`}
+                    onClick={() => void signTestnetAction(milestone, 'submitms')}
+                    disabled={chainBusyId === `${milestone.id}:submitms`}
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-[#7B2FF7] border border-[#C4B5FD] disabled:opacity-60"
                   >
-                    {chainBusyId === `${milestone.id}:submitmilestone` ? <Loader2 size={12} className="animate-spin" /> : <PlugZap size={12} />}
+                    {chainBusyId === `${milestone.id}:submitms` ? <Loader2 size={12} className="animate-spin" /> : <PlugZap size={12} />}
                     Sign Testnet Submit
                   </button>
                 )}
                 {canSignApprove && (
                   <button
-                    onClick={() => void signTestnetAction(milestone, 'approvemilestone')}
-                    disabled={chainBusyId === `${milestone.id}:approvemilestone`}
+                    onClick={() => void signTestnetAction(milestone, 'approvems')}
+                    disabled={chainBusyId === `${milestone.id}:approvems`}
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-[#3B6BF7] border border-[#BFDBFE] disabled:opacity-60"
                   >
-                    {chainBusyId === `${milestone.id}:approvemilestone` ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
+                    {chainBusyId === `${milestone.id}:approvems` ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
                     Sign Testnet Approve
                   </button>
                 )}
                 {canSignRelease && (
                   <button
-                    onClick={() => void signTestnetAction(milestone, 'releasemilestone')}
-                    disabled={chainBusyId === `${milestone.id}:releasemilestone`}
+                    onClick={() => void signTestnetAction(milestone, 'releasems')}
+                    disabled={chainBusyId === `${milestone.id}:releasems`}
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-[#10B981] border border-[#A7F3D0] disabled:opacity-60"
                   >
-                    {chainBusyId === `${milestone.id}:releasemilestone` ? <Loader2 size={12} className="animate-spin" /> : <DollarSign size={12} />}
+                    {chainBusyId === `${milestone.id}:releasems` ? <Loader2 size={12} className="animate-spin" /> : <DollarSign size={12} />}
                     Sign Testnet Release
                   </button>
                 )}
                 {canSignDispute && (
                   <button
-                    onClick={() => void signTestnetAction(milestone, 'disputemilestone')}
-                    disabled={chainBusyId === `${milestone.id}:disputemilestone`}
+                    onClick={() => void signTestnetAction(milestone, 'disputems')}
+                    disabled={chainBusyId === `${milestone.id}:disputems`}
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-semibold bg-white text-[#EF4444] border border-[#FECACA] disabled:opacity-60"
                   >
-                    {chainBusyId === `${milestone.id}:disputemilestone` ? <Loader2 size={12} className="animate-spin" /> : <AlertTriangle size={12} />}
+                    {chainBusyId === `${milestone.id}:disputems` ? <Loader2 size={12} className="animate-spin" /> : <AlertTriangle size={12} />}
                     Sign Testnet Dispute
                   </button>
                 )}

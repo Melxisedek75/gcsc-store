@@ -33,14 +33,18 @@ checks.push(
       !service.includes('https://proton.greymass.com'),
   },
   {
-    name: 'settlement service sends gcscrow1111 milestone actions',
+    name: 'settlement service sends real gcscrow1111 milestone action names',
     ok:
       service.includes('gcscrow1111') &&
-      service.includes('submitmilestone') &&
-      service.includes('approvemilestone') &&
-      service.includes('releasemilestone') &&
-      service.includes('disputemilestone') &&
-      service.includes('session.transact'),
+      service.includes('submitms') &&
+      service.includes('approvems') &&
+      service.includes('releasems') &&
+      service.includes('disputems') &&
+      service.includes('session.transact') &&
+      !service.includes("'submitmilestone'") &&
+      !service.includes("'approvemilestone'") &&
+      !service.includes("'releasemilestone'") &&
+      !service.includes("'disputemilestone'"),
   },
   {
     name: 'dashboard exposes testnet signing controls',
