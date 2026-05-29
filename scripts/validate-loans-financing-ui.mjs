@@ -72,6 +72,15 @@ const checks = [
       dashboard.includes('Save demo precheck'),
     message: 'Dashboard must include user precheck submission and admin review view.',
   },
+  {
+    ok:
+      dashboard.includes('min-[2200px]:grid-cols-[minmax(0,1fr)_420px]') &&
+      dashboard.includes('xl:grid-cols-2 gap-5') &&
+      dashboard.includes('min-[2200px]:sticky') &&
+      !dashboard.includes('lg:grid-cols-[minmax(0,1fr)_380px]') &&
+      !dashboard.includes('md:grid-cols-2 gap-5'),
+    message: 'Loans panel must not squeeze product cards into narrow columns before ultra-wide screens.',
+  },
 ];
 
 const failed = checks.filter((check) => !check.ok);

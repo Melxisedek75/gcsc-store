@@ -2250,8 +2250,8 @@ function LoansFinancingPanel({ user }: { user: GcscUser }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 min-[2200px]:grid-cols-[minmax(0,1fr)_420px] gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {orderedProducts.map((product) => {
             const Icon = product.icon;
             const isSelected = selectedProduct.id === product.id;
@@ -2260,17 +2260,17 @@ function LoansFinancingPanel({ user }: { user: GcscUser }) {
                 key={product.id}
                 type="button"
                 onClick={() => setSelectedProductId(product.id)}
-                className="glass-card p-5 text-left transition-all hover:-translate-y-0.5"
+                className="glass-card min-w-0 p-5 text-left transition-all hover:-translate-y-0.5"
                 style={{ borderColor: isSelected ? '#7B2FF7' : undefined, boxShadow: isSelected ? '0 20px 45px rgba(123,47,247,0.14)' : undefined }}
               >
-                <div className="flex items-start gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                   <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#7B2FF7] to-[#00D4FF] flex items-center justify-center shrink-0">
                     <Icon size={22} className="text-white" />
                   </div>
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-outfit font-bold text-[1.05rem] text-[#0F172A]">{product.title}</h3>
-                      <span className="rounded-full bg-[#F1F5F9] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#475569]">
+                      <h3 className="font-outfit font-bold text-[1.05rem] leading-snug text-[#0F172A]">{product.title}</h3>
+                      <span className="rounded-full bg-[#F1F5F9] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#475569] sm:whitespace-nowrap">
                         Best for {product.bestFor === 'contractor' ? 'contractors' : 'homeowners'}
                       </span>
                     </div>
@@ -2294,7 +2294,7 @@ function LoansFinancingPanel({ user }: { user: GcscUser }) {
           })}
         </div>
 
-        <aside className="glass-card p-6 h-fit lg:sticky lg:top-[92px]">
+        <aside className="glass-card p-6 h-fit min-[2200px]:sticky min-[2200px]:top-[92px]">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7B2FF7] to-[#00D4FF] flex items-center justify-center shrink-0">
               <DetailIcon size={24} className="text-white" />
