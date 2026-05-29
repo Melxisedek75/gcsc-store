@@ -3007,7 +3007,19 @@ const auditActionLabels: Record<string, string> = {
   'document.submitted': 'Document submitted',
   'document.reviewed': 'Document reviewed',
   'wallet.connected': 'Wallet connected',
+  'project.created': 'Project created',
+  'bid.submitted': 'Bid submitted',
   'bid.accepted': 'Bid accepted',
+  'escrow.milestone.created': 'Milestone created',
+  'escrow.milestone.submitted': 'Milestone submitted',
+  'escrow.milestone.approved': 'Milestone approved',
+  'escrow.milestone.released': 'Milestone released',
+  'escrow.milestone.disputed': 'Milestone disputed',
+  'escrow.chain_tx.recorded': 'Chain transaction recorded',
+  'escrow.chain_tx.confirmed': 'Chain transaction confirmed',
+  'escrow.chain_tx.failed': 'Chain transaction failed',
+  'financing.precheck.created': 'Financing precheck created',
+  'payment.intent.created': 'Payment intent created',
 };
 
 function metadataSummary(event: GcscAuditEvent) {
@@ -3157,8 +3169,19 @@ function AdminAuditLogPanel() {
     { value: 'document.submitted', label: 'Submitted' },
     { value: 'document.reviewed', label: 'Reviewed' },
     { value: 'wallet.connected', label: 'Wallet' },
+    { value: 'project.created', label: 'Projects' },
+    { value: 'bid.submitted', label: 'Submitted Bids' },
     { value: 'bid.accepted', label: 'Accepted Bids' },
+    { value: 'escrow.milestone.created', label: 'Milestone Created' },
+    { value: 'escrow.milestone.submitted', label: 'Milestone Submitted' },
+    { value: 'escrow.milestone.approved', label: 'Milestone Approved' },
+    { value: 'escrow.milestone.released', label: 'Milestone Released' },
+    { value: 'escrow.milestone.disputed', label: 'Milestone Disputed' },
+    { value: 'escrow.chain_tx.recorded', label: 'Chain Tx Recorded' },
+    { value: 'escrow.chain_tx.confirmed', label: 'Chain Tx Confirmed' },
+    { value: 'escrow.chain_tx.failed', label: 'Chain Tx Failed' },
     { value: 'financing.precheck.created', label: 'Financing' },
+    { value: 'payment.intent.created', label: 'Payments' },
   ];
 
   return (
@@ -3173,7 +3196,7 @@ function AdminAuditLogPanel() {
           <p className="text-xs font-semibold uppercase tracking-wider gradient-text">Trust Events</p>
           <h2 className="font-outfit font-bold text-[1.5rem] gradient-text mt-1">Audit Log</h2>
           <p className="font-inter text-sm text-[#475569] mt-1">
-            Review profile, document, wallet, and bid acceptance events recorded by the backend.
+            Review profile, document, wallet, project, bid, escrow, chain transaction, financing, and payment events recorded by the backend.
           </p>
         </div>
         <div className="inline-flex flex-wrap gap-2 rounded-2xl border border-[#E2E8F0] bg-white p-1">

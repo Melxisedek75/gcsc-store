@@ -6,6 +6,41 @@ const dashboard = fs.readFileSync(path.join(root, 'src/pages/Dashboard.tsx'), 'u
 const api = fs.readFileSync(path.join(root, 'src/services/api.ts'), 'utf8');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 
+const requiredAuditActions = [
+  'profile.updated',
+  'document.submitted',
+  'document.reviewed',
+  'wallet.connected',
+  'project.created',
+  'bid.submitted',
+  'bid.accepted',
+  'escrow.milestone.created',
+  'escrow.milestone.submitted',
+  'escrow.milestone.approved',
+  'escrow.milestone.released',
+  'escrow.milestone.disputed',
+  'escrow.chain_tx.recorded',
+  'escrow.chain_tx.confirmed',
+  'escrow.chain_tx.failed',
+  'financing.precheck.created',
+  'payment.intent.created',
+];
+
+const requiredFilterLabels = [
+  'Projects',
+  'Submitted Bids',
+  'Accepted Bids',
+  'Milestone Created',
+  'Milestone Submitted',
+  'Milestone Approved',
+  'Milestone Released',
+  'Milestone Disputed',
+  'Chain Tx Recorded',
+  'Chain Tx Confirmed',
+  'Chain Tx Failed',
+  'Payments',
+];
+
 const checks = [
   {
     ok: api.includes('interface GcscAuditEvent') && api.includes('getAdminAuditEvents('),
@@ -24,8 +59,12 @@ const checks = [
     message: 'Audit panel must show clear admin audit labels.',
   },
   {
-    ok: dashboard.includes('profile.updated') && dashboard.includes('document.reviewed') && dashboard.includes('bid.accepted'),
-    message: 'Audit panel must expose key trust event filters.',
+    ok: requiredAuditActions.every((action) => dashboard.includes(action)),
+    message: 'Audit panel must expose all production trust event action labels.',
+  },
+  {
+    ok: requiredFilterLabels.every((label) => dashboard.includes(label)),
+    message: 'Audit panel must expose filters for project, bid, milestone, chain, and payment events.',
   },
   {
     ok: dashboard.includes('api.getAdminAuditEvents') && dashboard.includes('event.metadata'),
