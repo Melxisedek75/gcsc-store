@@ -85,9 +85,9 @@ export default function Token() {
 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={stagger} className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: Lock, title: 'Stake for Collateral', desc: 'Lock your GCSC tokens as collateral to secure construction project loans. The more you stake, the higher your credit line.' },
-              { icon: TrendingUp, title: 'Earn Rewards', desc: 'Earn passive income by staking GCSC tokens. Reward rates adjust based on network participation and duration.' },
-              { icon: Vote, title: 'Governance', desc: 'Token holders vote on platform upgrades, fee structures, and ecosystem development decisions.' },
+              { icon: Lock, title: 'Collateral Readiness', desc: 'Future staking and collateral features are planned for eligible verified participants after testing, legal review, and provider approval.' },
+              { icon: TrendingUp, title: 'Ecosystem Participation', desc: 'Staking and reward mechanics are planned but not live. Terms will be published after security, legal, and governance review.' },
+              { icon: Vote, title: 'Governance', desc: 'Planned governance features are intended to let token holders participate in ecosystem upgrade and fee-structure decisions.' },
             ].map(card => (
               <motion.div key={card.title} variants={fadeUpChild} whileHover={{ y: -4 }} className="glass-card p-8 text-center transition-all duration-300">
                 <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center rounded-2xl" style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}>
@@ -112,23 +112,22 @@ export default function Token() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <SectionLabel text="GET GCSC TOKENS" />
+              <SectionLabel text="PLANNED TOKEN ACCESS" />
               <h2 className="font-outfit font-bold text-h1 leading-h1 tracking-h1 mt-4 gradient-text">
                 Buy with Metal Pay
               </h2>
               <p className="font-inter text-body-lg mt-4" style={{ color: '#475569' }}>
-                GCSC tokens will be available for purchase through Metal Pay — the compliant, 
-                secure payment platform from Metallicus. Metal Pay offers the lowest card fees 
-                in the industry with 24/7 live support and instant transfers on XPR Network.
+                GCSC token access through Metal Pay is planned for eligible users after official
+                launch instructions are published. Availability and supported payment methods depend on Metal Pay eligibility and jurisdiction.
               </p>
 
               <div className="space-y-4 mt-8">
                 {[
-                  'Lowest card fees in the industry',
-                  'Instant transfers on XPR Network',
-                  '24/7 live human support',
-                  'Available in US, Australia & New Zealand',
-                  'FDIC-insured cash wallets',
+                  'Official Metal Pay app access',
+                  'Card or bank funding options where supported',
+                  'XPR Network transfer support',
+                  'Availability depends on eligibility and jurisdiction',
+                  'Use official Metal Pay instructions only',
                 ].map((item, i) => (
                   <motion.div
                     key={item}
@@ -179,7 +178,7 @@ export default function Token() {
                   {[
                     { step: '1', title: 'Download Metal Pay', desc: 'Get the app on iOS or Android and complete verification.' },
                     { step: '2', title: 'Fund Your Wallet', desc: 'Add funds via debit card, credit card, or bank transfer.' },
-                    { step: '3', title: 'Purchase GCSC', desc: 'Buy GCSC tokens instantly with zero gas fees on XPR Network.' },
+                    { step: '3', title: 'Follow Official Launch Instructions', desc: 'Purchase steps will be published when GCSC token access is available.' },
                   ].map((item, i) => (
                     <motion.div
                       key={item.step}

@@ -105,8 +105,8 @@ const securityLayers = [
   {
     num: '01',
     title: 'Application Security',
-    description: 'Our web and mobile applications are built with security-first development practices. All code undergoes mandatory security review, automated vulnerability scanning (SAST/DAST), and penetration testing before deployment.',
-    spec: 'OWASP Top 10 compliant · Daily dependency scanning · WAF protection · Rate limiting · Input sanitization',
+    description: 'The application is being built toward a security-first production process with code review, dependency scanning, rate limits, and input validation.',
+    spec: 'OWASP review target · Dependency audit workflow · Rate limiting · Input sanitization · JWT guard tests',
   },
   {
     num: '02',
@@ -117,26 +117,26 @@ const securityLayers = [
   {
     num: '03',
     title: 'Encryption & Data Protection',
-    description: 'All sensitive data is encrypted at rest using AES-256 and in transit using TLS 1.3. Private keys are stored in hardware security modules (HSMs) with zero-knowledge architecture.',
-    spec: 'AES-256-GCM · TLS 1.3 · HSM key storage · Zero-knowledge proofs · End-to-end encrypted messaging',
+    description: 'Production data protection is designed around encrypted transport, managed database security controls, and no GCSC custody of user private keys.',
+    spec: 'TLS transport · Managed database controls · No private key custody target · Least-privilege access · Backup runbook',
   },
   {
     num: '04',
     title: 'Identity & Access Management',
-    description: 'Multi-factor authentication (MFA) is required for all accounts. Role-based access control (RBAC) ensures users can only access data relevant to their projects. Biometric auth supported on mobile.',
-    spec: 'MFA (TOTP + SMS) · RBAC · Biometric (Face/Touch ID) · Session timeout · Login anomaly detection',
+    description: 'Role-based access control is implemented for homeowner, contractor, and admin flows. Stronger account verification and MFA options are planned for production hardening.',
+    spec: 'JWT verification · RBAC · Admin guard tests · Future MFA options · Session policy review',
   },
   {
     num: '05',
     title: 'Blockchain Consensus',
-    description: "XPR Network's delegated proof-of-stake (DPoS) consensus ensures transactions are validated by 21 elected block producers. This provides enterprise-grade security with instant finality and no risk of double-spending.",
+    description: "XPR Network's delegated proof-of-stake (DPoS) consensus validates transactions through elected block producers and supports fast settlement finality for signed escrow actions.",
     spec: 'DPoS consensus · 21 block producers · 0.5s block time · Instant finality · Byzantine fault tolerance',
   },
   {
     num: '06',
     title: 'Disaster Recovery',
-    description: 'All critical data is replicated across multiple geographic regions with point-in-time recovery capability. Our RTO (Recovery Time Objective) is under 1 hour, and RPO (Recovery Point Objective) is under 5 minutes.',
-    spec: 'Multi-region replication · Daily encrypted backups · RTO < 1hr · RPO < 5min · Annual DR testing',
+    description: 'Backup, restore, monitoring, and rollback procedures are being documented before any real-money pilot. A non-production restore drill is still required.',
+    spec: 'PostgreSQL backup script · Restore drill runbook · Monitoring runbook · Rollback checklist · Founder approval gate',
   },
 ]
 
@@ -172,9 +172,9 @@ const certifications = [
   },
   {
     icon: Scale,
-    title: 'SEC Regulation',
-    description: 'Structured to meet emerging SEC guidance on digital asset custody and consumer protection in blockchain-based financial services.',
-    status: 'In Progress',
+    title: 'Digital Asset Legal Review',
+    description: 'Legal and regulatory review is planned before any digital asset custody or financial-service expansion.',
+    status: 'Planned',
     statusColor: 'warning' as const,
   },
   {
@@ -215,17 +215,17 @@ const detailCards = [
   {
     icon: FileSignature,
     title: 'Smart Contract Deployment',
-    description: 'Every project creates a unique smart contract on the XPR Network. This contract contains the payment terms, milestone schedule, and release conditions. Once deployed, it cannot be altered by any party — including GCSC.',
+    description: 'The target escrow flow links accepted projects to XPR smart contract actions for funding, milestone approval, and release once deployment and permissions are verified.',
   },
   {
     icon: Eye,
     title: 'Transparent Ledger',
-    description: 'Every deposit, milestone approval, and payment release is recorded on the public XPR blockchain. Both homeowner and contractor can verify transaction status in real-time through any block explorer.',
+    description: 'On-chain escrow events are designed to be recorded on XPR so homeowner and contractor activity can be verified through transaction evidence.',
   },
   {
     icon: Timer,
-    title: 'Instant Finality',
-    description: 'XPR Network provides sub-second transaction finality with zero gas fees for end users. This means escrow operations happen instantly — no waiting hours for blockchain confirmations.',
+    title: 'XPR Finality',
+    description: 'XPR Network supports fast transaction finality and low-friction settlement once users sign valid escrow actions through a supported wallet.',
   },
 ]
 
@@ -281,7 +281,7 @@ export default function Security() {
 
             {/* Subheading */}
             <motion.p variants={staggerChild} className="font-inter text-body-lg text-[#475569] max-w-[640px] mx-auto">
-              Every payment protected by military-grade encryption, immutable blockchain records, and multi-layered smart contract security.
+              GCSC is designed to protect construction payments with strong security controls, transparent escrow records, and planned smart contract settlement.
             </motion.p>
 
             {/* Security badges */}
@@ -290,8 +290,8 @@ export default function Security() {
               className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mt-10"
             >
               {[
-                { icon: Shield, text: 'SOC 2 Type II' },
-                { icon: Lock, text: 'AES-256 Encryption' },
+                { icon: Shield, text: 'Compliance Roadmap' },
+                { icon: Lock, text: 'AES-256 Target' },
                 { icon: Database, text: 'On-Chain Immutable' },
               ].map((badge, i) => (
                 <motion.div
