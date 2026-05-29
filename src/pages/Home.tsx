@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -18,6 +18,11 @@ import {
 } from 'lucide-react'
 
 gsap.registerPlugin(ScrollTrigger)
+
+function seededUnit(seed: number) {
+  const value = Math.sin(seed * 12.9898) * 43758.5453
+  return value - Math.floor(value)
+}
 
 /* ───────── Section Label (Eyebrow) ───────── */
 function SectionLabel({ text }: { text: string }) {
@@ -546,18 +551,20 @@ function EscrowSimulation() {
 
 /* ───────── Confetti Burst ───────── */
 function ConfettiBurst() {
-  const colors = ['#7B2FF7', '#3B6BF7', '#00D4FF', '#10B981']
-  const particles = useRef(
-    Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      x: (Math.random() - 0.5) * 400,
-      y: (Math.random() - 0.5) * 400 - 100,
-      rotation: Math.random() * 720 - 360,
-      scale: Math.random() * 0.5 + 0.5,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      duration: Math.random() * 0.8 + 0.7,
-    }))
-  ).current
+  const particles = useMemo(() => (
+    Array.from({ length: 50 }, (_, i) => {
+      const colors = ['#7B2FF7', '#3B6BF7', '#00D4FF', '#10B981']
+      return {
+        id: i,
+        x: (seededUnit(i + 1) - 0.5) * 400,
+        y: (seededUnit(i + 101) - 0.5) * 400 - 100,
+        rotation: seededUnit(i + 201) * 720 - 360,
+        scale: seededUnit(i + 301) * 0.5 + 0.5,
+        color: colors[Math.floor(seededUnit(i + 401) * colors.length)],
+        duration: seededUnit(i + 501) * 0.8 + 0.7,
+      }
+    })
+  ), [])
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -857,16 +864,16 @@ function FAQSection() {
 function CTASection() {
   const sectionRef = useRef<HTMLElement>(null)
 
-  const particles = useRef(
+  const particles = useMemo(() => (
     Array.from({ length: 20 }, (_, i) => ({
       id: i,
-      left: `${Math.random() * 100}%`,
-      size: Math.random() * 6 + 3,
-      duration: Math.random() * 12 + 10,
-      delay: Math.random() * 10,
-      opacity: Math.random() * 0.05 + 0.05,
+      left: `${seededUnit(i + 701) * 100}%`,
+      size: seededUnit(i + 801) * 6 + 3,
+      duration: seededUnit(i + 901) * 12 + 10,
+      delay: seededUnit(i + 1001) * 10,
+      opacity: seededUnit(i + 1101) * 0.05 + 0.05,
     }))
-  ).current
+  ), [])
 
   useGSAP(() => {
     if (!sectionRef.current) return

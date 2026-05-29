@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router'
+import { Link } from 'react-router'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
@@ -14,11 +14,6 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const location = useLocation()
-
-  useEffect(() => {
-    setIsOpen(false)
-  }, [location.pathname])
 
   useEffect(() => {
     if (isOpen) {
@@ -87,6 +82,7 @@ export default function Navbar() {
             <Link
               key={link.path}
               to={link.path}
+              onClick={() => setIsOpen(false)}
               className="font-outfit font-semibold text-[1.75rem] text-[#0F172A] hover:text-violet transition-colors duration-200"
               style={{
                 opacity: isOpen ? 1 : 0,
@@ -99,6 +95,7 @@ export default function Navbar() {
           ))}
           <Link
             to="/dashboard"
+            onClick={() => setIsOpen(false)}
             className="mt-4 inline-flex items-center justify-center gradient-primary text-white font-inter font-semibold text-[1rem] px-8 py-3.5 rounded-full"
             style={{
               opacity: isOpen ? 1 : 0,

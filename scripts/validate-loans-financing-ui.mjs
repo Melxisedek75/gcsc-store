@@ -3,6 +3,7 @@ import path from 'node:path';
 
 const root = process.cwd();
 const dashboard = fs.readFileSync(path.join(root, 'src/pages/Dashboard.tsx'), 'utf8');
+const api = fs.readFileSync(path.join(root, 'src/services/api.ts'), 'utf8');
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 
 const checks = [
@@ -41,8 +42,35 @@ const checks = [
     message: 'Loans panel must include safety/legal readiness copy.',
   },
   {
+    ok:
+      dashboard.includes('Readiness checklist') &&
+      dashboard.includes('Profile and role saved') &&
+      dashboard.includes('State selected') &&
+      dashboard.includes('Contract, escrow, claim, or collateral context added') &&
+      dashboard.includes('Admin review required') &&
+      dashboard.includes('Not live lending'),
+    message: 'Loans panel must include a simple readiness checklist.',
+  },
+  {
     ok: pkg.scripts?.['check:loans-financing'] === 'node scripts/validate-loans-financing-ui.mjs',
     message: 'package.json must expose check:loans-financing.',
+  },
+  {
+    ok:
+      api.includes('GcscFinancingPrecheck') &&
+      api.includes('createFinancingPrecheck') &&
+      api.includes('/financing/prechecks') &&
+      api.includes('getAdminFinancingPrechecks') &&
+      api.includes('/admin/financing-prechecks'),
+    message: 'API client must expose demo financing precheck endpoints.',
+  },
+  {
+    ok:
+      dashboard.includes('Financing Review') &&
+      dashboard.includes('AdminFinancingPrechecksPanel') &&
+      dashboard.includes('financing.precheck.created') &&
+      dashboard.includes('Save demo precheck'),
+    message: 'Dashboard must include user precheck submission and admin review view.',
   },
 ];
 

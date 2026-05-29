@@ -74,6 +74,23 @@ export interface GcscAuditEvent {
   created_at?: string
 }
 
+export type GcscFinancingProductType = 'escrow_advance' | 'token_credit' | 'claimbridge' | 'working_capital'
+
+export interface GcscFinancingPrecheck {
+  id: number
+  user_id: number
+  user?: GcscDocumentOwner | null
+  role: 'homeowner' | 'contractor' | 'admin' | string
+  product_type: GcscFinancingProductType | string
+  state: string
+  context: Record<string, unknown>
+  safety_acknowledged: boolean
+  status: string
+  admin_note?: string
+  created_at?: string
+  updated_at?: string
+}
+
 export interface GcscRequiredDocument {
   document_type: string
   label: string
@@ -276,6 +293,21 @@ class ApiClient {
     if (filters?.limit) params.set('limit', String(filters.limit))
     const qs = params.toString() ? `?${params.toString()}` : ''
     return this.request(`/admin/audit-events${qs}`)
+  }
+  createFinancingPrecheck(body: {
+    productType: GcscFinancingProductType
+    state?: string
+    context?: Record<string, unknown>
+    safetyAcknowledged: boolean
+  }) {
+    return this.request('/financing/prechecks', { method: 'POST', body: JSON.stringify(body) })
+  }
+  getFinancingPrechecks() {
+    return this.request('/financing/prechecks')
+  }
+  getAdminFinancingPrechecks(status?: string) {
+    const qs = status ? '?' + new URLSearchParams({ status }) : ''
+    return this.request(`/admin/financing-prechecks${qs}`)
   }
   logout() {
     this.clearToken()

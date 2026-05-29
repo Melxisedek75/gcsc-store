@@ -1,7 +1,7 @@
-import { useEffect, useState, useMemo, type FormEvent, type ChangeEvent } from 'react';
+import { useCallback, useEffect, useState, useMemo, type FormEvent, type ChangeEvent } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
-import { api, type GcscAuditEvent, type GcscBid, type GcscChainTx, type GcscCompliance, type GcscEscrow, type GcscMilestone, type GcscProfile, type GcscProject, type GcscRequiredDocument, type GcscUser, type GcscUserDocument } from '../services/api';
+import { api, type GcscAuditEvent, type GcscBid, type GcscChainTx, type GcscCompliance, type GcscEscrow, type GcscFinancingPrecheck, type GcscFinancingProductType, type GcscMilestone, type GcscProfile, type GcscProject, type GcscRequiredDocument, type GcscUser, type GcscUserDocument } from '../services/api';
 import { connectWebAuthWallet } from '../services/webauth';
 import { signEscrowMilestoneAction, type EscrowMilestoneChainAction } from '../services/xprSettlement';
 import {
@@ -50,7 +50,7 @@ import {
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
 
-type Section = 'projects' | 'estimator' | 'bids' | 'loans' | 'profile' | 'compliance' | 'admin-review' | 'admin-audit' | 'wallet' | 'token';
+type Section = 'projects' | 'estimator' | 'bids' | 'loans' | 'profile' | 'compliance' | 'admin-review' | 'admin-financing' | 'admin-audit' | 'wallet' | 'token';
 
 type ProjectType =
   | 'Kitchen Remodel'
@@ -266,6 +266,7 @@ const navItems: { key: Section; label: string; icon: typeof LayoutDashboard; adm
   { key: 'profile', label: 'Profile', icon: UserCircle },
   { key: 'compliance', label: 'Compliance', icon: ShieldCheck },
   { key: 'admin-review', label: 'Admin Review', icon: ShieldCheck, adminOnly: true },
+  { key: 'admin-financing', label: 'Financing Review', icon: Wallet, adminOnly: true },
   { key: 'admin-audit', label: 'Audit Log', icon: Activity, adminOnly: true },
   { key: 'wallet', label: 'Wallet', icon: Wallet },
 ];
@@ -856,7 +857,7 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
   const [detailMessage, setDetailMessage] = useState('');
   const isHomeowner = user.role === 'homeowner';
 
-  const loadProjects = async () => {
+  const loadProjects = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
@@ -879,11 +880,11 @@ function ProjectsPanel({ user }: { user: GcscUser }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isHomeowner]);
 
   useEffect(() => {
     void loadProjects();
-  }, [user.id, user.role]);
+  }, [loadProjects]);
 
   const loadDetails = async (projectId: number) => {
     setDetailLoading(true);
@@ -1488,7 +1489,7 @@ function BidsPanel({ user }: { user: GcscUser }) {
   const [error, setError] = useState('');
   const isContractor = user.role === 'contractor';
 
-  const loadBids = async () => {
+  const loadBids = useCallback(async () => {
     if (!isContractor) {
       setBids([]);
       setLoading(false);
@@ -1504,11 +1505,11 @@ function BidsPanel({ user }: { user: GcscUser }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isContractor]);
 
   useEffect(() => {
     void loadBids();
-  }, [user.id, user.role]);
+  }, [loadBids]);
 
   const filtered = useMemo(() => {
     if (filter === 'All') return bids;
@@ -2042,6 +2043,7 @@ function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: GcscUser) 
 
 type FinancingProduct = {
   id: string;
+  productType: GcscFinancingProductType;
   title: string;
   bestFor: AccountRole;
   icon: typeof DollarSign;
@@ -2059,6 +2061,7 @@ type FinancingProduct = {
 const financingProducts: FinancingProduct[] = [
   {
     id: 'escrow-advance',
+    productType: 'escrow_advance',
     title: 'Escrow-Backed Contractor Advance',
     bestFor: 'contractor',
     icon: Wallet,
@@ -2078,6 +2081,7 @@ const financingProducts: FinancingProduct[] = [
   },
   {
     id: 'token-credit',
+    productType: 'token_credit',
     title: 'Token-Collateral Equipment Credit',
     bestFor: 'contractor',
     icon: Coins,
@@ -2097,6 +2101,7 @@ const financingProducts: FinancingProduct[] = [
   },
   {
     id: 'claimbridge',
+    productType: 'claimbridge',
     title: 'ClaimBridge Emergency Advance',
     bestFor: 'homeowner',
     icon: ShieldCheck,
@@ -2116,6 +2121,7 @@ const financingProducts: FinancingProduct[] = [
   },
   {
     id: 'working-capital',
+    productType: 'working_capital',
     title: 'Contract-Backed Working Capital',
     bestFor: 'contractor',
     icon: ClipboardList,
@@ -2138,6 +2144,9 @@ const financingProducts: FinancingProduct[] = [
 function LoansFinancingPanel({ user }: { user: GcscUser }) {
   const profile = getProfile(user);
   const selectedState = String(profile.state || '').trim().toUpperCase();
+  const hasSavedProfile = Boolean(user.full_name || profile.companyName || profile.propertyAddress);
+  const [precheckStatus, setPrecheckStatus] = useState('');
+  const [savingPrecheck, setSavingPrecheck] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(financingProducts[0].id);
   const role = user.role === 'contractor' ? 'contractor' : 'homeowner';
   const orderedProducts = useMemo(() => {
@@ -2149,6 +2158,27 @@ function LoansFinancingPanel({ user }: { user: GcscUser }) {
   }, [role]);
   const selectedProduct = financingProducts.find((product) => product.id === selectedProductId) || orderedProducts[0];
   const DetailIcon = selectedProduct.icon;
+  const saveDemoPrecheck = async () => {
+    setSavingPrecheck(true);
+    setPrecheckStatus('');
+    try {
+      const response = await api.createFinancingPrecheck({
+        productType: selectedProduct.productType,
+        state: selectedState,
+        safetyAcknowledged: true,
+        context: {
+          productTitle: selectedProduct.title,
+          readinessOnly: true,
+          noLiveLending: true,
+        },
+      });
+      setPrecheckStatus(response.message || 'Demo/MVP financing precheck saved for admin review.');
+    } catch (err) {
+      setPrecheckStatus(err instanceof Error ? err.message : 'Could not save demo financing precheck.');
+    } finally {
+      setSavingPrecheck(false);
+    }
+  };
 
   return (
     <motion.div
@@ -2179,6 +2209,44 @@ function LoansFinancingPanel({ user }: { user: GcscUser }) {
               SmartContractor Financing helps contractors and homeowners understand future options that may connect to escrow, a signed contract, an insurance claim, or GCSC token collateral. These financial products are not live money products yet. Each workflow requires eligibility checks, documents, risk review, state rules, admin/legal/provider review, security review, and final approval.
             </p>
           </div>
+        </div>
+      </div>
+
+      <div className="glass-card p-5">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-[#7B2FF7]">Readiness checklist</p>
+            <h3 className="mt-1 font-outfit font-bold text-[1.15rem] text-[#0F172A]">Before any future financing review</h3>
+            <p className="mt-2 text-sm leading-6 text-[#475569]">
+              This checklist helps you understand what SmartContractor would need before a real provider, legal, or admin review.
+            </p>
+          </div>
+          <span className="rounded-full bg-[#FEF2F2] px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#991B1B]">
+            Not live lending
+          </span>
+        </div>
+        <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3">
+          {[
+            { label: 'Profile and role saved', complete: hasSavedProfile },
+            { label: 'State selected', complete: Boolean(selectedState) },
+            { label: 'Contract, escrow, claim, or collateral context added', complete: false },
+            { label: 'Admin review required', complete: false },
+            { label: 'Not live lending', complete: true },
+          ].map((item) => (
+            <div key={item.label} className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-4">
+              <div className="flex items-center gap-2">
+                {item.complete ? (
+                  <CheckCircle2 size={17} className="text-[#10B981] shrink-0" />
+                ) : (
+                  <Clock size={17} className="text-[#F59E0B] shrink-0" />
+                )}
+                <p className="text-sm font-semibold text-[#0F172A]">{item.label}</p>
+              </div>
+              <p className="mt-2 text-xs leading-5 text-[#64748B]">
+                {item.complete ? 'Ready for demo review.' : 'Needed before a future real-money workflow.'}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -2251,6 +2319,21 @@ function LoansFinancingPanel({ user }: { user: GcscUser }) {
               ]}
             />
             <DetailBlock title="Current status" lines={[selectedProduct.status, selectedProduct.rule]} />
+            <div className="rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF] p-4">
+              <p className="font-outfit font-bold text-[#1E3A8A]">Demo precheck</p>
+              <p className="mt-2 text-sm leading-6 text-[#1E3A8A]">
+                Save this selected workflow as a demo/MVP precheck for future admin review. This does not request live funds or create a credit approval.
+              </p>
+              <button
+                type="button"
+                onClick={saveDemoPrecheck}
+                disabled={savingPrecheck}
+                className="mt-4 inline-flex items-center justify-center rounded-full bg-[#7B2FF7] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {savingPrecheck ? 'Saving...' : 'Save demo precheck'}
+              </button>
+              {precheckStatus && <p className="mt-3 text-sm leading-6 text-[#1E3A8A]">{precheckStatus}</p>}
+            </div>
             <div className="rounded-2xl border border-[#FCA5A5] bg-[#FEF2F2] p-4">
               <p className="font-outfit font-bold text-[#991B1B]">Important safety notice</p>
               <p className="mt-2 text-sm leading-6 text-[#991B1B]">
@@ -2723,7 +2806,7 @@ function AdminDocumentReviewPanel() {
   const [reviewNotes, setReviewNotes] = useState<Record<number, string>>({});
   const [status, setStatus] = useState('');
 
-  const loadDocuments = async () => {
+  const loadDocuments = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.getAdminDocuments(filter);
@@ -2734,11 +2817,11 @@ function AdminDocumentReviewPanel() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
 
   useEffect(() => {
     loadDocuments();
-  }, [filter]);
+  }, [loadDocuments]);
 
   const reviewDocument = async (document: GcscUserDocument, reviewStatus: 'approved' | 'rejected') => {
     const manualNote = (reviewNotes[document.id] || '').trim();
@@ -2934,13 +3017,115 @@ function metadataSummary(event: GcscAuditEvent) {
     .join(' | ');
 }
 
+function financingProductLabel(productType: string) {
+  const labels: Record<string, string> = {
+    escrow_advance: 'Escrow-Backed Contractor Advance',
+    token_credit: 'Token-Collateral Equipment Credit',
+    claimbridge: 'ClaimBridge Emergency Advance',
+    working_capital: 'Contract-Backed Working Capital',
+  };
+  return labels[productType] || productType;
+}
+
+function AdminFinancingPrechecksPanel() {
+  const [prechecks, setPrechecks] = useState<GcscFinancingPrecheck[]>([]);
+  const [statusFilter, setStatusFilter] = useState('demo_precheck');
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState('');
+
+  const loadPrechecks = useCallback(async () => {
+    setLoading(true);
+    setStatus('');
+    try {
+      const response = await api.getAdminFinancingPrechecks(statusFilter);
+      setPrechecks(response.prechecks || []);
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : 'Could not load financing prechecks');
+    } finally {
+      setLoading(false);
+    }
+  }, [statusFilter]);
+
+  useEffect(() => {
+    void loadPrechecks();
+  }, [loadPrechecks]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+      className="space-y-6"
+    >
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wider text-[#7B2FF7]">Financing Review</p>
+        <h2 className="mt-2 font-outfit font-bold text-[1.75rem] gradient-text">Demo financing prechecks</h2>
+        <p className="mt-2 max-w-[760px] text-sm leading-6 text-[#475569]">
+          Review user interest in future financing workflows. These records are admin review signals only and do not create a loan offer, approval, token lock, insurance assignment, or repayment routing.
+        </p>
+      </div>
+
+      <div className="glass-card p-5">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="font-outfit font-bold text-[#0F172A]">Precheck filter</p>
+            <p className="text-sm text-[#64748B]">Default view shows demo/MVP prechecks awaiting review.</p>
+          </div>
+          <select
+            value={statusFilter}
+            onChange={(event) => setStatusFilter(event.target.value)}
+            className="rounded-xl border border-[#E2E8F0] bg-white px-4 py-2 text-sm font-semibold text-[#475569]"
+          >
+            <option value="demo_precheck">Demo precheck</option>
+            <option value="">All statuses</option>
+          </select>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="glass-card p-8 text-center text-[#64748B]">Loading financing prechecks...</div>
+      ) : prechecks.length === 0 ? (
+        <div className="glass-card p-8 text-center text-[#64748B]">No financing prechecks found.</div>
+      ) : (
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+          {prechecks.map((precheck) => (
+            <div key={precheck.id} className="glass-card p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-[#7B2FF7]">{precheck.status}</p>
+                  <h3 className="mt-1 font-outfit font-bold text-[1.1rem] text-[#0F172A]">{financingProductLabel(precheck.product_type)}</h3>
+                  <p className="mt-2 text-sm text-[#64748B]">
+                    {precheck.user?.full_name || 'Unknown user'} · {precheck.user?.companyName || precheck.user?.businessName || precheck.user?.role || precheck.role}
+                  </p>
+                </div>
+                <span className="rounded-full bg-[#EFF6FF] px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#1E3A8A]">
+                  {precheck.state || 'No state'}
+                </span>
+              </div>
+              <div className="mt-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-4">
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#64748B]">Context</p>
+                <p className="mt-2 text-sm leading-6 text-[#475569]">{JSON.stringify(precheck.context || {})}</p>
+              </div>
+              <p className="mt-4 text-xs leading-5 text-[#991B1B]">
+                Admin/legal/provider review required before any real-money activation. This is not live lending.
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {status && <p className="text-sm text-[#EF4444]">{status}</p>}
+    </motion.div>
+  );
+}
+
 function AdminAuditLogPanel() {
   const [events, setEvents] = useState<GcscAuditEvent[]>([]);
   const [action, setAction] = useState('');
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('');
 
-  const loadEvents = async () => {
+  const loadEvents = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.getAdminAuditEvents({ action, limit: 100 });
@@ -2951,11 +3136,11 @@ function AdminAuditLogPanel() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [action]);
 
   useEffect(() => {
     loadEvents();
-  }, [action]);
+  }, [loadEvents]);
 
   const filters = [
     { value: '', label: 'All' },
@@ -2964,6 +3149,7 @@ function AdminAuditLogPanel() {
     { value: 'document.reviewed', label: 'Reviewed' },
     { value: 'wallet.connected', label: 'Wallet' },
     { value: 'bid.accepted', label: 'Accepted Bids' },
+    { value: 'financing.precheck.created', label: 'Financing' },
   ];
 
   return (
@@ -3204,6 +3390,8 @@ export default function Dashboard() {
         return <CompliancePanel user={user} />;
       case 'admin-review':
         return user.role === 'admin' ? <AdminDocumentReviewPanel /> : <ProjectsPanel user={user} />;
+      case 'admin-financing':
+        return user.role === 'admin' ? <AdminFinancingPrechecksPanel /> : <ProjectsPanel user={user} />;
       case 'admin-audit':
         return user.role === 'admin' ? <AdminAuditLogPanel /> : <ProjectsPanel user={user} />;
       case 'wallet':
