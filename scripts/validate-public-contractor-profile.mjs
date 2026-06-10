@@ -1,9 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { readDashboardSource } from './lib/dashboard-source.mjs';
 
 const root = process.cwd();
 const app = fs.readFileSync(path.join(root, 'src/App.tsx'), 'utf8');
-const dashboard = fs.readFileSync(path.join(root, 'src/pages/Dashboard.tsx'), 'utf8');
+const dashboard = readDashboardSource(root);
 const api = fs.readFileSync(path.join(root, 'src/services/api.ts'), 'utf8');
 const pagePath = path.join(root, 'src/pages/ContractorProfile.tsx');
 const page = fs.existsSync(pagePath) ? fs.readFileSync(pagePath, 'utf8') : '';

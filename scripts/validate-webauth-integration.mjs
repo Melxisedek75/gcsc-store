@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { readDashboardSource } from './lib/dashboard-source.mjs';
 
 const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
@@ -7,7 +8,7 @@ const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const packageJson = JSON.parse(read('package.json'));
 const webauth = read('src/services/webauth.ts');
 const walletPage = read('src/pages/Wallet.tsx');
-const dashboard = read('src/pages/Dashboard.tsx');
+const dashboard = readDashboardSource(root);
 
 const checks = [
   {

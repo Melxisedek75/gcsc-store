@@ -1,8 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { readDashboardSource } from './lib/dashboard-source.mjs';
 
 const root = process.cwd();
-const dashboard = fs.readFileSync(path.join(root, 'src/pages/Dashboard.tsx'), 'utf8');
+const dashboard = readDashboardSource(root);
 const api = fs.readFileSync(path.join(root, 'src/services/api.ts'), 'utf8');
 
 const checks = [

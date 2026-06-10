@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { readDashboardSource } from './lib/dashboard-source.mjs';
 
 const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
@@ -17,7 +18,7 @@ const checks = [
 ];
 
 const service = checks[0].ok ? read('src/services/xprSettlement.ts') : '';
-const dashboard = read('src/pages/Dashboard.tsx');
+const dashboard = readDashboardSource(root);
 const webauth = read('src/services/webauth.ts');
 
 checks.push(

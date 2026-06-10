@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { readDashboardSource } from './lib/dashboard-source.mjs';
 
 const root = process.cwd()
 const files = [
@@ -8,7 +9,6 @@ const files = [
   'src/pages/Home.tsx',
   'src/pages/About.tsx',
   'src/pages/Pricing.tsx',
-  'src/pages/Dashboard.tsx',
 ]
 
 const bannedClaims = [
@@ -44,6 +44,13 @@ for (const file of files) {
     if (source.includes(claim)) {
       issues.push(`${file}: unsupported claim still present: ${claim}`)
     }
+  }
+}
+
+const dashboardSource = readDashboardSource(root)
+for (const claim of bannedClaims) {
+  if (dashboardSource.includes(claim)) {
+    issues.push(`src/pages/dashboard: unsupported claim still present: ${claim}`)
   }
 }
 

@@ -1,11 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { readDashboardSource } from './lib/dashboard-source.mjs';
 
 const root = process.cwd();
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 
 const api = read('src/services/api.ts');
-const dashboard = read('src/pages/Dashboard.tsx');
+const dashboard = readDashboardSource(root);
 const settlement = read('src/services/xprSettlement.ts');
 const pkg = read('package.json');
 
