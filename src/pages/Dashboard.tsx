@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, type GcscUser } from '../services/api';
@@ -22,17 +22,20 @@ import {
 import { getProfile, initials } from './dashboard/format';
 import type { Section } from './dashboard/types';
 import { AccountAccess } from './dashboard/AccountAccess';
-import { ProjectsPanel } from './dashboard/ProjectsPanel';
-import { EstimatorPanel } from './dashboard/EstimatorPanel';
-import { BidsPanel } from './dashboard/BidsPanel';
-import { LoansFinancingPanel } from './dashboard/LoansFinancingPanel';
-import { ProfilePanel } from './dashboard/ProfilePanel';
-import { CompliancePanel } from './dashboard/CompliancePanel';
-import { AdminDocumentReviewPanel } from './dashboard/AdminDocumentReviewPanel';
-import { AdminFinancingPrechecksPanel } from './dashboard/AdminFinancingPrechecksPanel';
-import { AdminAuditLogPanel } from './dashboard/AdminAuditLogPanel';
-import { WalletPanel } from './dashboard/WalletPanel';
-import { TokenRedirect } from './dashboard/TokenRedirect';
+
+// Authenticated panels are code-split so each dashboard section loads on demand.
+// This also keeps recharts (used only by the estimator) out of the main chunk.
+const ProjectsPanel = lazy(() => import('./dashboard/ProjectsPanel').then((m) => ({ default: m.ProjectsPanel })));
+const EstimatorPanel = lazy(() => import('./dashboard/EstimatorPanel').then((m) => ({ default: m.EstimatorPanel })));
+const BidsPanel = lazy(() => import('./dashboard/BidsPanel').then((m) => ({ default: m.BidsPanel })));
+const LoansFinancingPanel = lazy(() => import('./dashboard/LoansFinancingPanel').then((m) => ({ default: m.LoansFinancingPanel })));
+const ProfilePanel = lazy(() => import('./dashboard/ProfilePanel').then((m) => ({ default: m.ProfilePanel })));
+const CompliancePanel = lazy(() => import('./dashboard/CompliancePanel').then((m) => ({ default: m.CompliancePanel })));
+const AdminDocumentReviewPanel = lazy(() => import('./dashboard/AdminDocumentReviewPanel').then((m) => ({ default: m.AdminDocumentReviewPanel })));
+const AdminFinancingPrechecksPanel = lazy(() => import('./dashboard/AdminFinancingPrechecksPanel').then((m) => ({ default: m.AdminFinancingPrechecksPanel })));
+const AdminAuditLogPanel = lazy(() => import('./dashboard/AdminAuditLogPanel').then((m) => ({ default: m.AdminAuditLogPanel })));
+const WalletPanel = lazy(() => import('./dashboard/WalletPanel').then((m) => ({ default: m.WalletPanel })));
+const TokenRedirect = lazy(() => import('./dashboard/TokenRedirect').then((m) => ({ default: m.TokenRedirect })));
 
 const navItems: { key: Section; label: string; icon: typeof LayoutDashboard; adminOnly?: boolean }[] = [
   { key: 'projects', label: 'Projects', icon: LayoutDashboard },
@@ -341,7 +344,15 @@ export default function Dashboard() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
             >
-              {renderPanel()}
+              <Suspense
+                fallback={
+                  <div className="flex items-center justify-center py-20 text-[#7B2FF7]">
+                    <Loader2 size={22} className="animate-spin" />
+                  </div>
+                }
+              >
+                {renderPanel()}
+              </Suspense>
             </motion.div>
           </AnimatePresence>
         </div>
