@@ -57,6 +57,24 @@ Public reads (`gcsc_list_projects`, `gcsc_get_project`, `gcsc_get_contractor_pub
 
 \* `/token/*` routes returned 404 on the production backend at build time (2026-06-10) — tools are wired for when the backend ships them.
 
+## Test
+
+```bash
+npm run check   # builds, then runs a stdio smoke test (handshake + 26 tools + schema check)
+```
+
+`SMOKE PASS: 26 tools, handshake + schemas OK` means the server is wired correctly. No network/API calls are made by the smoke test.
+
+## Troubleshooting
+
+| Symptom | Cause / Fix |
+|---------|-------------|
+| `claude mcp list` shows the server as `✗ Failed to connect` right after adding | First `npx`/`node` start can exceed the health-check timeout while the package resolves. Re-run `claude mcp list` once; if it persists, run `npm run check` to confirm the build is healthy. |
+| Tool returns `Not authenticated: set GCSC_API_TOKEN or call gcsc_login first` | The tool needs auth. Set `GCSC_API_TOKEN` in the MCP `env`, or call `gcsc_login` first. Public reads work without it. |
+| Tool returns `...role does not allow this action (admin tools need an admin account)` | A `gcsc_admin_*` tool was called with a non-admin token. Log in as an admin. |
+| `Not found` on `gcsc_get_token_*` | Backend `/token/*` routes are not deployed yet (see note above), not an MCP error. |
+| `built server not found ... run "npm run build"` | Run `npm run build` (or `npm run check`, which builds first). |
+
 ## Deliberately not covered
 
 Registration with SMS/email codes, document file upload (base64 payloads), and WebAuth wallet signing are human-interactive flows and stay in the web dashboard.
