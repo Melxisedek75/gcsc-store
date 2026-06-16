@@ -172,3 +172,78 @@
     transform: scale(1.05);
   }
 }
+
+/* ── Kimi marketing design utilities (dark premium surfaces) ── */
+@layer components {
+  .brand-gradient {
+    background: linear-gradient(135deg, #0072F5 0%, #7C3AED 100%);
+  }
+
+  .glow-gradient {
+    background: linear-gradient(135deg, #00C6FF 0%, #7C3AED 100%);
+  }
+
+  .brand-gradient-text {
+    background: linear-gradient(135deg, #0072F5 0%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-gradient-text {
+    background: linear-gradient(135deg, #00C6FF 0%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .mesh-gradient-bg {
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(0,114,245,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 70%, rgba(124,58,237,0.08) 0%, transparent 60%);
+  }
+
+  .gradient-badge {
+    background: linear-gradient(135deg, rgba(0,114,245,0.15), rgba(124,58,237,0.15));
+    border: 1px solid rgba(0,114,245,0.3);
+    color: #4DA3FF;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 8px 16px;
+    border-radius: 100px;
+  }
+
+  .star-border-wrapper {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .star-border-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: conic-gradient(from 0deg, #0072F5, #7C3AED, #00C6FF, #0072F5);
+    animation: spin 4s linear infinite;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .star-border-content {
+    position: relative;
+    z-index: 1;
+    background: #070B14;
+    border-radius: 20px;
+    height: 100%;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

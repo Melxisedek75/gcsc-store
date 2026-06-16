@@ -13,6 +13,17 @@ module.exports = {
         cyan: '#00E5FF',
         white: '#F8FAFF',
         silver: '#A0AEC0',
+        // Kimi marketing palette (dark premium surfaces)
+        'deep-navy': '#070B14',
+        navy: '#0D1220',
+        slate: '#151B2B',
+        'muted-blue': '#5B6E8A',
+        'soft-white': '#E2E8F0',
+        'brand-blue': '#0072F5',
+        'light-blue': '#4DA3FF',
+        'electric-blue': '#00C6FF',
+        'vivid-violet': '#7C3AED',
+        'deep-violet': '#4C1D95',
         surface: '#F1F5F9',
         'surface-alt': '#E2E8F0',
         glass: 'rgba(255, 255, 255, 0.85)',
@@ -58,6 +69,9 @@ module.exports = {
       fontFamily: {
         outfit: ['Outfit', 'system-ui', 'sans-serif'],
         inter: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
       fontSize: {
         'hero': '4.5rem',
@@ -139,6 +153,18 @@ module.exports = {
           "90%": { opacity: "1" },
           "100%": { transform: "translateY(-100vh) translateX(20px)", opacity: "0" },
         },
+        spin: {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        "bounce-chevron": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(8px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -148,6 +174,10 @@ module.exports = {
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
         "gradient-shift": "gradientMove 8s ease infinite",
         "float-up": "float-up 15s linear infinite",
+        "spin-slow": "spin 4s linear infinite",
+        "spin-slower": "spin 8s linear infinite",
+        marquee: "marquee 30s linear infinite",
+        "bounce-chevron": "bounce-chevron 1.5s ease-in-out infinite",
       },
     },
   },

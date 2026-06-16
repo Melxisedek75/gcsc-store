@@ -1,7 +1,8 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router'
+import { Routes, Route, Outlet } from 'react-router'
 import { Loader2 } from 'lucide-react'
 import Layout from './components/Layout'
+import MarketingLayout from './components/MarketingLayout'
 import Home from './pages/Home'
 
 const Pricing = lazy(() => import('./pages/Pricing'))
@@ -21,22 +22,44 @@ function PageLoader() {
   )
 }
 
-export default function App() {
+// Premium dark marketing chrome (Kimi design)
+function MarketingShell() {
+  return (
+    <MarketingLayout>
+      <Suspense fallback={<PageLoader />}>
+        <Outlet />
+      </Suspense>
+    </MarketingLayout>
+  )
+}
+
+// Functional app chrome (Dashboard / Wallet / profiles)
+function AppShell() {
   return (
     <Layout>
       <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/security" element={<Security />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/contractors/:id" element={<ContractorProfile />} />
-          <Route path="/token" element={<Token />} />
-          <Route path="/wallet" element={<Wallet />} />
-        </Routes>
+        <Outlet />
       </Suspense>
     </Layout>
+  )
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route element={<MarketingShell />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/security" element={<Security />} />
+        <Route path="/contact" element={<Contact />} />
+      </Route>
+      <Route element={<AppShell />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/contractors/:id" element={<ContractorProfile />} />
+        <Route path="/token" element={<Token />} />
+        <Route path="/wallet" element={<Wallet />} />
+      </Route>
+    </Routes>
   )
 }
