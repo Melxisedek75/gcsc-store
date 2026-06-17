@@ -262,6 +262,18 @@ export default function Pricing() {
 
   return (
     <div className="relative min-h-[100dvh] bg-void overflow-hidden">
+      {/* Photographic backdrop */}
+      <div
+        className="absolute inset-x-0 top-0 h-[80vh] z-0 pointer-events-none"
+        style={{
+          backgroundImage: 'url(/bg_features.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center top',
+          opacity: 0.12,
+          maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
+        }}
+      />
       {/* Subtle mesh gradient background */}
       <div className="absolute inset-0 mesh-gradient-bg pointer-events-none" />
 

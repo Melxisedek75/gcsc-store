@@ -312,6 +312,16 @@ export default function About() {
       {/* HERO                                                          */}
       {/* ============================================================ */}
       <section className="relative min-h-[100dvh] flex flex-col items-center justify-center px-6 md:px-12 overflow-hidden">
+        {/* Photographic backdrop */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            backgroundImage: 'url(/scene_family_modern.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.14,
+          }}
+        />
         {/* Mesh gradient background */}
         <div
           className="absolute inset-0 z-0"

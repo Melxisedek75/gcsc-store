@@ -206,7 +206,16 @@ export default function Security() {
             'radial-gradient(ellipse at 20% 30%, rgba(0,114,245,0.12) 0%, transparent 60%), radial-gradient(ellipse at 80% 70%, rgba(124,58,237,0.08) 0%, transparent 60%)',
         }}
       >
-        <div className="max-w-[1280px] mx-auto px-6 md:px-12 py-[120px] md:py-[160px] text-center">
+        <div
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            backgroundImage: 'url(/bg_security.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.14,
+          }}
+        />
+        <div className="relative z-10 max-w-[1280px] mx-auto px-6 md:px-12 py-[120px] md:py-[160px] text-center">
           <div className="hero-animate inline-block mb-6">
             <span className="gradient-badge">
               <DecryptText text="SECURITY-FIRST ARCHITECTURE" delay={200} />

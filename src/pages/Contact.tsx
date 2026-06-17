@@ -291,6 +291,15 @@ export default function Contact() {
         <div
           className="absolute inset-0 z-0"
           style={{
+            backgroundImage: 'url(/bg_contact.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.16,
+          }}
+        />
+        <div
+          className="absolute inset-0 z-0"
+          style={{
             background:
               'radial-gradient(ellipse at 30% 40%, rgba(0,114,245,0.12) 0%, transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(124,58,237,0.08) 0%, transparent 60%)',
           }}
