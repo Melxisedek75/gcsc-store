@@ -316,7 +316,7 @@ export default function About() {
         <div
           className="absolute inset-0 z-0 pointer-events-none"
           style={{
-            backgroundImage: 'url(/scene_family_modern.png)',
+            backgroundImage: 'url(/scene_family_modern.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.14,

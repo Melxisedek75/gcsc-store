@@ -266,7 +266,7 @@ export default function Pricing() {
       <div
         className="absolute inset-x-0 top-0 h-[80vh] z-0 pointer-events-none"
         style={{
-          backgroundImage: 'url(/bg_features.png)',
+          backgroundImage: 'url(/bg_features.webp)',
           backgroundSize: 'cover',
           backgroundPosition: 'center top',
           opacity: 0.12,

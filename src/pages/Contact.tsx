@@ -291,7 +291,7 @@ export default function Contact() {
         <div
           className="absolute inset-0 z-0"
           style={{
-            backgroundImage: 'url(/bg_contact.png)',
+            backgroundImage: 'url(/bg_contact.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.16,

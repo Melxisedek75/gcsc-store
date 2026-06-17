@@ -209,7 +209,7 @@ export default function Security() {
         <div
           className="absolute inset-0 z-0 pointer-events-none"
           style={{
-            backgroundImage: 'url(/bg_security.png)',
+            backgroundImage: 'url(/bg_security.webp)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.14,
