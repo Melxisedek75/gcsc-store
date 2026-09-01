@@ -190,7 +190,7 @@ function BidComposer({ project, user, onSubmitted }: { project: GcscProject; use
         proposed_timeline_days: Number(form.proposed_timeline_days || project.timeline_days || 30),
         message: signedMessage,
       });
-      setStatus('Bid submitted in XPR after WebAuth signature.');
+      setStatus('Bid submitted. Check WebAuth: the amount should be your bid in XPR, not 0.0001.');
       setForm({ amount: '50', proposed_timeline_days: String(project.timeline_days || 30), message: '' });
       onSubmitted();
     } catch (err) {
@@ -204,7 +204,7 @@ function BidComposer({ project, user, onSubmitted }: { project: GcscProject; use
     <form onSubmit={submit} className="mt-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-4 space-y-3">
       <div>
         <h4 className="font-outfit font-semibold text-[#0F172A]">Submit a bid in XPR</h4>
-        <p className="text-xs text-[#64748B] mt-1">WebAuth must sign a tiny Testnet transfer (0.0001 XPR) before the bid is saved. Amount is XPR, not dollars.</p>
+        <p className="text-xs text-[#64748B] mt-1">WebAuth will send the bid amount in XPR on Testnet (for 50 that is 50.0000 XPR), then the bid is saved.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
@@ -313,14 +313,9 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
   const acceptBid = async (bid: GcscBid) => {
     if (!selectedProject) return;
     setDetailMessage('');
-    if (!bid.contractor_verification?.ready_for_bids) {
-      setDetailMessage('Contractor must be verified before bid acceptance.');
-      return;
-    }
-
     try {
       await api.acceptBid(bid.id);
-      setDetailMessage('Bid accepted. Escrow record created.');
+      setDetailMessage('Bid accepted. Escrow record created. 50 XPR lock is the signed bid transfer on Testnet.');
       await Promise.all([loadDetails(selectedProject.id), loadProjects()]);
     } catch (err) {
       setDetailMessage(err instanceof Error ? err.message : 'Could not accept bid');
@@ -507,7 +502,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
                     const contractor = bid.contractor;
                     const contractorName = contractor?.companyName || contractor?.full_name || `Contractor #${bid.contractor_id}`;
                     const specialties = contractor?.specialties || [];
-                    const canAccept = !!bid.contractor_verification?.ready_for_bids;
+                    const canAccept = bid.status === 'pending';
                     return (
                       <div key={bid.id} className="rounded-2xl border border-[#E2E8F0] p-4 space-y-3">
                         <div className="flex items-start justify-between gap-3">
@@ -560,7 +555,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-50"
                             style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}
                           >
-                            <CheckCircle2 size={14} /> {canAccept ? 'Accept and Create Escrow' : 'Verification Required'}
+                            <CheckCircle2 size={14} /> {canAccept ? 'Accept and Create Escrow' : 'Already handled'}
                           </button>
                         )}
                       </div>
@@ -572,7 +567,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
               ) : (
                 <button
                   onClick={() => setBiddingProjectId(selectedProject.id)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold"
                   style={{ background: 'linear-gradient(135deg, #7B2FF7 0%, #3B6BF7 100%)' }}
                 >
                   <Gavel size={15} /> Prepare Bid
