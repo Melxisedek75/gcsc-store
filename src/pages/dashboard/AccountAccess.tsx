@@ -39,7 +39,7 @@ export function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: Gcs
     setSubmitting(true);
     try {
       const response = mode === 'register'
-        ? await api.register({ ...form, phone: toE164(form.phone), role, verificationMode: 'preferred' })
+        ? await api.register({ ...form, phone: toE164(form.phone), role, verificationMode: 'optional' })
         : await api.login({ email: form.email, password: form.password });
       if (mode === 'register' && response.verification_required) {
         setVerificationPending({
@@ -100,7 +100,7 @@ export function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: Gcs
     setStatus('');
     setSubmitting(true);
     try {
-      const response = await api.register({ ...form, phone: toE164(form.phone), role, verificationMode: 'preferred' });
+      const response = await api.register({ ...form, phone: toE164(form.phone), role, verificationMode: 'optional' });
       if (response.verification_required) {
         setVerificationPending({
           email: form.email,
