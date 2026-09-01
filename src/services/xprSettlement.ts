@@ -125,9 +125,10 @@ export async function signEscrowMilestoneAction(params: SignEscrowMilestoneParam
 export async function signBidIntent(params: { projectId: number; amount: number }): Promise<XprSettlementResult> {
   const connected = await openSigningSession()
 
-  const quantity = '0.0001 XPR'
+  const quantity = `${Number(params.amount || 0).toFixed(4)} XPR`
   const from = connected.wallet.accountName
-  const to = from === 'proton' ? 'eosio' : 'proton'
+  const treasury = import.meta.env.VITE_GCSC_BID_TREASURY || 'ownerstest15'
+  const to = from === treasury ? 'proton' : treasury
   const raw = await connected.session.transact(
     {
       actions: [
