@@ -24,6 +24,7 @@ import {
 import { fieldClass, formatCurrency, projectStatusLabel, bidStatusLabel } from './format';
 import { StatusBadge, ContractorTrustBadge } from './shared';
 import { MilestoneManager } from './MilestoneManager';
+import { signBidIntent } from '../../services/xprSettlement';
 
 function ProjectRequestForm({ onCreated }: { onCreated: (project: GcscProject) => void }) {
   const [form, setForm] = useState({
@@ -79,7 +80,7 @@ function ProjectRequestForm({ onCreated }: { onCreated: (project: GcscProject) =
       <div>
         <h3 className="font-outfit font-semibold text-[#0F172A] text-lg">Post a project</h3>
         <p className="text-sm text-[#64748B] mt-1">
-          Create a real homeowner project in the backend so contractors can bid on it.
+          Budget is in XPR on XPR Network Testnet, not US dollars.
         </p>
       </div>
 
@@ -124,7 +125,7 @@ function ProjectRequestForm({ onCreated }: { onCreated: (project: GcscProject) =
           className={fieldClass}
           type="number"
           min="0"
-          placeholder="Minimum budget"
+          placeholder="Minimum budget, XPR"
           value={form.budget_min}
           onChange={(event) => update('budget_min', event.target.value)}
         />
@@ -132,7 +133,7 @@ function ProjectRequestForm({ onCreated }: { onCreated: (project: GcscProject) =
           className={fieldClass}
           type="number"
           min="0"
-          placeholder="Maximum budget"
+          placeholder="Maximum budget, XPR"
           value={form.budget_max}
           onChange={(event) => update('budget_max', event.target.value)}
         />
@@ -161,8 +162,8 @@ function ProjectRequestForm({ onCreated }: { onCreated: (project: GcscProject) =
   );
 }
 
-function BidComposer({ project, onSubmitted }: { project: GcscProject; onSubmitted: () => void }) {
-  const [form, setForm] = useState({ amount: '', proposed_timeline_days: String(project.timeline_days || 30), message: '' });
+function BidComposer({ project, user, onSubmitted }: { project: GcscProject; user: GcscUser; onSubmitted: () => void }) {
+  const [form, setForm] = useState({ amount: '50', proposed_timeline_days: String(project.timeline_days || 30), message: '' });
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState('');
 
@@ -171,14 +172,26 @@ function BidComposer({ project, onSubmitted }: { project: GcscProject; onSubmitt
     setSaving(true);
     setStatus('');
     try {
+      if (!user.wallet?.accountName) {
+        throw new Error('Connect WebAuth in Dashboard → Wallet first.');
+      }
+      const amount = Number(form.amount || 0);
+      if (!amount || amount <= 0) {
+        throw new Error('Enter a bid amount in XPR.');
+      }
+      setStatus('Confirm the Testnet signature in WebAuth…');
+      const signed = await signBidIntent({ projectId: project.id, amount });
+      const signedMessage = signed.transactionId
+        ? `${form.message || ''} [tx ${signed.transactionId}]`.trim()
+        : form.message;
       await api.submitBid({
         project_id: project.id,
-        amount: Number(form.amount || 0),
+        amount,
         proposed_timeline_days: Number(form.proposed_timeline_days || project.timeline_days || 30),
-        message: form.message,
+        message: signedMessage,
       });
-      setStatus('Bid submitted. You can track it in My Bids.');
-      setForm({ amount: '', proposed_timeline_days: String(project.timeline_days || 30), message: '' });
+      setStatus('Bid submitted in XPR after WebAuth signature.');
+      setForm({ amount: '50', proposed_timeline_days: String(project.timeline_days || 30), message: '' });
       onSubmitted();
     } catch (err) {
       setStatus(err instanceof Error ? err.message : 'Could not submit bid');
@@ -190,15 +203,15 @@ function BidComposer({ project, onSubmitted }: { project: GcscProject; onSubmitt
   return (
     <form onSubmit={submit} className="mt-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-4 space-y-3">
       <div>
-        <h4 className="font-outfit font-semibold text-[#0F172A]">Submit a bid</h4>
-        <p className="text-xs text-[#64748B] mt-1">Your proposal is saved to the backend and becomes visible to the homeowner.</p>
+        <h4 className="font-outfit font-semibold text-[#0F172A]">Submit a bid in XPR</h4>
+        <p className="text-xs text-[#64748B] mt-1">WebAuth must sign a tiny Testnet transfer (0.0001 XPR) before the bid is saved. Amount is XPR, not dollars.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
           className={fieldClass}
           type="number"
           min="1"
-          placeholder="Bid amount"
+          placeholder="Bid amount, XPR"
           value={form.amount}
           onChange={(event) => setForm((current) => ({ ...current, amount: event.target.value }))}
           required
@@ -349,7 +362,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
           <p className="font-inter text-sm text-[#475569] mt-1">
             {isHomeowner
               ? 'Create project requests, review contractor bids, and move accepted work into escrow.'
-              : 'Review homeowner requests and submit real bids through the backend API.'}
+              : 'Review homeowner requests and submit XPR bids signed in WebAuth.'}
           </p>
         </div>
         <div className="relative">
@@ -555,7 +568,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
                   })}
                 </div>
               ) : biddingProjectId === selectedProject.id ? (
-                <BidComposer project={selectedProject} onSubmitted={() => void loadProjects()} />
+                <BidComposer project={selectedProject} user={user} onSubmitted={() => void loadProjects()} />
               ) : (
                 <button
                   onClick={() => setBiddingProjectId(selectedProject.id)}

@@ -34,7 +34,7 @@ async function requestWebAuthSession(options: WebAuthConnectOptions = {}): Promi
 
   const endpoints = options.endpoints?.length
     ? options.endpoints
-    : [import.meta.env.VITE_XPR_RPC_URL || 'https://proton.greymass.com']
+    : [import.meta.env.VITE_XPR_RPC_URL || 'https://test.proton.eosusa.io']
 
   const result = await ProtonWebSDK({
     linkOptions: {

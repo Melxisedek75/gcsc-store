@@ -117,3 +117,48 @@ export async function signEscrowMilestoneAction(params: SignEscrowMilestoneParam
     raw,
   }
 }
+
+export async function signBidIntent(params: { projectId: number; amount: number }): Promise<XprSettlementResult> {
+  const connected = await connectWebAuthSession({
+    chainId: XPR_TESTNET_CHAIN_ID,
+    endpoints: getTestnetEndpoints(),
+  })
+
+  if (!connected) {
+    throw new Error('Connect WebAuth (Testnet) before submitting a bid')
+  }
+
+  const quantity = '0.0001 XPR'
+  const raw = await connected.session.transact(
+    {
+      actions: [
+        {
+          account: 'eosio.token',
+          name: 'transfer',
+          authorization: [
+            {
+              actor: connected.wallet.accountName,
+              permission: connected.wallet.permission,
+            },
+          ],
+          data: {
+            from: connected.wallet.accountName,
+            to: connected.wallet.accountName,
+            quantity,
+            memo: `GCSC bid project ${params.projectId} ${params.amount} XPR`,
+          },
+        },
+      ],
+    },
+    { broadcast: true },
+  )
+
+  return {
+    transactionId: getTransactionId(raw),
+    action: 'submitms',
+    chainId: XPR_TESTNET_CHAIN_ID,
+    contractAccount: 'eosio.token',
+    wallet: connected.wallet,
+    raw,
+  }
+}
