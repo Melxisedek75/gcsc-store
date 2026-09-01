@@ -5,6 +5,19 @@ import { api, type GcscUser } from '../../services/api';
 import { fieldClass } from './format';
 import type { AccountRole } from './types';
 
+function toE164(raw: string): string {
+  const trimmed = raw.trim();
+  if (trimmed.startsWith('+')) {
+    const digits = '+' + trimmed.slice(1).replace(/\D/g, '');
+    return digits;
+  }
+  const digits = trimmed.replace(/\D/g, '');
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`;
+  if (digits.length > 11) return `+${digits}`;
+  return digits ? `+${digits}` : '';
+}
+
 export function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: GcscUser) => void }) {
   const [mode, setMode] = useState<'register' | 'login'>('register');
   const [role, setRole] = useState<AccountRole>('contractor');
@@ -26,12 +39,12 @@ export function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: Gcs
     setSubmitting(true);
     try {
       const response = mode === 'register'
-        ? await api.register({ ...form, role, verificationMode: 'preferred' })
+        ? await api.register({ ...form, phone: toE164(form.phone), role, verificationMode: 'preferred' })
         : await api.login({ email: form.email, password: form.password });
       if (mode === 'register' && response.verification_required) {
         setVerificationPending({
           email: form.email,
-          phone: form.phone,
+          phone: toE164(form.phone),
           role,
           channel: response.verification_channel || registrationChannel,
         });
@@ -44,7 +57,7 @@ export function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: Gcs
       if (mode === 'register') {
         sessionStorage.setItem('gcsc_registration_notice', JSON.stringify({
           email: form.email,
-          phone: form.phone,
+          phone: toE164(form.phone),
           createdAt: new Date().toISOString(),
         }));
       }
@@ -87,11 +100,11 @@ export function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: Gcs
     setStatus('');
     setSubmitting(true);
     try {
-      const response = await api.register({ ...form, role, verificationMode: 'preferred' });
+      const response = await api.register({ ...form, phone: toE164(form.phone), role, verificationMode: 'preferred' });
       if (response.verification_required) {
         setVerificationPending({
           email: form.email,
-          phone: form.phone,
+          phone: toE164(form.phone),
           role,
           channel: response.verification_channel || registrationChannel,
         });
@@ -251,7 +264,7 @@ export function AccountAccess({ onAuthenticated }: { onAuthenticated: (user: Gcs
           {mode === 'register' && !verificationPending && (
             <input
               className={fieldClass}
-              placeholder="Phone"
+              placeholder="Phone +1 425 555 0100"
               value={form.phone}
               onChange={(e) => setForm((current) => ({ ...current, phone: e.target.value }))}
               required={registrationChannel === 'sms'}
