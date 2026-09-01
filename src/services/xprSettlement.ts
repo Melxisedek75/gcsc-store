@@ -126,6 +126,8 @@ export async function signBidIntent(params: { projectId: number; amount: number 
   const connected = await openSigningSession()
 
   const quantity = '0.0001 XPR'
+  const from = connected.wallet.accountName
+  const to = from === 'proton' ? 'eosio' : 'proton'
   const raw = await connected.session.transact(
     {
       actions: [
@@ -134,13 +136,13 @@ export async function signBidIntent(params: { projectId: number; amount: number 
           name: 'transfer',
           authorization: [
             {
-              actor: connected.wallet.accountName,
+              actor: from,
               permission: connected.wallet.permission,
             },
           ],
           data: {
-            from: connected.wallet.accountName,
-            to: connected.wallet.accountName,
+            from,
+            to,
             quantity,
             memo: `GCSC bid project ${params.projectId} ${params.amount} XPR`,
           },
