@@ -23,6 +23,14 @@ import { getProfile, initials } from './dashboard/format';
 import type { Section } from './dashboard/types';
 import { AccountAccess } from './dashboard/AccountAccess';
 
+const PLATFORM_ADMIN_EMAILS = ['serhiykbusiness@gmail.com'];
+
+function isAdminUser(user: GcscUser | null | undefined) {
+  if (!user) return false;
+  if (user.role === 'admin') return true;
+  return PLATFORM_ADMIN_EMAILS.includes(String(user.email || '').trim().toLowerCase());
+}
+
 // Authenticated panels are code-split so each dashboard section loads on demand.
 // This also keeps recharts (used only by the estimator) out of the main chunk.
 const ProjectsPanel = lazy(() => import('./dashboard/ProjectsPanel').then((m) => ({ default: m.ProjectsPanel })));
@@ -117,11 +125,11 @@ export default function Dashboard() {
       case 'compliance':
         return <CompliancePanel user={user} />;
       case 'admin-review':
-        return user.role === 'admin' ? <AdminDocumentReviewPanel /> : <ProjectsPanel user={user} />;
+        return isAdminUser(user) ? <AdminDocumentReviewPanel /> : <ProjectsPanel user={user} />;
       case 'admin-financing':
-        return user.role === 'admin' ? <AdminFinancingPrechecksPanel /> : <ProjectsPanel user={user} />;
+        return isAdminUser(user) ? <AdminFinancingPrechecksPanel /> : <ProjectsPanel user={user} />;
       case 'admin-audit':
-        return user.role === 'admin' ? <AdminAuditLogPanel /> : <ProjectsPanel user={user} />;
+        return isAdminUser(user) ? <AdminAuditLogPanel /> : <ProjectsPanel user={user} />;
       case 'wallet':
         return user ? <WalletPanel user={user} onUserChange={setUser} /> : null;
       case 'token':
@@ -147,11 +155,10 @@ export default function Dashboard() {
   }
 
   const profile = getProfile(user);
-  const visibleNavItems = navItems.filter((item) => !item.adminOnly || user.role === 'admin');
+  const visibleNavItems = navItems.filter((item) => !item.adminOnly || isAdminUser(user));
 
   return (
     <div className="min-h-[100dvh] bg-white flex">
-      {/* Desktop Sidebar */}
       <aside
         className="hidden lg:flex flex-col w-[240px] shrink-0 border-r border-[#E2E8F0] bg-[#F8FAFC] fixed left-0 top-[72px] bottom-0 overflow-y-auto z-40"
       >
@@ -181,11 +188,7 @@ export default function Dashboard() {
               </button>
             );
           })}
-
-          {/* Divider */}
           <div className="my-3 border-t border-[#E2E8F0]" />
-
-          {/* Token link */}
           <Link
             to="/token"
             className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-[#475569] hover:bg-[rgba(123,47,247,0.06)] hover:text-[#7B2FF7] transition-all duration-200"
@@ -195,8 +198,6 @@ export default function Dashboard() {
             <ChevronRight size={14} className="ml-auto text-[#94A3B8]" />
           </Link>
         </nav>
-
-        {/* Sidebar Footer */}
         <div className="px-4 py-4 border-t border-[#E2E8F0]">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#3B6BF7] flex items-center justify-center overflow-hidden">
@@ -208,7 +209,7 @@ export default function Dashboard() {
             </div>
             <div className="overflow-hidden">
               <p className="text-sm font-medium text-[#0F172A] truncate">{user.fullName || user.full_name || user.email}</p>
-              <p className="text-xs text-[#94A3B8] truncate">{user.role === 'contractor' ? 'Builder account' : 'Owner account'}</p>
+              <p className="text-xs text-[#94A3B8] truncate">{isAdminUser(user) ? 'Admin account' : user.role === 'contractor' ? 'Builder account' : 'Owner account'}</p>
             </div>
           </div>
           <button
@@ -220,8 +221,6 @@ export default function Dashboard() {
           </button>
         </div>
       </aside>
-
-      {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <>
@@ -292,10 +291,7 @@ export default function Dashboard() {
           </>
         )}
       </AnimatePresence>
-
-      {/* Main Content */}
       <main className="flex-1 lg:ml-[240px] min-w-0">
-        {/* Mobile Header */}
         <div className="lg:hidden flex items-center gap-3 px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC] sticky top-0 z-30">
           <button
             onClick={() => setMobileMenuOpen(true)}
@@ -307,7 +303,6 @@ export default function Dashboard() {
             {visibleNavItems.find((n) => n.key === activeSection)?.label || 'Dashboard'}
           </span>
         </div>
-
         <div className="container-padding py-8 max-w-[1200px]">
           {registrationNotice && (
             <div className="mb-6 rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF] p-5">
