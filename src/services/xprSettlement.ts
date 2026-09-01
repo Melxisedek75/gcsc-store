@@ -79,15 +79,19 @@ function buildMilestoneData(params: SignEscrowMilestoneParams): Record<string, n
   }
 }
 
-export async function signEscrowMilestoneAction(params: SignEscrowMilestoneParams): Promise<XprSettlementResult> {
+async function openSigningSession() {
   const connected = await connectWebAuthSession({
     chainId: XPR_TESTNET_CHAIN_ID,
     endpoints: getTestnetEndpoints(),
   })
-
   if (!connected) {
-    throw new Error('Connect WebAuth before signing a testnet escrow action')
+    throw new Error('Connect WebAuth (Testnet) first. Allow popups for gcsc.store.')
   }
+  return connected
+}
+
+export async function signEscrowMilestoneAction(params: SignEscrowMilestoneParams): Promise<XprSettlementResult> {
+  const connected = await openSigningSession()
 
   const raw = await connected.session.transact(
     {
@@ -119,14 +123,7 @@ export async function signEscrowMilestoneAction(params: SignEscrowMilestoneParam
 }
 
 export async function signBidIntent(params: { projectId: number; amount: number }): Promise<XprSettlementResult> {
-  const connected = await connectWebAuthSession({
-    chainId: XPR_TESTNET_CHAIN_ID,
-    endpoints: getTestnetEndpoints(),
-  })
-
-  if (!connected) {
-    throw new Error('Connect WebAuth (Testnet) before submitting a bid')
-  }
+  const connected = await openSigningSession()
 
   const quantity = '0.0001 XPR'
   const raw = await connected.session.transact(
