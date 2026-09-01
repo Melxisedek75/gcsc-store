@@ -31,8 +31,8 @@ export function CompliancePanel({ user }: { user: GcscUser }) {
     const file = event.target.files?.[0];
     event.target.value = '';
     if (!file) return;
-    if (file.size > 1500000) {
-      setStatus('Document file is too large. Please use a PDF or image under 1.5MB.');
+    if (file.size > 10 * 1024 * 1024) {
+      setStatus('Document file is too large. Please use a PDF or image under 10MB.');
       return;
     }
 
@@ -134,7 +134,7 @@ export function CompliancePanel({ user }: { user: GcscUser }) {
           <div className="flex items-center justify-between gap-4 mb-5">
             <div>
               <h3 className="font-outfit font-bold text-[1.25rem] gradient-text">Required Documents</h3>
-              <p className="text-sm text-[#64748B] mt-1">PDF, PNG, JPG, or WEBP under 1.5MB per document.</p>
+              <p className="text-sm text-[#64748B] mt-1">PDF, PNG, JPG, or WEBP under 10MB per document.</p>
             </div>
             <span
               className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"
