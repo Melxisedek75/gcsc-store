@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   Activity,
   Sparkles,
+  Search,
 } from 'lucide-react';
 import type { Section } from './dashboard/types';
 import { AccountAccess } from './dashboard/AccountAccess';
@@ -63,9 +64,11 @@ const AdminFinancingPrechecksPanel = lazy(() => import('./dashboard/AdminFinanci
 const AdminAuditLogPanel = lazy(() => import('./dashboard/AdminAuditLogPanel').then((m) => ({ default: m.AdminAuditLogPanel })));
 const WalletPanel = lazy(() => import('./dashboard/WalletPanel').then((m) => ({ default: m.WalletPanel })));
 const TokenRedirect = lazy(() => import('./dashboard/TokenRedirect').then((m) => ({ default: m.TokenRedirect })));
+const LevitonPanel = lazy(() => import('./dashboard/LevitonPanel').then((m) => ({ default: m.LevitonPanel })));
 
 const navItems: { key: Section; label: string; icon: typeof LayoutDashboard; adminOnly?: boolean }[] = [
   { key: 'projects', label: 'Projects', icon: LayoutDashboard },
+  { key: 'leviton', label: 'Leviton', icon: Search },
   { key: 'estimator', label: 'Estimator', icon: Calculator },
   { key: 'bids', label: 'My Bids', icon: ClipboardList },
   { key: 'loans', label: 'Loans', icon: DollarSign },
@@ -131,6 +134,7 @@ export default function Dashboard() {
     if (!user) return null;
     switch (activeSection) {
       case 'projects': return <ProjectsPanel user={user} />;
+      case 'leviton': return <LevitonPanel />;
       case 'estimator': return <EstimatorPanel />;
       case 'bids': return <BidsPanel user={user} />;
       case 'loans': return <LoansFinancingPanel user={user} />;

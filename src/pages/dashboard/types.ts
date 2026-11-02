@@ -3,6 +3,7 @@ import type { GcscFinancingProductType } from '../../services/api';
 
 export type Section =
   | 'projects'
+  | 'leviton'
   | 'estimator'
   | 'bids'
   | 'loans'
