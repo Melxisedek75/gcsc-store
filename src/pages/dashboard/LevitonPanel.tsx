@@ -47,7 +47,15 @@ export function LevitonPanel() {
         return;
       }
       setAnswer(data.answer);
-      setSources(Array.isArray(data.sources) ? data.sources.filter((s) => s && s.url) : []);
+      const rawSources: unknown = data.sources;
+      setSources(
+        Array.isArray(rawSources)
+          ? rawSources.filter(
+              (s): s is LevitonSource =>
+                !!s && typeof s === 'object' && typeof (s as LevitonSource).url === 'string',
+            )
+          : [],
+      );
       setStatus('ready');
     } catch {
       clearTimeout(timer);
