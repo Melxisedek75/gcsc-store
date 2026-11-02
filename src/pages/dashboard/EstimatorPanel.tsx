@@ -53,10 +53,10 @@ export function EstimatorPanel() {
       className="space-y-6"
     >
       <div>
-        <h2 className="font-outfit font-bold text-[1.5rem] text-[#0F172A]">
+        <h2 className="font-outfit font-bold text-[1.5rem] text-white">
           Cost Estimator
         </h2>
-        <p className="font-inter text-sm text-[#475569] mt-1">
+        <p className="font-inter text-sm text-[#A9BCD6] mt-1">
           Generate accurate project cost estimates based on scope, materials, and labor
         </p>
       </div>
@@ -64,19 +64,19 @@ export function EstimatorPanel() {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Input Form */}
         <div className="glass-card p-6 space-y-5">
-          <h3 className="font-outfit font-semibold text-[1.0625rem] text-[#0F172A] mb-4">
+          <h3 className="font-outfit font-semibold text-[1.0625rem] text-white mb-4">
             Project Details
           </h3>
 
           {/* Project Type */}
           <div>
-            <label className="block text-xs font-semibold text-[#0F172A] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-white uppercase tracking-wider mb-2">
               Project Type
             </label>
             <select
               value={projectType}
               onChange={(e) => setProjectType(e.target.value as ProjectType)}
-              className="w-full px-4 py-2.5 rounded-lg border border-[#E2E8F0] bg-white text-sm text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all appearance-none cursor-pointer"
+              className="w-full px-4 py-2.5 rounded-lg border border-[#22315E] bg-[#0A1633] text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all appearance-none cursor-pointer"
             >
               <option value="">Select project type...</option>
               {projectTypes.map((t) => (
@@ -89,7 +89,7 @@ export function EstimatorPanel() {
 
           {/* City/State */}
           <div>
-            <label className="block text-xs font-semibold text-[#0F172A] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-white uppercase tracking-wider mb-2">
               City / State
             </label>
             <input
@@ -97,13 +97,13 @@ export function EstimatorPanel() {
               placeholder="e.g. Austin, TX"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-[#E2E8F0] bg-white text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all"
+              className="w-full px-4 py-2.5 rounded-lg border border-[#22315E] bg-[#0A1633] text-sm text-white placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all"
             />
           </div>
 
           {/* Square Footage */}
           <div>
-            <label className="block text-xs font-semibold text-[#0F172A] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-white uppercase tracking-wider mb-2">
               Square Footage
             </label>
             <input
@@ -111,13 +111,13 @@ export function EstimatorPanel() {
               placeholder="e.g. 1200"
               value={sqft}
               onChange={(e) => setSqft(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-lg border border-[#E2E8F0] bg-white text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all"
+              className="w-full px-4 py-2.5 rounded-lg border border-[#22315E] bg-[#0A1633] text-sm text-white placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all"
             />
           </div>
 
           {/* Material Quality */}
           <div>
-            <label className="block text-xs font-semibold text-[#0F172A] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-white uppercase tracking-wider mb-2">
               Material Quality
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -127,9 +127,9 @@ export function EstimatorPanel() {
                   onClick={() => setMaterial(m)}
                   className="px-3 py-2.5 rounded-lg border text-sm font-medium transition-all duration-200"
                   style={{
-                    borderColor: material === m ? '#7B2FF7' : '#E2E8F0',
-                    backgroundColor: material === m ? 'rgba(123,47,247,0.08)' : '#FFFFFF',
-                    color: material === m ? '#7B2FF7' : '#475569',
+                    borderColor: material === m ? '#7B2FF7' : '#22315E',
+                    backgroundColor: material === m ? 'rgba(123,47,247,0.15)' : '#0A1633',
+                    color: material === m ? '#7B2FF7' : '#A9BCD6',
                   }}
                 >
                   {m}
@@ -140,7 +140,7 @@ export function EstimatorPanel() {
 
           {/* Labor Complexity */}
           <div>
-            <label className="block text-xs font-semibold text-[#0F172A] uppercase tracking-wider mb-2">
+            <label className="block text-xs font-semibold text-white uppercase tracking-wider mb-2">
               Labor Complexity
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -150,9 +150,9 @@ export function EstimatorPanel() {
                   onClick={() => setLabor(l)}
                   className="px-3 py-2.5 rounded-lg border text-sm font-medium transition-all duration-200"
                   style={{
-                    borderColor: labor === l ? '#7B2FF7' : '#E2E8F0',
-                    backgroundColor: labor === l ? 'rgba(123,47,247,0.08)' : '#FFFFFF',
-                    color: labor === l ? '#7B2FF7' : '#475569',
+                    borderColor: labor === l ? '#7B2FF7' : '#22315E',
+                    backgroundColor: labor === l ? 'rgba(123,47,247,0.15)' : '#0A1633',
+                    color: labor === l ? '#7B2FF7' : '#A9BCD6',
                   }}
                 >
                   {l}
@@ -190,12 +190,12 @@ export function EstimatorPanel() {
               <div className="glass-card p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <DollarSign size={18} className="text-[#7B2FF7]" />
-                  <h3 className="font-outfit font-semibold text-[1.0625rem] text-[#0F172A]">
+                  <h3 className="font-outfit font-semibold text-[1.0625rem] text-white">
                     Estimated Cost Range
                   </h3>
                 </div>
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="font-outfit font-bold text-[2.5rem] text-[#0F172A]">
+                  <span className="font-outfit font-bold text-[2.5rem] text-white">
                     {formatCurrency(result.lowCost)}
                   </span>
                   <span className="text-[#94A3B8] font-medium">–</span>
@@ -203,27 +203,29 @@ export function EstimatorPanel() {
                     {formatCurrency(result.highCost)}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-[#475569]">
+                <div className="flex items-center gap-2 text-sm text-[#A9BCD6]">
                   <Clock size={14} />
-                  <span>Estimated timeline: <strong className="text-[#0F172A]">{result.timelineWeeks} weeks</strong></span>
+                  <span>Estimated timeline: <strong className="text-white">{result.timelineWeeks} weeks</strong></span>
                 </div>
               </div>
 
               {/* Breakdown Chart */}
               <div className="glass-card p-6">
-                <h3 className="font-outfit font-semibold text-[1.0625rem] text-[#0F172A] mb-4">
+                <h3 className="font-outfit font-semibold text-[1.0625rem] text-white mb-4">
                   Cost Breakdown
                 </h3>
                 <div className="h-[180px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={result.breakdown} layout="vertical" barSize={28}>
                       <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
-                      <YAxis type="category" dataKey="name" tick={{ fontSize: 12, fill: '#0F172A', fontWeight: 500 }} axisLine={false} tickLine={false} width={90} />
+                      <YAxis type="category" dataKey="name" tick={{ fontSize: 12, fill: '#A9BCD6', fontWeight: 500 }} axisLine={false} tickLine={false} width={90} />
                       <Tooltip
                         formatter={(value: number) => [`${value}%`, '']}
                         contentStyle={{
                           borderRadius: '8px',
                           border: '1px solid rgba(123,47,247,0.2)',
+                          backgroundColor: '#0A1633',
+                          color: '#FFFFFF',
                           boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
                           fontSize: '12px',
                         }}
@@ -241,7 +243,7 @@ export function EstimatorPanel() {
                   {result.breakdown.map((item) => (
                     <div key={item.name} className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: item.color }} />
-                      <span className="text-xs text-[#475569]">{item.name}</span>
+                      <span className="text-xs text-[#A9BCD6]">{item.name}</span>
                     </div>
                   ))}
                 </div>
@@ -251,13 +253,13 @@ export function EstimatorPanel() {
               <div className="glass-card p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <AlertTriangle size={16} className="text-[#F59E0B]" />
-                  <h3 className="font-outfit font-semibold text-[1.0625rem] text-[#0F172A]">
+                  <h3 className="font-outfit font-semibold text-[1.0625rem] text-white">
                     Risk Factors
                   </h3>
                 </div>
                 <ul className="space-y-2">
                   {result.risks.map((risk, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-[#475569]">
+                    <li key={i} className="flex items-start gap-2 text-sm text-[#A9BCD6]">
                       <ChevronRight size={14} className="text-[#7B2FF7] mt-0.5 shrink-0" />
                       {risk}
                     </li>
@@ -274,10 +276,10 @@ export function EstimatorPanel() {
               animate={{ opacity: 1 }}
               className="glass-card p-6 flex flex-col items-center justify-center min-h-[400px] text-center"
             >
-              <div className="w-16 h-16 rounded-full bg-[#F1F5F9] flex items-center justify-center mb-4">
+              <div className="w-16 h-16 rounded-full bg-[#12224F] flex items-center justify-center mb-4">
                 <Calculator size={28} className="text-[#94A3B8]" />
               </div>
-              <h3 className="font-outfit font-semibold text-[#0F172A] mb-1">
+              <h3 className="font-outfit font-semibold text-white mb-1">
                 Ready to Estimate
               </h3>
               <p className="text-sm text-[#94A3B8] max-w-[280px]">

@@ -73,14 +73,14 @@ export function CompliancePanel({ user }: { user: GcscUser }) {
       <div>
         <p className="text-xs font-semibold uppercase tracking-wider gradient-text">Contractor Verification</p>
         <h2 className="font-outfit font-bold text-[1.5rem] gradient-text mt-1">Compliance Checklist</h2>
-        <p className="font-inter text-sm text-[#475569] mt-1">
+        <p className="font-inter text-sm text-[#A9BCD6] mt-1">
           Upload real contractor documents for profile review before bids become trust-ready.
         </p>
       </div>
 
       <div className="glass-card p-6">
         {loading ? (
-          <div className="flex items-center gap-2 text-sm text-[#64748B]">
+          <div className="flex items-center gap-2 text-sm text-[#A9BCD6]">
             <Loader2 size={16} className="animate-spin" />
             Loading compliance status...
           </div>
@@ -94,13 +94,13 @@ export function CompliancePanel({ user }: { user: GcscUser }) {
               <h3 className="font-outfit font-bold text-[1.75rem] gradient-text mt-1">
                 {summary?.label || 'Profile incomplete'}
               </h3>
-              <p className="text-sm text-[#475569] mt-3 leading-6">
+              <p className="text-sm text-[#A9BCD6] mt-3 leading-6">
                 {isContractor
                   ? 'Profile data, required documents, and WebAuth wallet connection are checked together.'
                   : 'Owner accounts currently use profile and wallet checks. Contractor document review is not required for owners.'}
               </p>
               {compliance && (
-                <div className="mt-5 h-2 rounded-full bg-[#E2E8F0] overflow-hidden">
+                <div className="mt-5 h-2 rounded-full bg-[#22315E] overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-500"
                     style={{
@@ -114,10 +114,10 @@ export function CompliancePanel({ user }: { user: GcscUser }) {
 
             <div className="space-y-3">
               {(compliance?.checklist || []).map((item) => (
-                <div key={item.key} className="flex items-center justify-between gap-3 rounded-xl border border-[#E2E8F0] px-4 py-3">
+                <div key={item.key} className="flex items-center justify-between gap-3 rounded-xl border border-[#22315E] px-4 py-3">
                   <div className="flex items-center gap-3 min-w-0">
                     {item.completed ? <CheckCircle2 size={18} className="text-[#10B981] shrink-0" /> : <Clock4 size={18} className="text-[#F59E0B] shrink-0" />}
-                    <span className="text-sm font-semibold text-[#0F172A] truncate">{item.label}</span>
+                    <span className="text-sm font-semibold text-white truncate">{item.label}</span>
                   </div>
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: item.completed ? '#10B981' : '#F59E0B' }}>
                     {item.completed ? 'done' : (item.status || 'needed')}
@@ -134,7 +134,7 @@ export function CompliancePanel({ user }: { user: GcscUser }) {
           <div className="flex items-center justify-between gap-4 mb-5">
             <div>
               <h3 className="font-outfit font-bold text-[1.25rem] gradient-text">Required Documents</h3>
-              <p className="text-sm text-[#64748B] mt-1">PDF, PNG, JPG, or WEBP under 10MB per document.</p>
+              <p className="text-sm text-[#A9BCD6] mt-1">PDF, PNG, JPG, or WEBP under 10MB per document.</p>
             </div>
             <span
               className="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"
@@ -149,11 +149,11 @@ export function CompliancePanel({ user }: { user: GcscUser }) {
               const isUploading = uploadingType === document.document_type;
               const uploaded = document.document;
               return (
-                <div key={document.document_type} className="rounded-xl border border-[#E2E8F0] p-4">
+                <div key={document.document_type} className="rounded-xl border border-[#22315E] p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-outfit font-bold text-[#0F172A]">{document.label}</p>
-                      <p className="text-xs text-[#64748B] mt-1">
+                      <p className="font-outfit font-bold text-white">{document.label}</p>
+                      <p className="text-xs text-[#A9BCD6] mt-1">
                         {uploaded ? `${uploaded.file_name} - ${formatFileSize(uploaded.file_size)}` : 'No file submitted'}
                       </p>
                     </div>
@@ -169,7 +169,7 @@ export function CompliancePanel({ user }: { user: GcscUser }) {
                     <p className="mt-3 text-[0.7rem] text-[#94A3B8] break-all">SHA-256: {uploaded.file_sha256.slice(0, 18)}...</p>
                   )}
                   {uploaded?.review_note && (
-                    <p className="mt-3 text-xs text-[#64748B]">{uploaded.review_note}</p>
+                    <p className="mt-3 text-xs text-[#A9BCD6]">{uploaded.review_note}</p>
                   )}
                   <label className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#C4B5FD] px-4 py-2 text-sm font-semibold text-[#7B2FF7] cursor-pointer hover:bg-[rgba(123,47,247,0.06)] transition-colors">
                     {isUploading ? <Loader2 size={15} className="animate-spin" /> : <Upload size={15} />}

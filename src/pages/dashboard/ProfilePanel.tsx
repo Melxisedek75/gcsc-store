@@ -59,25 +59,25 @@ export function ProfilePanel({ user, onUserChange }: { user: GcscUser; onUserCha
     >
       <div>
         <h2 className="font-outfit font-bold text-[1.5rem] gradient-text">Account Profile</h2>
-        <p className="font-inter text-sm text-[#475569] mt-1">
+        <p className="font-inter text-sm text-[#A9BCD6] mt-1">
           Save real business or property information for your GCSC account.
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="glass-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#64748B]">Email verification</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#A9BCD6]">Email verification</p>
           <p className={`mt-2 font-outfit font-bold ${user.email_verified ? 'text-[#059669]' : 'text-[#B45309]'}`}>
             {user.email_verified ? 'Verified' : 'Pending'}
           </p>
-          <p className="mt-1 text-xs text-[#64748B]">Contractors verify by email before business trust workflows.</p>
+          <p className="mt-1 text-xs text-[#A9BCD6]">Contractors verify by email before business trust workflows.</p>
         </div>
         <div className="glass-card p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#64748B]">Phone verification</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#A9BCD6]">Phone verification</p>
           <p className={`mt-2 font-outfit font-bold ${user.phone_verified ? 'text-[#059669]' : 'text-[#B45309]'}`}>
             {user.phone_verified ? 'Verified' : 'Pending'}
           </p>
-          <p className="mt-1 text-xs text-[#64748B]">Homeowners verify by SMS before sensitive owner and ClaimBridge workflows.</p>
+          <p className="mt-1 text-xs text-[#A9BCD6]">Homeowners verify by SMS before sensitive owner and ClaimBridge workflows.</p>
         </div>
       </div>
 
@@ -91,10 +91,10 @@ export function ProfilePanel({ user, onUserChange }: { user: GcscUser; onUserCha
           </div>
           <div className="text-left md:text-right">
             <p className="font-outfit font-bold text-[2rem] gradient-text">{completion.percent}%</p>
-            <p className="text-xs text-[#64748B]">Saved through backend profile storage</p>
+            <p className="text-xs text-[#A9BCD6]">Saved through backend profile storage</p>
           </div>
         </div>
-        <div className="mt-4 h-2 rounded-full bg-[#E2E8F0] overflow-hidden">
+        <div className="mt-4 h-2 rounded-full bg-[#22315E] overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-500"
             style={{
@@ -127,7 +127,7 @@ export function ProfilePanel({ user, onUserChange }: { user: GcscUser; onUserCha
             )}
           </div>
           <h3 className="font-outfit font-bold gradient-text">{fullName || user.email}</h3>
-          <p className="text-sm text-[#475569] mt-1">{user.email}</p>
+          <p className="text-sm text-[#A9BCD6] mt-1">{user.email}</p>
           <div className="mt-3"><RoleBadge role={user.role} /></div>
           <label className="mt-5 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-[#C4B5FD] text-sm font-semibold text-[#7B2FF7] cursor-pointer hover:bg-[rgba(123,47,247,0.06)] transition-colors">
             <Upload size={15} />

@@ -1,7 +1,7 @@
 import type { GcscAuditEvent, GcscProfile, GcscUser } from '../../services/api';
 
 export const fieldClass =
-  'w-full px-4 py-2.5 rounded-lg border border-[#E2E8F0] bg-white text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all';
+  'w-full px-4 py-2.5 rounded-lg border border-[#22315E] bg-[#020612] text-sm text-white placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all';
 
 export function formatCurrency(n: number): string {
   return `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(n)} XPR`;

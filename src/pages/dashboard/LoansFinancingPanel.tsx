@@ -139,11 +139,11 @@ export function LoansFinancingPanel({ user }: { user: GcscUser }) {
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-[#7B2FF7]">Loans / Financing</p>
           <h2 className="mt-2 font-outfit font-bold text-[1.75rem] gradient-text">SmartContractor Financing</h2>
-          <p className="mt-2 max-w-[760px] text-sm leading-6 text-[#475569]">
+          <p className="mt-2 max-w-[760px] text-sm leading-6 text-[#A9BCD6]">
             Explore future financing options connected to verified contracts, escrow, insurance claims, and GCSC token collateral.
           </p>
         </div>
-        <div className="rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 text-sm text-[#1E3A8A]">
+        <div className="rounded-2xl border border-[#22315E] bg-[rgba(59,107,247,0.12)] px-4 py-3 text-sm text-[#C7D2E0]">
           {selectedState ? `Your selected state: ${selectedState}` : 'Add your property or business state to check future eligibility.'}
         </div>
       </div>
@@ -164,8 +164,8 @@ export function LoansFinancingPanel({ user }: { user: GcscUser }) {
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-[#7B2FF7]">Readiness checklist</p>
-            <h3 className="mt-1 font-outfit font-bold text-[1.15rem] text-[#0F172A]">Before any future financing review</h3>
-            <p className="mt-2 text-sm leading-6 text-[#475569]">
+            <h3 className="mt-1 font-outfit font-bold text-[1.15rem] text-white">Before any future financing review</h3>
+            <p className="mt-2 text-sm leading-6 text-[#A9BCD6]">
               This checklist helps you understand what SmartContractor would need before a real provider, legal, or admin review.
             </p>
           </div>
@@ -181,16 +181,16 @@ export function LoansFinancingPanel({ user }: { user: GcscUser }) {
             { label: 'Admin review required', complete: false },
             { label: 'Not live lending', complete: true },
           ].map((item) => (
-            <div key={item.label} className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-4">
+            <div key={item.label} className="rounded-2xl border border-[#22315E] bg-[#0A1633] p-4">
               <div className="flex items-center gap-2">
                 {item.complete ? (
                   <CheckCircle2 size={17} className="text-[#10B981] shrink-0" />
                 ) : (
                   <Clock size={17} className="text-[#F59E0B] shrink-0" />
                 )}
-                <p className="text-sm font-semibold text-[#0F172A]">{item.label}</p>
+                <p className="text-sm font-semibold text-white">{item.label}</p>
               </div>
-              <p className="mt-2 text-xs leading-5 text-[#64748B]">
+              <p className="mt-2 text-xs leading-5 text-[#A9BCD6]">
                 {item.complete ? 'Ready for demo review.' : 'Needed before a future real-money workflow.'}
               </p>
             </div>
@@ -217,21 +217,21 @@ export function LoansFinancingPanel({ user }: { user: GcscUser }) {
                   </div>
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-outfit font-bold text-[1.05rem] leading-snug text-[#0F172A]">{product.title}</h3>
-                      <span className="rounded-full bg-[#F1F5F9] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#475569] sm:whitespace-nowrap">
+                      <h3 className="font-outfit font-bold text-[1.05rem] leading-snug text-white">{product.title}</h3>
+                      <span className="rounded-full bg-[#12224F] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#A9BCD6] sm:whitespace-nowrap">
                         Best for {product.bestFor === 'contractor' ? 'contractors' : 'homeowners'}
                       </span>
                     </div>
-                    <p className="mt-3 text-sm leading-6 text-[#475569]">{product.summary}</p>
+                    <p className="mt-3 text-sm leading-6 text-[#A9BCD6]">{product.summary}</p>
                   </div>
                 </div>
-                <div className="mt-5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-4">
+                <div className="mt-5 rounded-xl border border-[#22315E] bg-[#0A1633] p-4">
                   {product.example.map((line) => (
-                    <p key={line} className="text-xs leading-5 text-[#475569]">{line}</p>
+                    <p key={line} className="text-xs leading-5 text-[#A9BCD6]">{line}</p>
                   ))}
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-3">
-                  <p className="text-xs font-semibold text-[#64748B]">{product.status}</p>
+                  <p className="text-xs font-semibold text-[#A9BCD6]">{product.status}</p>
                   <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#7B2FF7]">
                     {product.cta}
                     <ChevronRight size={15} />
@@ -249,7 +249,7 @@ export function LoansFinancingPanel({ user }: { user: GcscUser }) {
             </div>
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-[#7B2FF7]">Selected workflow</p>
-              <h3 className="mt-1 font-outfit font-bold text-[1.25rem] text-[#0F172A]">{selectedProduct.title}</h3>
+              <h3 className="mt-1 font-outfit font-bold text-[1.25rem] text-white">{selectedProduct.title}</h3>
             </div>
           </div>
 
@@ -267,9 +267,9 @@ export function LoansFinancingPanel({ user }: { user: GcscUser }) {
               ]}
             />
             <DetailBlock title="Current status" lines={[selectedProduct.status, selectedProduct.rule]} />
-            <div className="rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF] p-4">
-              <p className="font-outfit font-bold text-[#1E3A8A]">Demo precheck</p>
-              <p className="mt-2 text-sm leading-6 text-[#1E3A8A]">
+            <div className="rounded-2xl border border-[#22315E] bg-[rgba(59,107,247,0.12)] p-4">
+              <p className="font-outfit font-bold text-[#C7D2E0]">Demo precheck</p>
+              <p className="mt-2 text-sm leading-6 text-[#C7D2E0]">
                 Save this selected workflow as a demo/MVP precheck for future admin review. This does not request live funds or create a credit approval.
               </p>
               <button
@@ -280,7 +280,7 @@ export function LoansFinancingPanel({ user }: { user: GcscUser }) {
               >
                 {savingPrecheck ? 'Saving...' : 'Save demo precheck'}
               </button>
-              {precheckStatus && <p className="mt-3 text-sm leading-6 text-[#1E3A8A]">{precheckStatus}</p>}
+              {precheckStatus && <p className="mt-3 text-sm leading-6 text-[#C7D2E0]">{precheckStatus}</p>}
             </div>
             <div className="rounded-2xl border border-[#FCA5A5] bg-[#FEF2F2] p-4">
               <p className="font-outfit font-bold text-[#991B1B]">Important safety notice</p>

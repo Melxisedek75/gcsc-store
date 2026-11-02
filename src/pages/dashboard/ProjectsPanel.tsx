@@ -78,8 +78,8 @@ function ProjectRequestForm({ onCreated }: { onCreated: (project: GcscProject) =
   return (
     <form onSubmit={submit} className="glass-card p-5 space-y-4">
       <div>
-        <h3 className="font-outfit font-semibold text-[#0F172A] text-lg">Post a project</h3>
-        <p className="text-sm text-[#64748B] mt-1">
+        <h3 className="font-outfit font-semibold text-white text-lg">Post a project</h3>
+        <p className="text-sm text-[#A9BCD6] mt-1">
           Budget is in XPR on XPR Network Testnet, not US dollars.
         </p>
       </div>
@@ -147,7 +147,7 @@ function ProjectRequestForm({ onCreated }: { onCreated: (project: GcscProject) =
         required
       />
 
-      {status && <p className="text-sm text-[#475569]">{status}</p>}
+      {status && <p className="text-sm text-[#A9BCD6]">{status}</p>}
 
       <button
         type="submit"
@@ -201,10 +201,10 @@ function BidComposer({ project, user, onSubmitted }: { project: GcscProject; use
   };
 
   return (
-    <form onSubmit={submit} className="mt-4 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-4 space-y-3">
+    <form onSubmit={submit} className="mt-4 rounded-2xl border border-[#22315E] bg-[#0A1633] p-4 space-y-3">
       <div>
-        <h4 className="font-outfit font-semibold text-[#0F172A]">Submit a bid in XPR</h4>
-        <p className="text-xs text-[#64748B] mt-1">WebAuth will send the bid amount in XPR on Testnet (for 50 that is 50.0000 XPR), then the bid is saved.</p>
+        <h4 className="font-outfit font-semibold text-white">Submit a bid in XPR</h4>
+        <p className="text-xs text-[#A9BCD6] mt-1">WebAuth will send the bid amount in XPR on Testnet (for 50 that is 50.0000 XPR), then the bid is saved.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
@@ -231,7 +231,7 @@ function BidComposer({ project, user, onSubmitted }: { project: GcscProject; use
         value={form.message}
         onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))}
       />
-      {status && <p className="text-sm text-[#475569]">{status}</p>}
+      {status && <p className="text-sm text-[#A9BCD6]">{status}</p>}
       <button
         type="submit"
         disabled={saving}
@@ -351,10 +351,10 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="font-outfit font-bold text-[1.5rem] text-[#0F172A]">
+          <h2 className="font-outfit font-bold text-[1.5rem] text-white">
             {isHomeowner ? 'My Projects' : 'Open Projects'}
           </h2>
-          <p className="font-inter text-sm text-[#475569] mt-1">
+          <p className="font-inter text-sm text-[#A9BCD6] mt-1">
             {isHomeowner
               ? 'Create project requests, review contractor bids, and move accepted work into escrow.'
               : 'Review homeowner requests and submit XPR bids signed in WebAuth.'}
@@ -367,7 +367,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
             placeholder="Search projects..."
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            className="pl-9 pr-4 py-2 rounded-lg border border-[#E2E8F0] bg-white text-sm text-[#0F172A] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all w-full sm:w-[240px]"
+            className="pl-9 pr-4 py-2 rounded-lg border border-[#22315E] bg-[#0A1633] text-sm text-white placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#7B2FF7]/30 focus:border-[#7B2FF7] transition-all w-full sm:w-[240px]"
           />
         </div>
       </div>
@@ -381,14 +381,14 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
             onClick={() => setFilter(status)}
             className="px-3.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200"
             style={{
-              backgroundColor: filter === status ? '#7B2FF7' : '#F1F5F9',
-              color: filter === status ? '#FFFFFF' : '#475569',
+              backgroundColor: filter === status ? '#7B2FF7' : '#12224F',
+              color: filter === status ? '#FFFFFF' : '#A9BCD6',
             }}
           >
             {status}
           </button>
         ))}
-        <div className="ml-auto text-sm text-[#475569]">
+        <div className="ml-auto text-sm text-[#A9BCD6]">
           <SlidersHorizontal size={16} className="inline mr-1" />
           {filtered.length} project{filtered.length !== 1 ? 's' : ''}
         </div>
@@ -401,33 +401,33 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#E2E8F0] bg-[#F8FAFC]">
-                  <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Project</th>
-                  <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Category</th>
-                  <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Location</th>
-                  <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Budget</th>
-                  <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Status</th>
-                  <th className="text-left px-4 py-3 font-semibold text-[#0F172A] text-xs uppercase tracking-wider">Actions</th>
+                <tr className="border-b border-[#22315E] bg-[#0A1633]">
+                  <th className="text-left px-4 py-3 font-semibold text-white text-xs uppercase tracking-wider">Project</th>
+                  <th className="text-left px-4 py-3 font-semibold text-white text-xs uppercase tracking-wider">Category</th>
+                  <th className="text-left px-4 py-3 font-semibold text-white text-xs uppercase tracking-wider">Location</th>
+                  <th className="text-left px-4 py-3 font-semibold text-white text-xs uppercase tracking-wider">Budget</th>
+                  <th className="text-left px-4 py-3 font-semibold text-white text-xs uppercase tracking-wider">Status</th>
+                  <th className="text-left px-4 py-3 font-semibold text-white text-xs uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="px-4 py-10 text-center text-[#64748B]">
+                    <td colSpan={6} className="px-4 py-10 text-center text-[#A9BCD6]">
                       <Loader2 size={18} className="animate-spin inline mr-2" /> Loading projects...
                     </td>
                   </tr>
                 ) : filtered.map((project) => {
                   const label = projectStatusLabel(project.status);
                   return (
-                    <tr key={project.id} className="border-b border-[#F1F5F9] hover:bg-[#F8FAFC]/60 transition-colors">
+                    <tr key={project.id} className="border-b border-[#22315E] hover:bg-[#12224F]/60 transition-colors">
                       <td className="px-4 py-3">
-                        <div className="font-semibold text-[#0F172A]">{project.title}</div>
+                        <div className="font-semibold text-white">{project.title}</div>
                         <div className="font-mono text-xs text-[#3B6BF7]">#{project.id}</div>
                       </td>
-                      <td className="px-4 py-3 text-[#475569]">{project.category || 'General'}</td>
-                      <td className="px-4 py-3 text-[#475569]">{project.location || 'Not set'}</td>
-                      <td className="px-4 py-3 font-medium text-[#0F172A]">
+                      <td className="px-4 py-3 text-[#A9BCD6]">{project.category || 'General'}</td>
+                      <td className="px-4 py-3 text-[#A9BCD6]">{project.location || 'Not set'}</td>
+                      <td className="px-4 py-3 font-medium text-white">
                         {formatCurrency(project.budget_min || 0)} - {formatCurrency(project.budget_max || 0)}
                       </td>
                       <td className="px-4 py-3"><StatusBadge status={label} /></td>
@@ -435,7 +435,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => void loadDetails(project.id)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium bg-[#F1F5F9] text-[#475569] hover:bg-[#E2E8F0] hover:text-[#0F172A] transition-colors"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium bg-[#12224F] text-[#A9BCD6] hover:bg-[#22315E] hover:text-white transition-colors"
                           >
                             <Eye size={12} /> View
                           </button>
@@ -471,32 +471,32 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
 
         <aside className="glass-card p-5 min-h-[320px]">
           {detailLoading ? (
-            <div className="h-full flex items-center justify-center text-[#64748B]">
+            <div className="h-full flex items-center justify-center text-[#A9BCD6]">
               <Loader2 size={18} className="animate-spin mr-2" /> Loading details...
             </div>
           ) : selectedProject ? (
             <div className="space-y-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider gradient-text">Selected Project</p>
-                <h3 className="font-outfit font-bold text-xl text-[#0F172A] mt-1">{selectedProject.title}</h3>
-                <p className="text-sm text-[#64748B] mt-2 leading-6">{selectedProject.description}</p>
+                <h3 className="font-outfit font-bold text-xl text-white mt-1">{selectedProject.title}</h3>
+                <p className="text-sm text-[#A9BCD6] mt-2 leading-6">{selectedProject.description}</p>
               </div>
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-xl bg-[#F8FAFC] p-3">
+                <div className="rounded-xl bg-[#0A1633] p-3">
                   <p className="text-xs text-[#94A3B8]">Timeline</p>
-                  <p className="font-semibold text-[#0F172A]">{selectedProject.timeline_days || 30} days</p>
+                  <p className="font-semibold text-white">{selectedProject.timeline_days || 30} days</p>
                 </div>
-                <div className="rounded-xl bg-[#F8FAFC] p-3">
+                <div className="rounded-xl bg-[#0A1633] p-3">
                   <p className="text-xs text-[#94A3B8]">Status</p>
-                  <p className="font-semibold text-[#0F172A]">{projectStatusLabel(selectedProject.status)}</p>
+                  <p className="font-semibold text-white">{projectStatusLabel(selectedProject.status)}</p>
                 </div>
               </div>
 
               {isHomeowner ? (
                 <div className="space-y-3">
-                  <h4 className="font-outfit font-semibold text-[#0F172A]">Contractor bids</h4>
+                  <h4 className="font-outfit font-semibold text-white">Contractor bids</h4>
                   {selectedBids.length === 0 ? (
-                    <p className="text-sm text-[#64748B]">No bids yet.</p>
+                    <p className="text-sm text-[#A9BCD6]">No bids yet.</p>
                   ) : selectedBids.map((bid) => {
                     const label = bidStatusLabel(bid.status);
                     const contractor = bid.contractor;
@@ -504,7 +504,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
                     const specialties = contractor?.specialties || [];
                     const canAccept = bid.status === 'pending';
                     return (
-                      <div key={bid.id} className="rounded-2xl border border-[#E2E8F0] p-4 space-y-3">
+                      <div key={bid.id} className="rounded-2xl border border-[#22315E] p-4 space-y-3">
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-start gap-3 min-w-0">
                             <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#7B2FF7] to-[#00D4FF] flex items-center justify-center overflow-hidden shrink-0">
@@ -515,14 +515,14 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
                               )}
                             </div>
                             <div className="min-w-0">
-                              <p className="font-semibold text-[#0F172A] truncate">{contractorName}</p>
-                              <p className="text-xs text-[#64748B]">
+                              <p className="font-semibold text-white truncate">{contractorName}</p>
+                              <p className="text-xs text-[#A9BCD6]">
                                 Contractor #{bid.contractor_id} - {bid.proposed_timeline_days || 30} days
                               </p>
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className="font-semibold text-[#0F172A]">{formatCurrency(bid.amount)}</p>
+                            <p className="font-semibold text-white">{formatCurrency(bid.amount)}</p>
                             <StatusBadge status={label} />
                           </div>
                         </div>
@@ -541,7 +541,7 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
                             ))}
                           </div>
                         )}
-                        {bid.message && <p className="text-sm text-[#475569] leading-6">{bid.message}</p>}
+                        {bid.message && <p className="text-sm text-[#A9BCD6] leading-6">{bid.message}</p>}
                         <Link
                           to={`/contractors/${bid.contractor_id}`}
                           className="inline-flex items-center gap-2 rounded-full border border-[#C4B5FD] px-4 py-2 text-xs font-semibold text-[#7B2FF7] hover:bg-[rgba(123,47,247,0.06)] transition-colors"
@@ -583,12 +583,12 @@ export function ProjectsPanel({ user }: { user: GcscUser }) {
                 />
               )}
 
-              {detailMessage && <p className="text-sm text-[#475569]">{detailMessage}</p>}
+              {detailMessage && <p className="text-sm text-[#A9BCD6]">{detailMessage}</p>}
             </div>
           ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center text-[#64748B] py-10">
+            <div className="h-full flex flex-col items-center justify-center text-center text-[#A9BCD6] py-10">
               <ClipboardList size={32} className="text-[#94A3B8] mb-3" />
-              <p className="font-semibold text-[#0F172A]">Select a project</p>
+              <p className="font-semibold text-white">Select a project</p>
               <p className="text-sm mt-1">Project details, bids, and escrow actions appear here.</p>
             </div>
           )}
