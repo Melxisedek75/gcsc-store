@@ -1,6 +1,4 @@
 import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
-import { Link } from 'react-router';
-import { motion, AnimatePresence } from 'framer-motion';
 import { api, type GcscUser } from '../services/api';
 import {
   LayoutDashboard,
@@ -8,18 +6,14 @@ import {
   ClipboardList,
   UserCircle,
   Wallet,
-  Coins,
   Menu,
-  X,
-  ChevronRight,
   DollarSign,
-  CheckCircle2,
   LogOut,
   Loader2,
   ShieldCheck,
   Activity,
 } from 'lucide-react';
-import { getProfile, initials } from './dashboard/format';
+import { getProfile } from './dashboard/format';
 import type { Section } from './dashboard/types';
 import { AccountAccess } from './dashboard/AccountAccess';
 
@@ -90,7 +84,7 @@ export default function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<GcscUser | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
-  const [registrationNotice, setRegistrationNotice] = useState<{ email?: string; phone?: string } | null>(null);
+  const [, setRegistrationNotice] = useState<{ email?: string; phone?: string } | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -162,7 +156,6 @@ export default function Dashboard() {
 
   if (!user) return <AccountAccess onAuthenticated={setUser} />;
 
-  const profile = getProfile(user);
   const visibleNavItems = navItems.filter((item) => !item.adminOnly || isAdminUser(user));
 
   return (

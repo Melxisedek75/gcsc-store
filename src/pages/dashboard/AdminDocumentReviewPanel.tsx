@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Loader2, ShieldCheck, Building2, CheckCircle2, XCircle } from 'lucide-react';
+import { Loader2, ShieldCheck, CheckCircle2, XCircle } from 'lucide-react';
 import { api, type GcscUserDocument } from '../../services/api';
 import { complianceStatusCopy, documentTypeLabel, formatDate, formatFileSize } from './format';
 
