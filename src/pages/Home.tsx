@@ -94,6 +94,13 @@ function HeroSection() {
         }}
       />
       <div className="absolute inset-0 z-[2] pointer-events-none mesh-gradient-bg opacity-50" />
+      <div
+        className="absolute inset-0 z-[2] pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 90% 55% at 0% 0%, rgba(96, 140, 255, 0.35) 0%, rgba(59, 107, 247, 0.15) 35%, transparent 65%)',
+        }}
+      />
 
       <div
         ref={contentRef}

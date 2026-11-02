@@ -13,7 +13,6 @@ import {
   ShieldCheck,
   Activity,
 } from 'lucide-react';
-import { getProfile } from './dashboard/format';
 import type { Section } from './dashboard/types';
 import { AccountAccess } from './dashboard/AccountAccess';
 
