@@ -151,7 +151,7 @@ export default function Dashboard() {
 
   if (loadingUser) {
     return (
-      <div className="min-h-[100dvh] bg-white flex items-center justify-center">
+      <div className="min-h-[100dvh] bg-[#020612] flex items-center justify-center">
         <div className="flex items-center gap-3 text-[#7B2FF7] font-inter font-semibold">
           <Loader2 size={22} className="animate-spin" />
           Loading dashboard...
@@ -166,8 +166,8 @@ export default function Dashboard() {
   const visibleNavItems = navItems.filter((item) => !item.adminOnly || isAdminUser(user));
 
   return (
-    <div className="min-h-[100dvh] bg-white flex">
-      <aside className="hidden lg:flex flex-col w-[240px] shrink-0 border-r border-[#E2E8F0] bg-[#F8FAFC] fixed left-0 top-[72px] bottom-0 overflow-y-auto z-40">
+    <div className="min-h-[100dvh] bg-transparent flex">
+      <aside className="hidden lg:flex flex-col w-[240px] shrink-0 border-r border-[#22315E] bg-[#0A1633] fixed left-0 top-[72px] bottom-0 overflow-y-auto z-40">
         <nav className="flex-1 px-3 py-6 space-y-1">
           {visibleNavItems.map((item) => {
             const Icon = item.icon;
@@ -180,24 +180,24 @@ export default function Dashboard() {
             );
           })}
         </nav>
-        <div className="px-4 py-4 border-t border-[#E2E8F0]">
-          <p className="text-sm font-medium text-[#0F172A] truncate">{user.fullName || user.full_name || user.email}</p>
+        <div className="px-4 py-4 border-t border-[#22315E]">
+          <p className="text-sm font-medium text-white truncate">{user.fullName || user.full_name || user.email}</p>
           <p className="text-xs text-[#94A3B8] truncate">{isAdminUser(user) ? 'Admin account' : user.role === 'contractor' ? 'Builder account' : 'Owner account'}</p>
-          <button onClick={logout} className="mt-4 w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-[#64748B]">
+          <button onClick={logout} className="mt-4 w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-[#A9BCD6]">
             <LogOut size={14} /> Sign out
           </button>
         </div>
       </aside>
       <main className="flex-1 lg:ml-[240px] min-w-0">
-        <div className="lg:hidden flex items-center gap-3 px-4 py-3 border-b border-[#E2E8F0] bg-[#F8FAFC] sticky top-0 z-30">
-          <button onClick={() => setMobileMenuOpen(true)} className="p-2 rounded-lg text-[#0F172A]"><Menu size={20} /></button>
-          <span className="font-outfit font-semibold text-[#0F172A]">{visibleNavItems.find((n) => n.key === activeSection)?.label || 'Dashboard'}</span>
+        <div className="lg:hidden flex items-center gap-3 px-4 py-3 border-b border-[#22315E] bg-[#0A1633] sticky top-0 z-30">
+          <button onClick={() => setMobileMenuOpen(true)} className="p-2 rounded-lg text-white"><Menu size={20} /></button>
+          <span className="font-outfit font-semibold text-white">{visibleNavItems.find((n) => n.key === activeSection)?.label || 'Dashboard'}</span>
         </div>
         {mobileMenuOpen && (
           <div className="lg:hidden fixed inset-0 z-50 bg-black/30" onClick={() => setMobileMenuOpen(false)}>
-            <div className="w-[260px] h-full bg-[#F8FAFC] p-4" onClick={(e) => e.stopPropagation()}>
+            <div className="w-[260px] h-full bg-[#0A1633] p-4" onClick={(e) => e.stopPropagation()}>
               {visibleNavItems.map((item) => (
-                <button key={item.key} onClick={() => { setActiveSection(item.key); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 text-sm font-medium text-[#0F172A]">{item.label}</button>
+                <button key={item.key} onClick={() => { setActiveSection(item.key); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 text-sm font-medium text-white">{item.label}</button>
               ))}
             </div>
           </div>
