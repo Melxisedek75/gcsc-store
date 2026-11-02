@@ -12,9 +12,11 @@ import {
   Loader2,
   ShieldCheck,
   Activity,
+  Sparkles,
 } from 'lucide-react';
 import type { Section } from './dashboard/types';
 import { AccountAccess } from './dashboard/AccountAccess';
+import AiAgent from './dashboard/AiAgent';
 
 class PanelErrorBoundary extends Component<{ children: ReactNode }, { error: string | null }> {
   state = { error: null as string | null };
@@ -81,6 +83,7 @@ export default function Dashboard() {
     return saved || 'projects';
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const [user, setUser] = useState<GcscUser | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [, setRegistrationNotice] = useState<{ email?: string; phone?: string } | null>(null);
@@ -172,6 +175,12 @@ export default function Dashboard() {
             );
           })}
         </nav>
+        <div className="px-3 pb-2">
+          <button type="button" onClick={() => setAiOpen(true)} className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-white border border-[#22315E]" style={{ background: 'rgba(123,47,247,0.12)' }}>
+            <Sparkles size={18} />
+            Ask AI
+          </button>
+        </div>
         <div className="px-4 py-4 border-t border-[#22315E]">
           <p className="text-sm font-medium text-white truncate">{user.fullName || user.full_name || user.email}</p>
           <p className="text-xs text-[#94A3B8] truncate">{isAdminUser(user) ? 'Admin account' : user.role === 'contractor' ? 'Builder account' : 'Owner account'}</p>
@@ -191,6 +200,7 @@ export default function Dashboard() {
               {visibleNavItems.map((item) => (
                 <button key={item.key} onClick={() => { setActiveSection(item.key); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 text-sm font-medium text-white">{item.label}</button>
               ))}
+              <button type="button" onClick={() => { setAiOpen(true); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 text-sm font-medium text-white">Ask AI</button>
             </div>
           </div>
         )}
@@ -202,6 +212,7 @@ export default function Dashboard() {
           </PanelErrorBoundary>
         </div>
       </main>
+      <AiAgent user={user} onNavigate={setActiveSection} open={aiOpen} onOpenChange={setAiOpen} />
     </div>
   );
 }
